@@ -12,8 +12,8 @@ import tushare as ts
 
 
 dw = ts.get_k_data("300033")
-close = dw.close.values
-dw['dif'], dw['dea'], dw['macd'] = ta.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)
+close = dw.close.values  #ndarray
+dw['dif'], dw['dea'], dw['macd'] = ta.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9) #series
 dw['macd'] = dw['macd'] * 2;
-print(dw[['close','dif','dea','macd']])
+print(dw[['close','dif','dea','macd']])  #dataFrame
 # dw[['close','macd','macdsignal','macdhist']].plot()
