@@ -21,14 +21,14 @@ def myMACD(price, fastperiod=12, slowperiod=26, signalperiod=9):
 
 
 # df_k = ts.get_k_data(code)
-df_hist = ts.get_hist_data(code,ktype='5')
-df_hist = df_hist.iloc[::-1]
-close = df_hist.close.values  #ndarray
-df_hist['dif'], df_hist['dea'], df_hist['macd'] = myMACD(close, fastperiod=12, slowperiod=26, signalperiod=9) #series
+# df_hist = ts.get_hist_data(code,ktype='5')
+# df_hist = df_hist.iloc[::-1]
+# close = df_hist.close.values  #ndarray
+# df_hist['dif'], df_hist['dea'], df_hist['macd'] = myMACD(close, fastperiod=12, slowperiod=26, signalperiod=9) #series
 # df_hist['macd'] = df_hist['macd'] * 2;
 
 # df_ticket = ts.get_today_ticks(code)
-# df_basic = ts.get_stock_basics()
+df_basic = ts.get_stock_basics()
 # df_report = ts.get_report_data(year,quarter)
 # df_profit = ts.get_profit_data(year,quarter)
 # df_operation = ts.get_operation_data(year,quarter)
@@ -41,9 +41,10 @@ df_hist['dif'], df_hist['dea'], df_hist['macd'] = myMACD(close, fastperiod=12, s
 # epsg = abs(df_growth[df_growth.code=='000905'].iloc[0].get('epsg'))
 
 # print(df_k)
-print(df_hist.tail(48))
+# print(df_hist.tail(48))
 # print(df_ticket)
 # print(df_basic.loc['000905']);
+print(df_basic)
 # print(df_report[df_report.code=='000905'].iloc[0]);
 # print(df_profit[df_profit.code=='000905'].iloc[0]);
 # print(df_operation[df_operation.code=='000905'].iloc[0]);
