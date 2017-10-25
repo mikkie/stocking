@@ -21,16 +21,12 @@ def getData(setting):
 def initData(setting):
     df_todayAll = ts.get_today_all()
     priceRange = setting.get_PriceRange()
-    for index in df_todayAll.index:
-        price = df_todayAll.loc[index].get('trade')
-        if price >= priceRange['min'] and price <= priceRange['max']:
-           print('价格匹配',price)  
-    pass
-
+    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
 
 #setting
 setting = conf.Config()
 engine = create_engine(setting.get_DBurl())
+df_stocksPool = None
 if isInTradingTime():
    #交易监控 
    #data
@@ -42,7 +38,10 @@ if isInTradingTime():
    pass 
 else:
    #初始化数据 
-   initData(setting) 
+   df_stocksPool = initData(setting) 
+   df_stocksPool = df_stocksPool.sort_values('trade')
+   df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
+   print(df_stocksPool)
    pass    
 
 
