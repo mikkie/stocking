@@ -29,6 +29,7 @@ def initData(setting):
 
 
 def filterSuperSoldIn3Months(df_todayAll):
+    result = [];
     now = dt.datetime.now()
     timeDelta = dt.timedelta(30 * 3)
     threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
@@ -45,15 +46,15 @@ def filterSuperSoldIn3Months(df_todayAll):
            continue 
         ratio = (close - low) / (high - low)
         if (high - low) / avgClose > setting.get_pKM3Change() and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
-            print(code)
-    pass
+            # print(code)
+            result.append(code)
+    return result        
 
 #setting
 setting = conf.Config()
 engine = create_engine(setting.get_DBurl())
 df_stocksPool = None
-forceInit = len(sys.argv) > 1 and str(sys.argv[1]) == 'init'
-if isInTradingTime() and forceInit == False:
+if isInTradingTime() and len(sys.argv) == 1:
    #交易监控 
    #data
    data_km5,data_kd3 = getData(setting)
@@ -64,13 +65,17 @@ if isInTradingTime() and forceInit == False:
    pass 
 else:
    #初始化数据 
-#    df_stocksPool = initData(setting) 
-#    df_stocksPool = df_stocksPool.sort_values('trade')
-#    df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
-#    print(df_stocksPool)
-   df_stocks = pd.read_sql_table('stocks', con=engine)
-   filterSuperSoldIn3Months(df_stocks)
-   pass    
+   if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
+      if len(sys.argv) == 3 and str(sys.argv[2]) == '0':
+         print('=====执行价格过滤=====',setting.get_PriceRange())  
+         df_stocksPool = initData(setting) 
+         df_stocksPool = df_stocksPool.sort_values('trade')
+         df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
+         print(df_stocksPool)
+      df_stocks = pd.read_sql_table('stocks', con=engine)
+      result = filterSuperSoldIn3Months(df_stocks)
+      df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
+      df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
 
 
 
