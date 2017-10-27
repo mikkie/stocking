@@ -6,7 +6,8 @@ class Config(object):
       def __init__(self):
           self.__priceRange = {'min' : 5.00, 'max' : 15.00} #价格区间
           self.__timeStart = '14:25:00' #监控起始时间
-          self.__pKm5Change = 0.01 #振幅
+          self.__pKm5Change = 0.01 #当日5分钟振幅
+          self.__pKM3Change = 0.05 #3个月振幅
           self.__superSold = [0.05,0.2] #超卖
           self.__dbUrl = 'mysql://root:aqua@10.172.97.136/stocking?charset=utf8' #数据库地址
 
@@ -26,5 +27,9 @@ class Config(object):
 
       def get_PriceRange(self):
           return self.__priceRange  
+
+
+      def get_pKM3Change(self):
+          return self.__pKM3Change  
 
       pass

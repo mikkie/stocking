@@ -1,17 +1,20 @@
 # -*-coding=utf-8-*-
+
 __author__ = 'aqua'
 
+import sys
 import pandas as pd
+import numpy as np
 import tushare as ts
 import handlers.DadStrategy as ds
 import config.Config as conf
 from sqlalchemy import create_engine
-from datetime import datetime
+import datetime as dt
 
 
 def isInTradingTime():
-    now = datetime.now()
-    return (now > datetime(now.year,now.month,now.day,9,30) and now < datetime(now.year,now.month,now.day,11,30)) or (now > datetime(now.year,now.month,now.day,13,0) and now < datetime(now.year,now.month,now.day,15,0))
+    now = dt.datetime.now()
+    return (now > dt.datetime(now.year,now.month,now.day,9,30) and now < dt.datetime(now.year,now.month,now.day,11,30)) or (now > dt.datetime(now.year,now.month,now.day,13,0) and now < dt.datetime(now.year,now.month,now.day,15,0))
 
 def getData(setting):
     df_hist_km5 = pd.read_sql_table('km5', con=engine)
@@ -23,11 +26,34 @@ def initData(setting):
     priceRange = setting.get_PriceRange()
     return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
 
+
+
+def filterSuperSoldIn3Months(df_todayAll):
+    now = dt.datetime.now()
+    timeDelta = dt.timedelta(30 * 3)
+    threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
+    for index,row in df_todayAll.iterrows():
+        code = row['code']
+        df_3m = ts.get_hist_data(code,start=threeMbefore,ktype='M')
+        if df_3m.empty:
+           continue 
+        high = df_3m.loc[df_3m['high'].idxmax()].get('high')
+        low = df_3m.loc[df_3m['low'].idxmin()].get('low')
+        avgClose = df_3m['close'].mean()
+        close = df_3m.iloc[0].get('close')
+        if np.isnan(high) or np.isnan(low) or np.isnan(avgClose) or np.isnan(close):
+           continue 
+        ratio = (close - low) / (high - low)
+        if (high - low) / avgClose > setting.get_pKM3Change() and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
+            print(code)
+    pass
+
 #setting
 setting = conf.Config()
 engine = create_engine(setting.get_DBurl())
 df_stocksPool = None
-if isInTradingTime():
+forceInit = len(sys.argv) > 1 and str(sys.argv[1]) == 'init'
+if isInTradingTime() and forceInit == False:
    #交易监控 
    #data
    data_km5,data_kd3 = getData(setting)
@@ -38,10 +64,12 @@ if isInTradingTime():
    pass 
 else:
    #初始化数据 
-   df_stocksPool = initData(setting) 
-   df_stocksPool = df_stocksPool.sort_values('trade')
-   df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
-   print(df_stocksPool)
+#    df_stocksPool = initData(setting) 
+#    df_stocksPool = df_stocksPool.sort_values('trade')
+#    df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
+#    print(df_stocksPool)
+   df_stocks = pd.read_sql_table('stocks', con=engine)
+   filterSuperSoldIn3Months(df_stocks)
    pass    
 
 
