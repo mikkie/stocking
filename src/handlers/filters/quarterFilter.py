@@ -36,7 +36,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         ratio = (close - low) / (high - low)
         if isMACDkingCross(df_3m) and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
            print(code)
-        result.append(code)
+           result.append(code)
     return result 
 
 def isMACDkingCross(df_3m):
