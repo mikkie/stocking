@@ -10,6 +10,7 @@ import handlers.DadStrategy as ds
 import config.Config as conf
 from sqlalchemy import create_engine
 import datetime as dt
+import handlers.filters.quarterFilter as qf
 
 
 def isInTradingTime():
@@ -26,29 +27,6 @@ def initData(setting):
     priceRange = setting.get_PriceRange()
     return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
 
-
-
-def filterSuperSoldIn3Months(df_todayAll):
-    result = [];
-    now = dt.datetime.now()
-    timeDelta = dt.timedelta(30 * 3)
-    threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
-    for index,row in df_todayAll.iterrows():
-        code = row['code']
-        df_3m = ts.get_hist_data(code,start=threeMbefore,ktype='M')
-        if df_3m.empty:
-           continue 
-        high = df_3m.loc[df_3m['high'].idxmax()].get('high')
-        low = df_3m.loc[df_3m['low'].idxmin()].get('low')
-        avgClose = df_3m['close'].mean()
-        close = df_3m.iloc[0].get('close')
-        if np.isnan(high) or np.isnan(low) or np.isnan(avgClose) or np.isnan(close):
-           continue 
-        ratio = (close - low) / (high - low)
-        if (high - low) / avgClose > setting.get_pKM3Change() and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
-            # print(code)
-            result.append(code)
-    return result        
 
 #setting
 setting = conf.Config()
@@ -73,7 +51,7 @@ else:
          df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
          print(df_stocksPool)
       df_stocks = pd.read_sql_table('stocks', con=engine)
-      result = filterSuperSoldIn3Months(df_stocks)
+      result = qf.filterSuperSoldIn3Months(df_stocks,setting)
       df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
       df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
 

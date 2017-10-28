@@ -9,7 +9,8 @@ class Config(object):
           self.__pKm5Change = 0.01 #当日5分钟振幅
           self.__pKM3Change = 0.05 #3个月振幅
           self.__superSold = [0.05,0.2] #超卖
-          self.__dbUrl = 'mysql://root:aqua@10.172.97.136/stocking?charset=utf8' #数据库地址
+          self.__longPeriod = 180 #半年
+          self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
 
       def get_pKm5Change(self):
           return self.__pKm5Change
@@ -31,5 +32,8 @@ class Config(object):
 
       def get_pKM3Change(self):
           return self.__pKM3Change  
+
+      def get_longPeriod(self):
+          return self.__longPeriod  
 
       pass
