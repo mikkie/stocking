@@ -24,7 +24,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         df_3m = df_3m[::-1]
         #计算指标使用半年D数据
         Utils.macd(df_3m)
-        # Utils.kdj(df_3m)
+        Utils.kdj(df_3m)
         print(df_3m)
         #计算一季度的值
         df_3m = df_3m[-90:]

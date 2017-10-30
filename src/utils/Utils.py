@@ -24,7 +24,7 @@ class Utils(object):
       @staticmethod
       def kdj(df): 
           close = df.close.values  #ndarray
-          high = df.close.values
-          low = df.close.values
+          high = df.high.values
+          low = df.low.values
           df['k'], df['d'] = ta.STOCH(high, low, close, fastk_period=9, slowk_period=3, slowk_matype=1, slowd_period=3, slowd_matype=1)
           df['j'] = 3 * df['k'] - 2 * df['d']
