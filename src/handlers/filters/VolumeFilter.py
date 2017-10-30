@@ -10,13 +10,12 @@ class VolumeFilter(StockFilter):
       pass
 
       def filter(self, data, config):
-          km5 = data['km5']
-          sellVolume = self.getSellVolume(km5)
+          sellVolume = self.getSellVolume(data)
           sellTrend = Utils.trendline(sellVolume['volume'])
-          print('sellVolumn and trend', sellVolume['volume'], sellTrend)
-          buyVolume = self.getBuyVolume(km5) 
+        #   print('sellVolumn and trend', sellVolume['volume'], sellTrend)
+          buyVolume = self.getBuyVolume(data) 
           buyTrend = Utils.trendline(buyVolume['volume'])
-          print('buyVolume and trend', buyVolume['volume'], buyTrend)
+        #   print('buyVolume and trend', buyVolume['volume'], buyTrend)
           return sellTrend < 0 and buyTrend > 0
 
 

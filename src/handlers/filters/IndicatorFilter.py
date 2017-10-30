@@ -7,8 +7,7 @@ class IndicatorFilter(StockFilter):
       pass 
 
       def filter(self, data, config):
-          km5 = data['km5']
-          return self.isMACDkingCross(km5)
+          return self.isMACDkingCross(data)
 
       def isMACDkingCross(self, km5):
           macd1 = km5.iloc[-2].get('macd')

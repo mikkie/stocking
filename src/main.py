@@ -10,36 +10,55 @@ import handlers.DadStrategy as ds
 import config.Config as conf
 from sqlalchemy import create_engine
 import datetime as dt
+import time
 import handlers.filters.quarterFilter as qf
+import threading
 
 
 def isInTradingTime():
     now = dt.datetime.now()
     return (now > dt.datetime(now.year,now.month,now.day,9,30) and now < dt.datetime(now.year,now.month,now.day,11,30)) or (now > dt.datetime(now.year,now.month,now.day,13,0) and now < dt.datetime(now.year,now.month,now.day,15,0))
 
-def getData(setting):
-    df_hist_km5 = pd.read_sql_table('km5', con=engine)
-    df_hist_kd3 = pd.read_sql_table('kd3', con=engine)
-    return df_hist_km5,df_hist_kd3
+def getData():
+    df_codes = pd.read_sql_table('codes', con=engine)
+    return df_codes
 
 def initData(setting):
     df_todayAll = ts.get_today_all()
     priceRange = setting.get_PriceRange()
     return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
 
-
 #setting
 setting = conf.Config()
 engine = create_engine(setting.get_DBurl())
 df_stocksPool = None
-if isInTradingTime() and len(sys.argv) == 1:
+
+def runEachMin(df_codes,dad):
+    print('正在监控==== ', dt.datetime.now())
+    for index,row in df_codes.iterrows():
+        code = row['code']
+        now = dt.datetime.now()
+        start = dt.datetime(now.year,now.month,now.day,9,30).strftime('%Y-%m-%d')
+        df_5m = ts.get_hist_data(code,start=start, ktype='5')
+        df_5m = df_5m[::-1]
+        #run
+        if dad.chooseStock(df_5m,setting):
+           print(code)
+    timer = threading.Timer(60, runEachMin,[df_codes,dad])
+    timer.start()       
+
+
+if (isInTradingTime() and len(sys.argv) == 1) or (len(sys.argv) == 2 and str(sys.argv[1]) == 'start'):
    #交易监控 
    #data
-   data_km5,data_kd3 = getData(setting)
+   df_codes = getData()
    #strategy
    dad = ds.DadStrategy()
-   #run
-   dad.chooseStock({'km5' : data_km5,'kd3' : data_kd3},setting)
+   timer = threading.Timer(60, runEachMin,[df_codes,dad])
+   timer.start()
+
+   while True:
+         time.sleep(0.5)
    pass 
 else:
    #初始化数据 

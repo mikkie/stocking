@@ -10,7 +10,8 @@ class Utils(object):
       
       @staticmethod
       def trendline(data, order=1):
-         coeffs = np.polyfit(data.index.values, list(data), order)
+         values = list(data)
+         coeffs = np.polyfit(list(range(1,len(values) + 1)), values, order)
          slope = coeffs[-2]
          return float(slope)
 
@@ -19,3 +20,11 @@ class Utils(object):
           close = df.close.values  #ndarray
           df['dif'], df['dea'], df['macd'] = ta.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9) #series
           df['macd'] = df['macd'] * 2;
+
+      @staticmethod
+      def kdj(df): 
+          close = df.close.values  #ndarray
+          high = df.close.values
+          low = df.close.values
+          df['k'], df['d'] = ta.STOCH(high, low, close, fastk_period=9, slowk_period=3, slowk_matype=1, slowd_period=3, slowd_matype=1)
+          df['j'] = 3 * df['k'] - 2 * df['d']

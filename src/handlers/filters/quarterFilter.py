@@ -24,6 +24,8 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         df_3m = df_3m[::-1]
         #计算指标使用半年D数据
         Utils.macd(df_3m)
+        # Utils.kdj(df_3m)
+        print(df_3m)
         #计算一季度的值
         df_3m = df_3m[-90:]
         # print(df_3m)
@@ -34,9 +36,11 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         if np.isnan(high) or np.isnan(low) or np.isnan(close):
            continue 
         ratio = (close - low) / (high - low)
+        #中长期趋势见底
         if isMACDkingCross(df_3m) and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
-           print(code)
-           result.append(code)
+           if filterFor5Days(df_3m): 
+              print(code)
+              result.append(code)
     return result 
 
 def isMACDkingCross(df_3m):
@@ -46,3 +50,13 @@ def isMACDkingCross(df_3m):
     if np.isnan(yesterday) or np.isnan(now) or np.isnan(lastday):
        return False 
     return (yesterday < 0 or lastday < 0) and now > 0
+
+
+def filterFor5Days(df_3m):
+    df_5d = df_3m[-5:]
+    for index,row in df_5d.iterrows():
+        close = row['close']
+        ma5 = row['ma5']
+        if close < ma5:
+           return False 
+    return True
