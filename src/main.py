@@ -26,7 +26,7 @@ def getData():
 def initData(setting):
     df_todayAll = ts.get_today_all()
     priceRange = setting.get_PriceRange()
-    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
+    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['p_change'] >= 1.00)]
 
 #setting
 setting = conf.Config()
@@ -71,8 +71,10 @@ else:
          print(df_stocksPool)
       df_stocks = pd.read_sql_table('stocks', con=engine)
       result = qf.filterSuperSoldIn3Months(df_stocks,setting)
-      df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
-      df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
+    #   df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
+    #   df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
+      df_codes =  df_stocks[df_stocks.index.map(lambda x : x in result)]
+      df_codes.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
 
 
 
