@@ -17,6 +17,8 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
     for index,row in df_todayAll.iterrows():
         code = row['code']
         df_3m = ts.get_hist_data(code,start=threeMbefore,ktype='D')
+        if df_3m is None:
+           continue 
         # 数据少于90天
         if df_3m.empty or len(df_3m) < 30 * 3:
            continue 
@@ -24,8 +26,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         df_3m = df_3m[::-1]
         #计算指标使用半年D数据
         Utils.macd(df_3m)
-        Utils.kdj(df_3m)
-        print(df_3m)
+        Utils.myKdj(df_3m)
         #计算一季度的值
         df_3m = df_3m[-90:]
         # print(df_3m)
@@ -36,12 +37,27 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         if np.isnan(high) or np.isnan(low) or np.isnan(close):
            continue 
         ratio = (close - low) / (high - low)
-        #中长期趋势见底
-        if isMACDkingCross(df_3m) and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
+        #中长期趋势见底(用kdj替换掉macd,滞后性)
+        if isIndicatorMatch(df_3m) and ratio < setting.get_SuperSold()[1] and ratio > setting.get_SuperSold()[0]:
            if filterFor5Days(df_3m): 
               print(code)
               result.append(code)
     return result 
+
+
+def isIndicatorMatch(df_3m):
+    return isKdjKingCross(df_3m)  
+
+
+
+def isKdjKingCross(df_3m):
+    yesterdayK = df_3m.iloc[-1].get('k')
+    yesterdayD = df_3m.iloc[-1].get('d')
+    yesterdayJ = df_3m.iloc[-1].get('j')
+    lastK = df_3m.iloc[-2].get('k')
+    lastD = df_3m.iloc[-2].get('d')
+    lastJ = df_3m.iloc[-2].get('j')
+    return yesterdayK < 20 and yesterdayD < 20 and yesterdayJ < 20 and lastD > lastK and yesterdayD < yesterdayK
 
 def isMACDkingCross(df_3m):
     yesterday = df_3m.iloc[-2].get('macd')
@@ -49,12 +65,12 @@ def isMACDkingCross(df_3m):
     now = df_3m.iloc[-1].get('macd')
     if np.isnan(yesterday) or np.isnan(now) or np.isnan(lastday):
        return False 
-    return (yesterday < 0 or lastday < 0) and now > 0
+    return (yesterday < 0 and lastday < 0 and yesterday > lastday) and (now > 0 or round(float(now), 2) == 0.00) 
 
 
 def filterFor5Days(df_3m):
-    df_5d = df_3m[-5:]
-    for index,row in df_5d.iterrows():
+    df_3d = df_3m[-3:]
+    for index,row in df_3d.iterrows():
         close = row['close']
         ma5 = row['ma5']
         if close < ma5:
