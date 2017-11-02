@@ -12,18 +12,22 @@ from utils.Utils import Utils
 def filterSuperSoldIn3Months(df_todayAll,setting):
     result = [];
     now = dt.datetime.now()
+    todayStr = now.strftime('%Y-%m-%d')
     timeDelta = dt.timedelta(setting.get_longPeriod())
     threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
     for index,row in df_todayAll.iterrows():
         code = row['code']
-        df_3m = ts.get_hist_data(code,start=threeMbefore,ktype='D')
+        df_3m = ts.get_k_data(code,start=threeMbefore)
         if df_3m is None:
            continue 
         # 数据少于90天
         if df_3m.empty or len(df_3m) < 30 * 3:
            continue 
-        #倒序
-        df_3m = df_3m[::-1]
+        #添加最后一行
+        if df_3m.iloc[-1].get('date') != todayStr:
+           today_df = pd.DataFrame([[todayStr, row['open'],row['trade'],row['high'],row['low'],row['volume']/100,code]],columns=list(['date','open','close','high','low','volume','code']))
+           df_3m = df_3m.append(today_df,ignore_index=True)
+        # df_3m = df_3m[::-1]
         #计算指标使用半年D数据
         Utils.macd(df_3m)
         Utils.myKdj(df_3m)
