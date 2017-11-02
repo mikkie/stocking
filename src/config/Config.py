@@ -4,13 +4,14 @@ __author__ = 'aqua'
 class Config(object):
 
       def __init__(self):
-          self.__priceRange = {'min' : 5.00, 'max' : 30.00} #价格区间
+          self.__priceRange = {'min' : 5.00, 'max' : 50.00} #价格区间
           self.__timeStart = '14:25:00' #监控起始时间
           self.__pKm5Change = 0.01 #当日5分钟振幅
           self.__pKM3Change = 0.05 #3个月振幅
           self.__superSold = [0.05,0.2] #超卖
           self.__longPeriod = 180 #半年
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
+          self.__turnOver = 3.00 #换手率
 
       def get_pKm5Change(self):
           return self.__pKm5Change
@@ -35,5 +36,8 @@ class Config(object):
 
       def get_longPeriod(self):
           return self.__longPeriod  
+
+      def get_TurnOver(self):
+          return self.__turnOver  
 
       pass

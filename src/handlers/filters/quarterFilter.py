@@ -38,7 +38,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
            continue 
         ratio = (close - low) / (high - low)
         #中长期趋势见底(用kdj替换掉macd,滞后性)
-        if isIndicatorMatch(df_3m) and ratio < setting.get_SuperSold()[1]:
+        if ratio < setting.get_SuperSold()[1] and isIndicatorMatch(df_3m):
         #    if filterFor5Days(df_3m): 
            print(code)
            result.append(code)

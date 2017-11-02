@@ -26,7 +26,7 @@ def getData():
 def initData(setting):
     df_todayAll = ts.get_today_all()
     priceRange = setting.get_PriceRange()
-    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['changepercent'] >= 1.00)]
+    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['turnoverratio'] > setting.get_TurnOver())]
 
 #setting
 setting = conf.Config()
