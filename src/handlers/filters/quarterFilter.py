@@ -24,9 +24,9 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         if df_3m.empty or len(df_3m) < 30 * 3:
            continue 
         #添加最后一行
-        if df_3m.iloc[-1].get('date') != todayStr:
-           today_df = pd.DataFrame([[todayStr, row['open'],row['trade'],row['high'],row['low'],row['volume']/100,code]],columns=list(['date','open','close','high','low','volume','code']))
-           df_3m = df_3m.append(today_df,ignore_index=True)
+        # if df_3m.iloc[-1].get('date') != todayStr:
+        #    today_df = pd.DataFrame([[todayStr, row['open'],row['trade'],row['high'],row['low'],row['volume']/100,code]],columns=list(['date','open','close','high','low','volume','code']))
+        #    df_3m = df_3m.append(today_df,ignore_index=True)
         # df_3m = df_3m[::-1]
         #计算指标使用半年D数据
         Utils.macd(df_3m)
@@ -47,9 +47,11 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
            tag = False
            if isKdjKingCross(df_3m):
               print('kdj\r\n',code)
+            #   print(df_3m)
               tag = True
            if isMACDkingCross(df_3m):  
               print('macd\r\n',code)  
+            #   print(df_3m)
               tag = True
            if tag:   
               result.append(code)
@@ -68,7 +70,10 @@ def isKdjKingCross(df_3m):
     lastK = df_3m.iloc[-2].get('k')
     lastD = df_3m.iloc[-2].get('d')
     lastJ = df_3m.iloc[-2].get('j')
-    return yesterdayK < 20 and yesterdayD < 20 and yesterdayJ < 20 and lastD > lastK and yesterdayD < yesterdayK
+    tdbfyK = df_3m.iloc[-3].get('k')
+    tdbfyD = df_3m.iloc[-3].get('d')
+    tdbfyJ = df_3m.iloc[-3].get('j')
+    return lastK < 20 and lastD < 20 and lastJ < 20 and tdbfyD > tdbfyK and lastD <= lastK and yesterdayD <= yesterdayK
 
 def isMACDkingCross(df_3m):
     yesterday = df_3m.iloc[-2].get('macd')
