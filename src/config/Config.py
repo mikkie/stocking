@@ -4,7 +4,7 @@ __author__ = 'aqua'
 class Config(object):
 
       def __init__(self):
-          self.__priceRange = {'min' : 5.00, 'max' : 50.00} #价格区间
+          self.__priceRange = {'min' : 3.00, 'max' : 30.00} #价格区间
           self.__timeStart = '14:25:00' #监控起始时间
           self.__pKm5Change = 0.01 #当日5分钟振幅
           self.__pKM3Change = 0.05 #3个月振幅
