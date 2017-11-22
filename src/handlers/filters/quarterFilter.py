@@ -47,7 +47,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         #中长期趋势见底(用kdj替换掉macd,滞后性)
         tag = False
         #中小盘 右侧交易
-        if len(sys.argv) > 2 and (sys.argv[2] == 'zx' or sys.argv[2] == '0'):
+        if len(sys.argv) > 2 and (sys.argv[2] == 'zx' or sys.argv[2] == '0' or sys.argv[2] == 'tiger'):
            if ratio < setting.get_SuperSold()[1]:
               print('super sold\r\n',code)
               if isMACDkingCross(df_3m):  

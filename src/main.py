@@ -37,7 +37,11 @@ def initData(setting):
          df_todayAll = df_todayAll[df_todayAll['code'].isin(hs300CodeList)]
     elif str(sys.argv[2]) == 'zx':  #中小盘
          zxCodeList = getZXCodeList() 
-         df_todayAll = df_todayAll[df_todayAll['code'].isin(zxCodeList)]           
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(zxCodeList)]   
+    elif str(sys.argv[2]) == 'tiger': #龙虎榜
+         tigerList = getTigerCodeList()
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(tigerList)]
+         pass             
     if len(sys.argv) > 4:
        if str(sys.argv[3]) == 'hy':  #行业分类
             hyCodeList = getHYCodeList()    
@@ -46,7 +50,7 @@ def initData(setting):
             cCodeList = getConceptCodeList()    
             df_todayAll = df_todayAll[df_todayAll['code'].isin(cCodeList)]      
     turn_over = setting.get_TurnOver()[1]
-    if str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300':        
+    if str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'tiger':        
        turn_over = setting.get_TurnOver()[0]
     return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['turnoverratio'] > turn_over)]
 
@@ -85,6 +89,15 @@ def getZXCodeList():
        df_zx = ts.get_sme_classified()
        df_zx.to_sql('zx',con=engine,if_exists='replace',index=False,index_label='code')
     return df_zx['code'].tolist()
+
+
+def getTigerCodeList():
+    def cb():
+        return ts.inst_tops()
+    df_tiger = Utils.queryData('tiger','code',engine, cb, forceUpdate=True)
+    df_tiger = df_tiger[df_tiger['net'] > 0]
+    return df_tiger['code'].tolist()
+
 
 #获取行业股票代码
 def getHYCodeList():
@@ -154,7 +167,7 @@ if (isInTradingTime() and len(sys.argv) == 1) or (len(sys.argv) == 2 and str(sys
 else:
    #初始化数据 
    if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
-      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c'):
+      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger'):
          print('=====执行价格,换手率过滤=====',setting.get_PriceRange(),setting.get_TurnOver())  
          df_stocksPool = initData(setting) 
          df_stocksPool = df_stocksPool.sort_values('trade')
