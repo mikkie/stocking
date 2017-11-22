@@ -45,7 +45,10 @@ def initData(setting):
        elif str(sys.argv[3]) == 'c':  #概念分类
             cCodeList = getConceptCodeList()    
             df_todayAll = df_todayAll[df_todayAll['code'].isin(cCodeList)]      
-    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['turnoverratio'] > setting.get_TurnOver())]
+    turn_over = setting.get_TurnOver()[1]
+    if str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300':        
+       turn_over = setting.get_TurnOver()[0]
+    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['turnoverratio'] > turn_over)]
 
 #获取上证50代码列表
 def getSZ50CodeList():

@@ -21,8 +21,8 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         df_3m = ts.get_k_data(code,start=threeMbefore)
         if df_3m is None:
            continue 
-        # 数据少于90天
-        if df_3m.empty or len(df_3m) < 30 * 3:
+        # 数据少于120天
+        if df_3m.empty or len(df_3m) < setting.get_trendPeriod():
            continue 
         #添加最后一行
         if df_3m.iloc[-1].get('date') != todayStr:
@@ -33,7 +33,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         Utils.macd(df_3m)
         Utils.myKdj(df_3m)
         #计算一季度的值
-        df_3m = df_3m[-90:]
+        df_3m = df_3m[setting.get_trendPeriod() * -1:]
         # print(df_3m)
         high_row = df_3m.loc[df_3m['high'].idxmax()]
         high = high_row.get('high')

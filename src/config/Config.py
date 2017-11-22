@@ -9,10 +9,11 @@ class Config(object):
           self.__pKm5Change = 0.01 #当日5分钟振幅
           self.__pKM3Change = 0.05 #3个月振幅
           self.__superSold = [0.05,0.2] #超卖
-          self.__leftTrade = [0.2,0.5] #左侧交易
+          self.__leftTrade = [0.2,0.6] #左侧交易
           self.__longPeriod = 180 #半年
+          self.__trendPeriod = 120 #主要分析范围 最近120天
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
-          self.__turnOver = 3.00 #换手率
+          self.__turnOver = [1.50, 5.00, 7.00] #换手率
           self.__updateToday = False #更新当前实时价格
 
       def get_pKm5Change(self):
@@ -47,5 +48,8 @@ class Config(object):
 
       def get_updateToday(self):
           return self.__updateToday
+
+      def get_trendPeriod(self):
+          return self.__trendPeriod  
 
       pass
