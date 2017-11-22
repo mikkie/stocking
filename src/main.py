@@ -13,6 +13,7 @@ import datetime as dt
 import time
 import handlers.filters.quarterFilter as qf
 import threading
+from utils.Utils import Utils
 
 
 def isInTradingTime():
@@ -24,7 +25,9 @@ def getData():
     return df_codes
 
 def initData(setting):
-    df_todayAll = ts.get_today_all()
+    def cb():
+        return ts.get_today_all()
+    df_todayAll = Utils.queryData('today_all','code',engine, cb)
     priceRange = setting.get_PriceRange()
     if str(sys.argv[2]) == '50': #上证50成份股
          sz50CodeList = getSZ50CodeList() 
@@ -46,17 +49,38 @@ def initData(setting):
 
 #获取上证50代码列表
 def getSZ50CodeList():
-    df_sz50 = ts.get_sz50s()
+    df_sz50 = None
+    try:
+        df_sz50 = pd.read_sql_table('sz50', con=engine)
+    except:
+        pass
+    if df_sz50 is None or df_sz50.empty:
+       df_sz50 = ts.get_sz50s()
+       df_sz50.to_sql('sz50',con=engine,if_exists='replace',index=False,index_label='code')
     return df_sz50['code'].tolist()
 
 #获取沪深300代码列表
 def getHS300CodeList():
-    df_hs300 = ts.get_hs300s()
+    df_hs300 = None
+    try:
+        df_hs300 = pd.read_sql_table('hs300', con=engine)
+    except:
+        pass
+    if df_hs300 is None or df_hs300.empty:
+       df_hs300 = ts.get_hs300s()
+       df_hs300.to_sql('hs300',con=engine,if_exists='replace',index=False,index_label='code')
     return df_hs300['code'].tolist()
 
 #获取中小板代码列表
 def getZXCodeList():
-    df_zx = ts.get_sme_classified()
+    df_zx = None
+    try:
+        df_zx = pd.read_sql_table('zx', con=engine)
+    except:
+        pass
+    if df_zx is None or df_zx.empty:
+       df_zx = ts.get_sme_classified()
+       df_zx.to_sql('zx',con=engine,if_exists='replace',index=False,index_label='code')
     return df_zx['code'].tolist()
 
 #获取行业股票代码
@@ -64,7 +88,14 @@ def getHYCodeList():
     if len(sys.argv) < 5:
        raise Exception('缺少参数:行业名称')
     hyName = str(sys.argv[4])
-    df_hy = ts.get_industry_classified()
+    df_hy = None
+    try:
+        df_hy = pd.read_sql_table('hy', con=engine)
+    except:
+        pass
+    if df_hy is None or df_hy.empty:
+       df_hy = ts.get_industry_classified()
+       df_hy.to_sql('hy',con=engine,if_exists='replace',index=False,index_label='code')
     df_hy = df_hy.loc[df_hy['c_name'] == hyName]
     return df_hy['code'].tolist()
 
@@ -73,7 +104,14 @@ def getConceptCodeList():
     if len(sys.argv) < 5:
            raise Exception('缺少参数:概念名称')
     cName = str(sys.argv[4])
-    df_c = ts.get_concept_classified()
+    df_c = None
+    try:
+        df_c = pd.read_sql_table('c', con=engine)
+    except:
+        pass
+    if df_c is None or df_c.empty:
+       df_c = ts.get_concept_classified()
+       df_c.to_sql('c',con=engine,if_exists='replace',index=False,index_label='code')
     df_c = df_c.loc[df_c['c_name'] == cName]
     return df_c['code'].tolist()
 

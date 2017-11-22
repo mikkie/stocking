@@ -2,6 +2,7 @@
 
 __author__ = 'aqua'
 
+import sys
 import pandas as pd
 import numpy as np
 import tushare as ts
@@ -34,8 +35,10 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         #计算一季度的值
         df_3m = df_3m[-90:]
         # print(df_3m)
-        high = df_3m.loc[df_3m['high'].idxmax()].get('high')
-        low = df_3m.loc[df_3m['low'].idxmin()].get('low')
+        high_row = df_3m.loc[df_3m['high'].idxmax()]
+        high = high_row.get('high')
+        low_row = df_3m.loc[df_3m['low'].idxmin()]
+        low = low_row.get('low')
         # p_change = df_3m['p_change'].mean()
         close = df_3m.iloc[-1].get('close')
         if np.isnan(high) or np.isnan(low) or np.isnan(close):
@@ -43,15 +46,26 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         ratio = (close - low) / (high - low)
         #中长期趋势见底(用kdj替换掉macd,滞后性)
         tag = False
-        if ratio < setting.get_SuperSold()[1]:
-           tag = True
-           print('super sold\r\n',code)
-           if isKdjKingCross(df_3m):
-              print('kdj\r\n',code)
-           if isMACDkingCross(df_3m):  
-              print('macd\r\n',code)  
-           if tag:   
-              result.append(code)
+        #中小盘 右侧交易
+        if len(sys.argv) > 2 and (sys.argv[2] == 'zx' or sys.argv[2] == '0'):
+           if ratio < setting.get_SuperSold()[1]:
+              print('super sold\r\n',code)
+              if isMACDkingCross(df_3m):  
+                 tag = True 
+                 print('macd\r\n',code)  
+              if tag:   
+                 result.append(code)
+        #大盘股 左侧交易
+        elif len(sys.argv) > 2 and (sys.argv[2] == '50' or sys.argv[2] == '300'):
+             high_date = high_row.get('date')
+             low_date = low_row.get('date')
+             if ratio < setting.get_LeftTrade()[1] and ratio > setting.get_LeftTrade()[0] and high_date < low_date:  
+                print('left trade period\r\n',code)
+                if isKdjKingCross(df_3m):
+                   tag = True 
+                   print('kdj\r\n',code)
+                if tag:   
+                   result.append(code)   
     return result 
 
 

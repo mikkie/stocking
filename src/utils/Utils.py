@@ -7,6 +7,18 @@ import talib as ta
 
 class Utils(object):
       pass
+
+      @staticmethod
+      def queryData(tableName, indexLabel, engine, cb):   
+          df_data = None
+          try:
+             df_data = pd.read_sql_table(tableName, con=engine)
+          except:
+             pass
+          if df_data is None or df_data.empty:
+             df_data = cb()
+             df_data.to_sql(tableName,con=engine,if_exists='replace',index=False,index_label=indexLabel)
+          return df_data  
       
       @staticmethod
       def trendline(data, order=1):
