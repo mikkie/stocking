@@ -13,7 +13,7 @@ class Config(object):
           self.__longPeriod = 180 #半年
           self.__trendPeriod = 120 #主要分析范围 最近120天
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
-          self.__turnOver = [1.50, 5.00, 7.00] #换手率
+          self.__turnOver = [1.50, 3.00, 7.00] #换手率
           self.__updateToday = False #更新当前实时价格
 
       def get_pKm5Change(self):
