@@ -152,7 +152,7 @@ else:
    #初始化数据 
    if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
       if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c'):
-         print('=====执行价格,换手率过滤=====',setting.get_PriceRange())  
+         print('=====执行价格,换手率过滤=====',setting.get_PriceRange(),setting.get_TurnOver())  
          df_stocksPool = initData(setting) 
          df_stocksPool = df_stocksPool.sort_values('trade')
          df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
