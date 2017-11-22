@@ -27,7 +27,7 @@ def getData():
 def initData(setting):
     def cb():
         return ts.get_today_all()
-    df_todayAll = Utils.queryData('today_all','code',engine, cb)
+    df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=setting.get_updateToday())
     priceRange = setting.get_PriceRange()
     if str(sys.argv[2]) == '50': #上证50成份股
          sz50CodeList = getSZ50CodeList() 

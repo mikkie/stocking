@@ -13,6 +13,7 @@ class Config(object):
           self.__longPeriod = 180 #半年
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3.00 #换手率
+          self.__updateToday = False #更新当前实时价格
 
       def get_pKm5Change(self):
           return self.__pKm5Change
@@ -44,5 +45,7 @@ class Config(object):
       def get_LeftTrade(self):
           return self.__leftTrade
 
+      def get_updateToday(self):
+          return self.__updateToday
 
       pass
