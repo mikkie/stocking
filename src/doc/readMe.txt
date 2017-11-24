@@ -11,3 +11,4 @@ main.py init 300 c 节能
 [turnover] 换手率
 [macd] 指标
 [kdj] 指标
+[ma] 均线

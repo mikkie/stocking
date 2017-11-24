@@ -7,8 +7,8 @@ class MAFilter(object):
       pass 
 
       def filter(self, data, config):
-          if data['df_h'] is None or data['df_h'].empty :
-             data['df_h'] = ts.get_hist_data(data.iloc[0]['code'])
+          if not ('df_h' in data) or data['df_h'].empty :
+             data['df_h'] = ts.get_hist_data(data['df_3m'].iloc[0]['code'])
           df_last_90h = data['df_h'][0:90]
           count_higher_ma5 = 0
           count_higher_ma10 = 0
