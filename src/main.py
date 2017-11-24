@@ -112,7 +112,7 @@ def getHYCodeList():
     if df_hy is None or df_hy.empty:
        df_hy = ts.get_industry_classified()
        df_hy.to_sql('hy',con=engine,if_exists='replace',index=False,index_label='code')
-    df_hy = df_hy.loc[df_hy['c_name'].contains(hyName)]
+    df_hy = df_hy.loc[df_hy['c_name'].str.contains(hyName)]
     return df_hy['code'].tolist()
 
 #获取概念股票代码
@@ -128,7 +128,7 @@ def getConceptCodeList():
     if df_c is None or df_c.empty:
        df_c = ts.get_concept_classified()
        df_c.to_sql('c',con=engine,if_exists='replace',index=False,index_label='code')
-    df_c = df_c.loc[df_c['c_name'].contains(cName)]
+    df_c = df_c.loc[df_c['c_name'].str.contains(cName)]
     return df_c['code'].tolist()
 
 
