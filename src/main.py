@@ -50,9 +50,9 @@ def initData(setting):
             cCodeList = getConceptCodeList()    
             df_todayAll = df_todayAll[df_todayAll['code'].isin(cCodeList)]      
     turn_over = setting.get_TurnOver()[1]
-    if str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'tiger':        
+    if str(sys.argv[2]) == '50' or str(sys.argv[2]) == 'tiger':        
        turn_over = setting.get_TurnOver()[0]
-    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max']) & (df_todayAll['turnoverratio'] > turn_over)]
+    return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
 
 #获取上证50代码列表
 def getSZ50CodeList():
@@ -112,7 +112,7 @@ def getHYCodeList():
     if df_hy is None or df_hy.empty:
        df_hy = ts.get_industry_classified()
        df_hy.to_sql('hy',con=engine,if_exists='replace',index=False,index_label='code')
-    df_hy = df_hy.loc[df_hy['c_name'] == hyName]
+    df_hy = df_hy.loc[df_hy['c_name'].contains(hyName)]
     return df_hy['code'].tolist()
 
 #获取概念股票代码
@@ -128,7 +128,7 @@ def getConceptCodeList():
     if df_c is None or df_c.empty:
        df_c = ts.get_concept_classified()
        df_c.to_sql('c',con=engine,if_exists='replace',index=False,index_label='code')
-    df_c = df_c.loc[df_c['c_name'] == cName]
+    df_c = df_c.loc[df_c['c_name'].contains(cName)]
     return df_c['code'].tolist()
 
 
@@ -168,17 +168,18 @@ else:
    #初始化数据 
    if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
       if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger'):
-         print('=====执行价格,换手率过滤=====',setting.get_PriceRange(),setting.get_TurnOver())  
+         print('=====执行基础过滤=====')  
          df_stocksPool = initData(setting) 
          df_stocksPool = df_stocksPool.sort_values('trade')
          df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
-         print(df_stocksPool)
+        #  print(df_stocksPool)
       df_stocks = pd.read_sql_table('stocks', con=engine)
-      result = qf.filterSuperSoldIn3Months(df_stocks,setting)
+      result = qf.filter(df_stocks,setting)
     #   df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
     #   df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
       df_codes = df_stocks[df_stocks.code.isin(result)]
       df_codes = df_codes.sort_values('changepercent',ascending=False)
+      print(df_codes)
       df_codes.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
 
 

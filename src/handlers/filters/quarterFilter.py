@@ -8,9 +8,10 @@ import numpy as np
 import tushare as ts
 import datetime as dt
 from utils.Utils import Utils 
+from ..StrategyManager import StrategyManager
 
 
-def filterSuperSoldIn3Months(df_todayAll,setting):
+def filter(df_todayAll,setting):
     result = [];
     now = dt.datetime.now()
     todayStr = now.strftime('%Y-%m-%d')
@@ -21,7 +22,7 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         df_3m = ts.get_k_data(code,start=threeMbefore)
         if df_3m is None:
            continue 
-        # 数据少于120天
+        # 数据少于360天
         if df_3m.empty or len(df_3m) < setting.get_trendPeriod():
            continue 
         #添加最后一行
@@ -32,40 +33,11 @@ def filterSuperSoldIn3Months(df_todayAll,setting):
         #计算指标使用半年D数据
         Utils.macd(df_3m)
         Utils.myKdj(df_3m)
-        #计算一季度的值
-        df_3m = df_3m[setting.get_trendPeriod() * -1:]
-        # print(df_3m)
-        high_row = df_3m.loc[df_3m['high'].idxmax()]
-        high = high_row.get('high')
-        low_row = df_3m.loc[df_3m['low'].idxmin()]
-        low = low_row.get('low')
-        # p_change = df_3m['p_change'].mean()
-        close = df_3m.iloc[-1].get('close')
-        if np.isnan(high) or np.isnan(low) or np.isnan(close):
-           continue 
-        ratio = (close - low) / (high - low)
-        #中长期趋势见底(用kdj替换掉macd,滞后性)
-        tag = False
-        #中小盘 右侧交易
-        if len(sys.argv) > 2 and (sys.argv[2] == 'zx' or sys.argv[2] == '0' or sys.argv[2] == 'tiger'):
-           if ratio < setting.get_SuperSold()[1]:
-              print('super sold\r\n',code)
-              if isMACDkingCross(df_3m):  
-                 tag = True 
-                 print('macd\r\n',code)  
-              if tag:   
-                 result.append(code)
-        #大盘股 左侧交易
-        elif len(sys.argv) > 2 and (sys.argv[2] == '50' or sys.argv[2] == '300'):
-             high_date = high_row.get('date')
-             low_date = low_row.get('date')
-             if ratio < setting.get_LeftTrade()[1] and ratio > setting.get_LeftTrade()[0] and high_date < low_date:  
-                print('left trade period\r\n',code)
-                if isKdjKingCross(df_3m):
-                   tag = True 
-                   print('kdj\r\n',code)
-                if tag:   
-                   result.append(code)   
+        ######################################开始配置计算###########################################
+        sm = StrategyManager()
+        data = {'df_3m' : df_3m}
+        if sm.start(code, setting.get_Strategy(), data, setting):
+           result.append(code) 
     return result 
 
 
