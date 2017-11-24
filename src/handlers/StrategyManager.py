@@ -1,7 +1,7 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-from .filtersV2 import LeftTradeFilter, RightTradeFilter, MACDFilter, KDJFilter, TurnoverFilter, VolumeFilter
+from .filtersV2 import LeftTradeFilter, RightTradeFilter, MACDFilter, KDJFilter, TurnoverFilter, VolumeFilter, MAFilter
 
 class StrategyManager(object):
 
@@ -13,6 +13,7 @@ class StrategyManager(object):
           self.strategyMaps['kdj'] = KDJFilter.KDJFilter()
           self.strategyMaps['turnover'] = TurnoverFilter.TurnoverFilter()
           self.strategyMaps['volume'] = VolumeFilter.VolumeFilter()
+          self.strategyMaps['kLine'] = MAFilter.MAFilter()
 
 
       def start(self,code,strategySequence,data,config):

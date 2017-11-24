@@ -20,7 +20,6 @@ def filter(df_todayAll,setting):
     for index,row in df_todayAll.iterrows():
         code = row['code']
         df_3m = ts.get_k_data(code,start=threeMbefore)
-        df_h = ts.get_hist_data(code)
         if df_3m is None:
            continue 
         # 数据少于360天
@@ -36,7 +35,7 @@ def filter(df_todayAll,setting):
         Utils.myKdj(df_3m)
         ######################################开始配置计算###########################################
         sm = StrategyManager()
-        data = {'df_3m' : df_3m,'df_realTime' : row, 'df_h' : df_h}
+        data = {'df_3m' : df_3m,'df_realTime' : row}
         if sm.start(code, setting.get_Strategy(), data, setting):
            result.append(code) 
     return result 

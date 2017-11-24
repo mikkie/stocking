@@ -11,15 +11,15 @@ class LeftTradeFilter(object):
 
       def filter(self, data, config):
           df_3m = data['df_3m']
-          df_3m = df_3m[config.get_trendPeriod() * -1:]
-          high_row = df_3m.loc[df_3m['high'].idxmax()]
-          high = high_row.get('high')
-          low_row = df_3m.loc[df_3m['low'].idxmin()]
-          low = low_row.get('low')
-          close = df_3m.iloc[-1].get('close')
-          if np.isnan(high) or np.isnan(low) or np.isnan(close):
-             return False 
-          ratio = (close - low) / (high - low) 
-          high_date = high_row.get('date')
-          low_date = low_row.get('date')
-          return ratio < config.get_LeftTrade()[1] and ratio > config.get_LeftTrade()[0] and high_date < low_date
+          df_3m = df_3m[config.get_LeftTrade()[0] * -1:]
+          count = 0
+          countH = 0
+          lastClose = 0
+          for index,row in df_3m.iterrows():
+              if row['close'] > row['open']:
+                 count = count + 1
+              if lastClose != 0 and row['close'] > lastClose:
+                 countH = countH + 1
+              lastClose = row['close']      
+          return count >= config.get_LeftTrade()[1] and countH >= config.get_LeftTrade()[2] and df_3m.iloc[-1]['close'] > df_3m.iloc[-1]['open']
+                          
