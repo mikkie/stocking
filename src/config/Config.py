@@ -13,9 +13,9 @@ class Config(object):
           self.__longPeriod = 365 #1年
           self.__trendPeriod = 180 #主要分析范围 最近120天
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
-          self.__turnOver = [1.50, 0.00, 7.00] #换手率
+          self.__turnOver = 1.50 #换手率
           self.__updateToday = False #更新当前实时价格
-          self.__strategy = ['rightTrade','macd'] #使用策略
+          self.__strategy = ['volume','turnover','rightTrade','macd'] #使用策略
 
       def get_pKm5Change(self):
           return self.__pKm5Change
