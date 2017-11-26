@@ -9,7 +9,7 @@ class Utils(object):
       pass
 
       @staticmethod
-      def queryData(tableName, indexLabel, engine, cb, forceUpdate=False):   
+      def queryData(tableName, indexLabel, engine, cb, forceUpdate=False, **kw):   
           df_data = None
           if forceUpdate == False:
              try:
@@ -17,7 +17,7 @@ class Utils(object):
              except:
                 pass
           if df_data is None or df_data.empty:
-             df_data = cb()
+             df_data = cb(kw=kw)
              df_data.to_sql(tableName,con=engine,if_exists='replace',index=False,index_label=indexLabel)
           return df_data  
       

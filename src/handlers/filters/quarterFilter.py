@@ -11,7 +11,7 @@ from utils.Utils import Utils
 from ..StrategyManager import StrategyManager
 
 
-def filter(df_todayAll,setting):
+def filter(df_todayAll,setting,engine):
     result = [];
     now = dt.datetime.now()
     todayStr = now.strftime('%Y-%m-%d')
@@ -19,7 +19,9 @@ def filter(df_todayAll,setting):
     threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
     for index,row in df_todayAll.iterrows():
         code = row['code']
-        df_3m = ts.get_k_data(code,start=threeMbefore)
+        def cb(**kw):
+            return ts.get_k_data(kw['kw']['code'],start=kw['kw']['start'])
+        df_3m = Utils.queryData('k_data_' + code,'code',engine, cb, forceUpdate=setting.get_updateToday(),code=code,start=threeMbefore)
         if df_3m is None:
            continue 
         # 数据少于360天
@@ -35,7 +37,7 @@ def filter(df_todayAll,setting):
         Utils.myKdj(df_3m)
         ######################################开始配置计算###########################################
         sm = StrategyManager()
-        data = {'df_3m' : df_3m,'df_realTime' : row}
+        data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
         if sm.start(code, setting.get_Strategy(), data, setting):
            result.append(code) 
     return result 

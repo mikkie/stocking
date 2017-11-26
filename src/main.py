@@ -25,7 +25,7 @@ def getData():
     return df_codes
 
 def initData(setting):
-    def cb():
+    def cb(**kw):
         return ts.get_today_all()
     df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=setting.get_updateToday())
     priceRange = setting.get_PriceRange()
@@ -171,7 +171,7 @@ else:
          df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
         #  print(df_stocksPool)
       df_stocks = pd.read_sql_table('stocks', con=engine)
-      result = qf.filter(df_stocks,setting)
+      result = qf.filter(df_stocks,setting, engine)
     #   df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
     #   df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
       df_codes = df_stocks[df_stocks.code.isin(result)]
