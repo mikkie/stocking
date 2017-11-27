@@ -9,22 +9,19 @@ import tushare as ts
 import datetime as dt
 from utils.Utils import Utils 
 from ..StrategyManager import StrategyManager
+from multiprocessing import Pool
+import os
 
 
-def filter(df_todayAll,setting,engine):
-    result = [];
-    now = dt.datetime.now()
-    todayStr = now.strftime('%Y-%m-%d')
-    timeDelta = dt.timedelta(setting.get_longPeriod())
-    threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
-    for index,row in df_todayAll.iterrows():
+def subProcessTask(df_today,result,start,sm,engine):
+    for index,row in df_today.iterrows():
         code = row['code']
         def cb(**kw):
             return ts.get_k_data(kw['kw']['code'],start=kw['kw']['start'])
         df_3m = Utils.queryData('k_data_' + code,'code',engine, cb, forceUpdate=setting.get_updateToday(),code=code,start=threeMbefore)
         if df_3m is None:
            continue 
-        # 数据少于360天
+        # 数据少于180天
         if df_3m.empty or len(df_3m) < setting.get_trendPeriod():
            continue 
         #添加最后一行
@@ -36,10 +33,52 @@ def filter(df_todayAll,setting,engine):
         Utils.macd(df_3m)
         Utils.myKdj(df_3m)
         ######################################开始配置计算###########################################
-        sm = StrategyManager()
         data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
         if sm.start(code, setting.get_Strategy(), data, setting):
-           result.append(code) 
+           result.append(code)
+
+
+def filter(df_todayAll,setting,engine):
+    result = [];
+    now = dt.datetime.now()
+    todayStr = now.strftime('%Y-%m-%d')
+    timeDelta = dt.timedelta(setting.get_longPeriod())
+    threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
+    sm = StrategyManager()
+    p = Pool(4)
+    length = len(df_todayAll)
+    begin = 0
+    for i in range(5):
+        end = begin + length // 4
+        if end >= length:
+           end = length 
+        p.apply_async(subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine))
+        begin = end
+    p.close()
+    p.join()
+    # for index,row in df_todayAll.iterrows():
+    #     code = row['code']
+    #     def cb(**kw):
+    #         return ts.get_k_data(kw['kw']['code'],start=kw['kw']['start'])
+    #     df_3m = Utils.queryData('k_data_' + code,'code',engine, cb, forceUpdate=setting.get_updateToday(),code=code,start=threeMbefore)
+    #     if df_3m is None:
+    #        continue 
+    #     # 数据少于180天
+    #     if df_3m.empty or len(df_3m) < setting.get_trendPeriod():
+    #        continue 
+    #     #添加最后一行
+    #     if df_3m.iloc[-1].get('date') != todayStr:
+    #        today_df = pd.DataFrame([[todayStr, row['open'],row['trade'],row['high'],row['low'],row['volume']/100,code]],columns=list(['date','open','close','high','low','volume','code']))
+    #        df_3m = df_3m.append(today_df,ignore_index=True)
+    #     # df_3m = df_3m[::-1]
+    #     #计算指标使用半年D数据
+    #     Utils.macd(df_3m)
+    #     Utils.myKdj(df_3m)
+    #     ######################################开始配置计算###########################################
+    #     sm = StrategyManager()
+    #     data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
+    #     if sm.start(code, setting.get_Strategy(), data, setting):
+    #        result.append(code) 
     return result 
 
 

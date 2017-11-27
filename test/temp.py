@@ -2,11 +2,6 @@
 __author__ = 'aqua'
 
 
-def inner(**kw):
-    print(kw['kw']['code'])
+import tushare as ts
 
-def wrappr(name,**kw):
-    print(name)
-    inner(kw=kw)
-
-wrappr('li',code = '123')    
+print(ts.get_industry_classified())

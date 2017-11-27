@@ -16,6 +16,7 @@ import threading
 from utils.Utils import Utils
 
 
+
 def isInTradingTime():
     now = dt.datetime.now()
     return (now > dt.datetime(now.year,now.month,now.day,9,30) and now < dt.datetime(now.year,now.month,now.day,11,30)) or (now > dt.datetime(now.year,now.month,now.day,13,0) and now < dt.datetime(now.year,now.month,now.day,15,0))
@@ -128,56 +129,56 @@ def getConceptCodeList():
     df_c = df_c.loc[df_c['c_name'].str.contains(cName)]
     return df_c['code'].tolist()
 
+if __name__=='__main__':
+   #setting
+   setting = conf.Config()
+   engine = create_engine(setting.get_DBurl())
+   df_stocksPool = None
 
-#setting
-setting = conf.Config()
-engine = create_engine(setting.get_DBurl())
-df_stocksPool = None
-
-def runEachMin(df_codes,dad):
-    print('正在监控==== ', dt.datetime.now())
-    for index,row in df_codes.iterrows():
-        code = row['code']
-        now = dt.datetime.now()
-        start = dt.datetime(now.year,now.month,now.day,9,30).strftime('%Y-%m-%d')
-        df_5m = ts.get_hist_data(code,start=start, ktype='5')
-        df_5m = df_5m[::-1]
-        #run
-        if dad.chooseStock(df_5m,setting):
-           print(code)
-    timer = threading.Timer(60, runEachMin,[df_codes,dad])
-    timer.start()       
+   def runEachMin(df_codes,dad):
+       print('正在监控==== ', dt.datetime.now())
+       for index,row in df_codes.iterrows():
+           code = row['code']
+           now = dt.datetime.now()
+           start = dt.datetime(now.year,now.month,now.day,9,30).strftime('%Y-%m-%d')
+           df_5m = ts.get_hist_data(code,start=start, ktype='5')
+           df_5m = df_5m[::-1]
+           #run
+           if dad.chooseStock(df_5m,setting):
+              print(code)
+       timer = threading.Timer(60, runEachMin,[df_codes,dad])
+       timer.start()       
 
 
-if (isInTradingTime() and len(sys.argv) == 1) or (len(sys.argv) == 2 and str(sys.argv[1]) == 'start'):
-   #交易监控 
-   #data
-   df_codes = getData()
-   #strategy
-   dad = ds.DadStrategy()
-   timer = threading.Timer(60, runEachMin,[df_codes,dad])
-   timer.start()
+   if (isInTradingTime() and len(sys.argv) == 1) or (len(sys.argv) == 2 and str(sys.argv[1]) == 'start'):
+      #交易监控 
+      #data
+      df_codes = getData()
+      #strategy
+      dad = ds.DadStrategy()
+      timer = threading.Timer(60, runEachMin,[df_codes,dad])
+      timer.start()
 
-   while True:
-         time.sleep(0.5)
-   pass 
-else:
-   #初始化数据 
-   if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
-      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger'):
-         print('=====执行基础过滤=====')  
-         df_stocksPool = initData(setting) 
-         df_stocksPool = df_stocksPool.sort_values('trade')
-         df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
-        #  print(df_stocksPool)
-      df_stocks = pd.read_sql_table('stocks', con=engine)
-      result = qf.filter(df_stocks,setting, engine)
-    #   df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
-    #   df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
-      df_codes = df_stocks[df_stocks.code.isin(result)]
-      df_codes = df_codes.sort_values('changepercent',ascending=False)
-      print(df_codes)
-      df_codes.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
+      while True:
+            time.sleep(0.5)
+      pass 
+   else:
+      #初始化数据 
+      if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
+         if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger'):
+            print('=====执行基础过滤=====')  
+            df_stocksPool = initData(setting) 
+            df_stocksPool = df_stocksPool.sort_values('trade')
+            df_stocksPool.to_sql('stocks',con=engine,if_exists='replace',index=False,index_label='code')
+           #  print(df_stocksPool)
+         df_stocks = pd.read_sql_table('stocks', con=engine)
+         result = qf.filter(df_stocks,setting, engine)
+       #   df_code = pd.DataFrame(np.array(result).reshape(len(result),1), columns = ['code'])
+       #   df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
+         df_codes = df_stocks[df_stocks.code.isin(result)]
+         df_codes = df_codes.sort_values('changepercent',ascending=False)
+         print(df_codes)
+         df_codes.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
 
 
 

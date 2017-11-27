@@ -4,7 +4,7 @@ __author__ = 'aqua'
 import tushare as ts
 from sqlalchemy import create_engine
 
-df = ts.get_sina_dd('002153', date='2017-11-24',vol=400)
+df = ts.get_sina_dd('000856', date='2017-11-27',vol=400)
 print(df)
 # df_ticket = ts.get_tick_data('000856',date='2017-11-09')
 # engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')

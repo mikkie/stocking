@@ -18,7 +18,10 @@ class Utils(object):
                 pass
           if df_data is None or df_data.empty:
              df_data = cb(kw=kw)
-             df_data.to_sql(tableName,con=engine,if_exists='replace',index=False,index_label=indexLabel)
+             try:
+                df_data.to_sql(tableName,con=engine,if_exists='replace',index=False,index_label=indexLabel)
+             except:
+                pass    
           return df_data  
       
       @staticmethod

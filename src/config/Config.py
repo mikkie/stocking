@@ -10,12 +10,13 @@ class Config(object):
           self.__pKM3Change = 0.05 #3个月振幅
           self.__superSold = [0.05,0.2] #超卖
           self.__leftTrade = [6,5,4] #左侧交易
+          self.__flatTrade = [30, 0.9, 0.1] #长时间横盘
           self.__longPeriod = 365 #1年
           self.__trendPeriod = 180 #主要分析范围 最近180天
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 1.00 #换手率
           self.__updateToday = False #更新当前实时价格
-          self.__strategy = ['rightTrade','macd'] #使用策略
+          self.__strategy = ['flat'] #使用策略
           self.__kLineMA = [0.8,0.6] #K线超过MA5,MA10数量的百分比
 
       def get_pKm5Change(self):
@@ -59,5 +60,9 @@ class Config(object):
 
       def get_KLineMA(self):
           return self.__kLineMA   
+
+
+      def get_FlatTrade(self):
+          return self.__flatTrade  
 
       pass
