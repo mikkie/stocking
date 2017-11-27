@@ -9,16 +9,15 @@ import tushare as ts
 import datetime as dt
 from utils.Utils import Utils 
 from ..StrategyManager import StrategyManager
-from multiprocessing import Pool
-import os
+import threading
 
 
-def subProcessTask(df_today,result,start,sm,engine):
+def subProcessTask(df_today,result,start,sm,engine,setting,todayStr):
     for index,row in df_today.iterrows():
         code = row['code']
         def cb(**kw):
             return ts.get_k_data(kw['kw']['code'],start=kw['kw']['start'])
-        df_3m = Utils.queryData('k_data_' + code,'code',engine, cb, forceUpdate=setting.get_updateToday(),code=code,start=threeMbefore)
+        df_3m = Utils.queryData('k_data_' + code,'code',engine, cb, forceUpdate=setting.get_updateToday(),code=code,start=start)
         if df_3m is None:
            continue 
         # 数据少于180天
@@ -45,17 +44,17 @@ def filter(df_todayAll,setting,engine):
     timeDelta = dt.timedelta(setting.get_longPeriod())
     threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
     sm = StrategyManager()
-    p = Pool(4)
     length = len(df_todayAll)
     begin = 0
     for i in range(5):
         end = begin + length // 4
         if end >= length:
            end = length 
-        p.apply_async(subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine))
+        t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine,setting,todayStr))   
+        t.start()
+        print('start thread filter data %d, %d' % (begin,end))
+        t.join()
         begin = end
-    p.close()
-    p.join()
     # for index,row in df_todayAll.iterrows():
     #     code = row['code']
     #     def cb(**kw):
