@@ -16,15 +16,15 @@ class LongFlatFilter(object):
                  return ts.get_hist_data(kw['kw']['code'])
              data['df_h'] = Utils.queryData('h_data_' + data['df_3m'].iloc[0]['code'],'code',data['engine'], cb, forceUpdate=config.get_updateToday(),code=data['df_3m'].iloc[0]['code'])
           df_h = data['df_h'][config.get_FlatTrade()[0] * -1:]
-        #   high_row = df_h.loc[df_h['high'].idxmax()]
-        #   high = high_row.get('high')
-        #   low_row = df_h.loc[df_h['low'].idxmin()]
-        #   low = low_row.get('low')
+          high_row = df_h.loc[df_h['high'].idxmax()]
+          high = high_row.get('high')
+          low_row = df_h.loc[df_h['low'].idxmin()]
+          low = low_row.get('low')
           count = 0
           for index,row in df_h.iterrows():
               p_change = row['p_change']
               if abs(p_change) < 3.00:
                  count = count + 1
-        #   if high == 0 or low == 0:
-        #      return False        
-          return count >= config.get_FlatTrade()[0] * config.get_FlatTrade()[1]    
+          if high == 0 or low == 0:
+             return False        
+          return count >= config.get_FlatTrade()[0] * config.get_FlatTrade()[1] and (high - low)/low < config.get_FlatTrade()[2]  
