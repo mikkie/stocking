@@ -46,15 +46,18 @@ def filter(df_todayAll,setting,engine):
     sm = StrategyManager()
     length = len(df_todayAll)
     begin = 0
-    for i in range(5):
-        end = begin + length // 4
+    threads = []
+    for i in range(11):
+        end = begin + length // 10
         if end >= length:
            end = length 
         t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine,setting,todayStr))   
         t.start()
         print('start thread filter data %d, %d' % (begin,end))
-        t.join()
+        threads.append(t)
         begin = end
+    for t in threads:
+        t.join()    
     # for index,row in df_todayAll.iterrows():
     #     code = row['code']
     #     def cb(**kw):
