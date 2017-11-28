@@ -123,7 +123,7 @@ def getZZCodeList():
     except:
         pass
     if df_zz is None or df_zz.empty:
-       df_zz = ts.get_gem_classified()
+       df_zz = ts.get_zz500s()
        df_zz.to_sql('zz',con=engine,if_exists='replace',index=False,index_label='code')
     return df_zz['code'].tolist()
 
