@@ -41,7 +41,10 @@ def initData(setting):
          df_todayAll = df_todayAll[df_todayAll['code'].isin(zxCodeList)] 
     elif str(sys.argv[2]) == 'cy':  #创业板 
          cyCodeList = getCYCodeList() 
-         df_todayAll = df_todayAll[df_todayAll['code'].isin(cyCodeList)]      
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(cyCodeList)]
+    elif str(sys.argv[2]) == 'zz':  #中证500
+         zzCodeList = getZZCodeList()
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(zzCodeList)]
     elif str(sys.argv[2]) == 'tiger': #龙虎榜
          tigerList = getTigerCodeList()
          df_todayAll = df_todayAll[df_todayAll['code'].isin(tigerList)]
@@ -112,6 +115,19 @@ def getCYCodeList():
     return df_cy['code'].tolist()
 
 
+#获取中证500列表
+def getZZCodeList():
+    df_zz = None
+    try:
+       df_zz = pd.read_sql_table('zz', con=engine)
+    except:
+        pass
+    if df_zz is None or df_zz.empty:
+       df_zz = ts.get_gem_classified()
+       df_zz.to_sql('zz',con=engine,if_exists='replace',index=False,index_label='code')
+    return df_zz['code'].tolist()
+
+
 
 #获取行业股票代码
 def getHYCodeList():
@@ -180,7 +196,7 @@ if (isInTradingTime() and len(sys.argv) == 1) or (len(sys.argv) == 2 and str(sys
 else:
    #初始化数据 
    if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
-      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger'):
+      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger' or str(sys.argv[2]) == 'cy' or str(sys.argv[2]) == 'zz'):
          print('=====执行基础过滤=====')  
          df_stocksPool = initData(setting) 
          df_stocksPool = df_stocksPool.sort_values('trade')

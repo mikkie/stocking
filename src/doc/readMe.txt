@@ -13,3 +13,8 @@ main.py init 300 c 节能
 [macd] 指标
 [kdj] 指标
 [ma] 均线
+
+1. main.py init cy [turnover,leftTrade]
+2. main.py init 0 c [xxx] [leftTrade]
+3. main.py init zz [turnover,rightTrade,macd]
+4. main.py init 0 [turnover,rightTrade,macd,volume]
