@@ -7,6 +7,7 @@ main.py init 300 c 节能
 策略:
 [leftTrade] 左侧交易
 [rightTrade] 右侧交易
+[flat]横盘
 [volume] 成交量
 [turnover] 换手率
 [macd] 指标

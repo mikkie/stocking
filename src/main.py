@@ -38,7 +38,10 @@ def initData(setting):
          df_todayAll = df_todayAll[df_todayAll['code'].isin(hs300CodeList)]
     elif str(sys.argv[2]) == 'zx':  #中小盘
          zxCodeList = getZXCodeList() 
-         df_todayAll = df_todayAll[df_todayAll['code'].isin(zxCodeList)]   
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(zxCodeList)] 
+    elif str(sys.argv[2]) == 'cy':  #创业板 
+         cyCodeList = getCYCodeList() 
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(cyCodeList)]      
     elif str(sys.argv[2]) == 'tiger': #龙虎榜
          tigerList = getTigerCodeList()
          df_todayAll = df_todayAll[df_todayAll['code'].isin(tigerList)]
@@ -88,13 +91,26 @@ def getZXCodeList():
        df_zx.to_sql('zx',con=engine,if_exists='replace',index=False,index_label='code')
     return df_zx['code'].tolist()
 
-
+#获取龙虎榜
 def getTigerCodeList():
     def cb():
         return ts.inst_tops()
     df_tiger = Utils.queryData('tiger','code',engine, cb, forceUpdate=True)
     df_tiger = df_tiger[df_tiger['net'] > 0]
     return df_tiger['code'].tolist()
+
+#获取创业榜
+def getCYCodeList():
+    df_cy = None
+    try:
+       df_cy = pd.read_sql_table('cy', con=engine)
+    except:
+        pass
+    if df_cy is None or df_cy.empty:
+       df_cy = ts.get_gem_classified()
+       df_cy.to_sql('cy',con=engine,if_exists='replace',index=False,index_label='code')
+    return df_cy['code'].tolist()
+
 
 
 #获取行业股票代码

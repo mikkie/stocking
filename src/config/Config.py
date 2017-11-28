@@ -10,7 +10,7 @@ class Config(object):
           self.__pKM3Change = 0.05 #3个月振幅
           self.__superSold = [0.05,0.2] #超卖
           self.__leftTrade = [6,5,4] #左侧交易
-          self.__flatTrade = [30, 0.9, 0.1] #长时间横盘
+          self.__flatTrade = [90, 10, 1.2, 1.5] #长时间横盘后突破
           self.__longPeriod = 365 #1年
           self.__trendPeriod = 180 #主要分析范围 最近180天
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址

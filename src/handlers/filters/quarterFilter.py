@@ -10,11 +10,14 @@ import datetime as dt
 from utils.Utils import Utils 
 from ..StrategyManager import StrategyManager
 import threading
+from time import sleep
 
 
 def subProcessTask(df_today,result,start,sm,engine,setting,todayStr):
     for index,row in df_today.iterrows():
+        # sleep(0.1)
         code = row['code']
+        print('thread %s run %s' % (threading.current_thread().name,code))
         def cb(**kw):
             return ts.get_k_data(kw['kw']['code'],start=kw['kw']['start'])
         df_3m = Utils.queryData('k_data_' + code,'code',engine, cb, forceUpdate=setting.get_updateToday(),code=code,start=start)
@@ -52,12 +55,13 @@ def filter(df_todayAll,setting,engine):
         if end >= length:
            end = length 
         t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine,setting,todayStr))   
+        t.setDaemon(True)
         t.start()
         print('start thread filter data %d, %d' % (begin,end))
         threads.append(t)
         begin = end
     for t in threads:
-        t.join()    
+        t.join()
     # for index,row in df_todayAll.iterrows():
     #     code = row['code']
     #     def cb(**kw):
