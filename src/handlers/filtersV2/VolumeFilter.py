@@ -21,7 +21,7 @@ class VolumeFilter(object):
           df_h_10 = data['df_h'][0:config.get_FlatTrade()[1]]
           avg_10 = df_h_10['volume'].mean()
 
-          if avg_10 >= df_h_90 * 2:
+          if avg_10 >= avg_90 * 2:
              return True
            
           df_last_3h = data['df_h'][0:3]

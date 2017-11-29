@@ -16,7 +16,7 @@ class Config(object):
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3.00 #换手率
           self.__updateToday = False #更新当前实时价格
-          self.__strategy = ['volume'] #使用策略
+          self.__strategy = ['rightTrade','volume'] #使用策略
           self.__kLineMA = [0.8,0.6] #K线超过MA5,MA10数量的百分比
 
       def get_pKm5Change(self):
