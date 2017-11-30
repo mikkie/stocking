@@ -96,7 +96,7 @@ def getZXCodeList():
 
 #获取龙虎榜
 def getTigerCodeList():
-    def cb():
+    def cb(**kw):
         return ts.inst_tops()
     df_tiger = Utils.queryData('tiger','code',engine, cb, forceUpdate=True)
     df_tiger = df_tiger[df_tiger['net'] > 0]
