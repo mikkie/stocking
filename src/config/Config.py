@@ -16,10 +16,11 @@ class Config(object):
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3.00 #换手率
           self.__updateToday = False #更新当前实时价格
-          self.__strategy = ['turnover','volume','rightTrade'] #使用策略
+          self.__strategy = ['bigMoney'] #使用策略
           self.__kLineMA = [0.8,0.6] #K线超过MA5,MA10数量的百分比
-          self.__volume = [3,90,1.3] #量的突变
+          self.__volume = [3,90,1.3,1.2] #量的突变
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
+          self.__bigMoney = [1.2,400] #大单净流入
 
       def get_pKm5Change(self):
           return self.__pKm5Change
@@ -73,6 +74,9 @@ class Config(object):
 
       def get_Basic(self):
           return self.__basics 
+
+      def get_BigMoney(self):
+          return self.__bigMoney
 
 
       pass

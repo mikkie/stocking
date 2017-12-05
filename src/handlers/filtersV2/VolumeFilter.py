@@ -26,6 +26,6 @@ class VolumeFilter(object):
            
           df_last_3h = data['df_h'][0:3]
           for index,row in df_last_3h.iterrows():
-              if row['volume'] < row['v_ma10']:
+              if row['volume'] < row['v_ma10'] * config.get_Volume()[3]:
                  return False
           return True      
