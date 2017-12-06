@@ -31,7 +31,7 @@ def initData(setting):
     df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=setting.get_updateToday())
     priceRange = setting.get_PriceRange()
     if str(sys.argv[2]) == '1': #test
-         specificList = getSpecificCode()
+         specificList = getSpecificCode(setting)
          df_todayAll = df_todayAll[df_todayAll['code'].isin(specificList)]
     if str(sys.argv[2]) == '50': #上证50成份股
          sz50CodeList = getSZ50CodeList() 
@@ -62,8 +62,8 @@ def initData(setting):
     return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
 
 
-def getSpecificCode():
-    return ['002043']
+def getSpecificCode(setting):
+    return setting.get_TestCodes()
 
 #获取上证50代码列表
 def getSZ50CodeList():
