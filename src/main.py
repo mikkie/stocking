@@ -30,6 +30,9 @@ def initData(setting):
         return ts.get_today_all()
     df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=setting.get_updateToday())
     priceRange = setting.get_PriceRange()
+    if str(sys.argv[2]) == '1': #test
+         specificList = getSpecificCode()
+         df_todayAll = df_todayAll[df_todayAll['code'].isin(specificList)]
     if str(sys.argv[2]) == '50': #上证50成份股
          sz50CodeList = getSZ50CodeList() 
          df_todayAll = df_todayAll[df_todayAll['code'].isin(sz50CodeList)]
@@ -57,6 +60,10 @@ def initData(setting):
             cCodeList = getConceptCodeList()    
             df_todayAll = df_todayAll[df_todayAll['code'].isin(cCodeList)]      
     return df_todayAll[(df_todayAll['trade'] >= priceRange['min']) & (df_todayAll['trade'] <= priceRange['max'])]
+
+
+def getSpecificCode():
+    return ['002043']
 
 #获取上证50代码列表
 def getSZ50CodeList():
@@ -196,7 +203,7 @@ if (isInTradingTime() and len(sys.argv) == 1) or (len(sys.argv) == 2 and str(sys
 else:
    #初始化数据 
    if len(sys.argv) >= 2 and str(sys.argv[1]) == 'init':
-      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger' or str(sys.argv[2]) == 'cy' or str(sys.argv[2]) == 'zz'):
+      if len(sys.argv) >= 3 and (str(sys.argv[2]) == '0' or str(sys.argv[2]) == '1' or str(sys.argv[2]) == '50' or str(sys.argv[2]) == '300' or str(sys.argv[2]) == 'zx' or str(sys.argv[2]) == 'hy' or str(sys.argv[2]) == 'c' or str(sys.argv[2]) == 'tiger' or str(sys.argv[2]) == 'cy' or str(sys.argv[2]) == 'zz'):
          print('=====执行基础过滤=====')  
          df_stocksPool = initData(setting) 
          df_stocksPool = df_stocksPool.sort_values('trade')

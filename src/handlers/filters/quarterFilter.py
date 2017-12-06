@@ -52,7 +52,7 @@ def filter(df_todayAll,setting,engine):
     threads = []
     for i in range(11):
         end = begin + length // 10
-        if end >= length:
+        if end >= length - 1:
            end = length 
         t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine,setting,todayStr))   
         t.setDaemon(True)
@@ -60,6 +60,8 @@ def filter(df_todayAll,setting,engine):
         print('start thread filter data %d, %d' % (begin,end))
         threads.append(t)
         begin = end
+        if begin >= length:
+           break 
     for t in threads:
         t.join()
     # for index,row in df_todayAll.iterrows():
