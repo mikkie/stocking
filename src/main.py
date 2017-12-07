@@ -33,7 +33,7 @@ def initData(setting):
     if str(sys.argv[2]) == '1': #test
          specificList = getSpecificCode(setting)
          df_todayAll = df_todayAll[df_todayAll['code'].isin(specificList)]
-    if str(sys.argv[2]) == '50': #上证50成份股
+    if str(sys.argv[2]) == '300': #上证50成份股
          sz50CodeList = getSZ50CodeList() 
          df_todayAll = df_todayAll[df_todayAll['code'].isin(sz50CodeList)]
     elif str(sys.argv[2]) == '300':  #沪深50成份股
