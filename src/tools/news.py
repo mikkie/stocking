@@ -13,5 +13,5 @@ df_news = ts.get_latest_news(top=20,show_content=True)
 df_news = df_news[df_news['classify'] == '证券']
 df_news.to_sql('news',con=engine,if_exists='replace')
 
-df_news_highlight = ts.guba_sina(show_content=True)
-df_news_highlight.to_sql('news_highlight',con=engine,if_exists='replace')
+# df_news_highlight = ts.guba_sina(show_content=True)
+# df_news_highlight.to_sql('news_highlight',con=engine,if_exists='replace')
