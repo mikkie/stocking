@@ -9,11 +9,13 @@ import tushare as ts
 import datetime as dt
 from utils.Utils import Utils 
 from ..StrategyManager import StrategyManager
+from models.StocksManager import StocksManager
+from models.Stock import Stock
 import threading
 from time import sleep
 
 
-def subProcessTask(df_today,result,start,sm,engine,setting,todayStr):
+def subProcessTask(df_today,result,start,sm,stockManager,engine,setting,todayStr):
     for index,row in df_today.iterrows():
         # sleep(0.1)
         code = row['code']
@@ -36,9 +38,17 @@ def subProcessTask(df_today,result,start,sm,engine,setting,todayStr):
         Utils.myKdj(df_3m)
         ######################################开始配置计算###########################################
         data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
-        if sm.start(code, setting.get_Strategy(), data, setting):
-           result.append(code)
+        # if sm.start(code, setting.get_Strategy(), data, setting):
+        buildStockModels(code,data,stockManager) 
+           
 
+
+
+def buildStockModels(code,data,stockManager):
+    stock = Stock(code)
+    stock.set_kdata(data['df_3m'])
+    stock.set_ktoday(data['df_realTime'])
+    stockManager.addStock(stock)
 
 def filter(df_todayAll,setting,engine):
     result = [];
@@ -47,6 +57,7 @@ def filter(df_todayAll,setting,engine):
     timeDelta = dt.timedelta(setting.get_longPeriod())
     threeMbefore = (now - timeDelta).strftime('%Y-%m-%d')
     sm = StrategyManager()
+    stockManager = StocksManager(engine,setting)
     length = len(df_todayAll)
     begin = 0
     threads = []
@@ -54,7 +65,7 @@ def filter(df_todayAll,setting,engine):
         end = begin + length // 10
         if end >= length - 1:
            end = length 
-        t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,engine,setting,todayStr))   
+        t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,stockManager,engine,setting,todayStr))   
         t.setDaemon(True)
         t.start()
         print('start thread filter data %d, %d' % (begin,end))
