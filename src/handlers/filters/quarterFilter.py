@@ -48,6 +48,12 @@ def buildStockModels(code,data,stockManager):
     stock = Stock(code)
     stock.set_kdata(data['df_3m'])
     stock.set_ktoday(data['df_realTime'])
+    stock.set_macd(data['macd'])
+    stock.set_kdj(data['kdj'])
+    stock.set_ma(data['ma'])
+    stock.set_turnover(data['turnover'])
+    stock.set_volume(data['volume'])
+    stock.set_bigMoney(data['bigMoney'])
     stockManager.addStock(stock)
 
 def filter(df_todayAll,setting,engine):

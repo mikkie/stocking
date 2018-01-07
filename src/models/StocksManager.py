@@ -8,6 +8,7 @@ import pandas as pd
 import talib as ta
 import tushare as ts
 from sqlalchemy.types import VARCHAR
+from ..handlers.StrategyManager import StrategyManager
 
 class StocksManager(object):
       pass
@@ -16,6 +17,7 @@ class StocksManager(object):
           self.__cahce = {}
           self.__engine = engine
           self.__config = config
+          self.__sm = StrategyManager()
           self.__dfBasic = None
           self.__dfProfit = None
           self.__dfGrowth = None
@@ -25,8 +27,42 @@ class StocksManager(object):
           self.buildBasicsForStock(stock)
           self.buildProfitForStock(stock)
           self.buildGrowthForStock(stock)
+          self.buildMACDForStock(stock)
+          self.buildKDJForStock(stock)
+          self.buildTurnoverForStock(stock)
+          self.buildVolumeForStock(stock)
+          self.buildMAForStock(stock)
+          self.buildBigMoneyForStock(stock)
           print(stock)
 
+      def callStrategy(self,stock:Stock,strategy):
+          if self.__sm.start(stock.get_code(),strategy,{'df_3m' : stock.get_kdata(),'df_realTime' : stock.get_ktoday(), 'engine' : self.__engine},self.__config) == True:
+             return 1
+          return 0        
+
+      def buildMACDForStock(self,stock):
+          if stock.get_macd() is None:
+             stock.set_macd(callStrategy(stock,['macd']))
+
+      def buildKDJForStock(self,stock):
+          if stock.get_kdj() is None:
+             stock.set_kdj(callStrategy(stock,['kdj'])) 
+
+      def buildTurnoverForStock(self,stock):
+          if stock.get_turnover() is None:
+             stock.set_turnover(callStrategy(stock,['turnover']))
+
+      def buildVolumeForStock(self,stock):
+          if stock.get_volume() is None:
+             stock.set_volume(callStrategy(stock,['volume']))
+
+      def buildMAForStock(self,stock):
+          if stock.get_ma() is None:
+             stock.set_ma(callStrategy(stock,['ma']))
+
+      def buildBigMoneyForStock(self,stock):
+          if stock.get_bigMoney() is None:
+             stock.set_bigMoney(callStrategy(stock,['bigMoney']))                                  
 
       def buildGrowthForStock(self,stock): 
           code = stock.get_code()
