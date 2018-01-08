@@ -110,6 +110,7 @@ def filter(df_todayAll,setting,engine):
     df_res = stockManager.buildDataFrame()
     for index,row in df_res.iterrows():
         result.append(index)
+    print(result)
     return result 
 
 
