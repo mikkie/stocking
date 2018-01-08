@@ -45,6 +45,8 @@ class StocksManager(object):
               array.append({'pe' : self.__cahce[code].get_pe(), 'pb' : self.__cahce[code].get_pb(), 'esp' : self.__cahce[code].get_esp(), 'bvps' : self.__cahce[code].get_bvps(), 'roe' : self.__cahce[code].get_roe(), 'nprg' : self.__cahce[code].get_nprg(), 'epsg' : self.__cahce[code].get_epsg(), 'turnover' : self.__cahce[code].get_turnover(), 'volume' :  self.__cahce[code].get_volume(), 'macd' : self.__cahce[code].get_macd(), 'kdj' : self.__cahce[code].get_kdj(), 'ma' : self.__cahce[code].get_ma(), 'bigMoney' : self.__cahce[code].get_bigMoney()})    
               index.append(code)    
           self.__dfData = pd.DataFrame(array,index=index)
+          if self.__dfData.empty:
+             return self.__dfData 
           self.calc()
           return self.__dfData 
 
@@ -70,11 +72,15 @@ class StocksManager(object):
           for column in columnList:
               temp = temp + np.square(row[column + '_vi'] - row[column + best_worst])
           row['Di' + best_worst] = cmath.sqrt(temp)
-          self.__dfData.set_value(index, 'Di' + best_worst, row['Di' + best_worst])
+          self.__dfData.loc[index,'Di' + best_worst] = row['Di' + best_worst]
 
       def calcCi(self,index,row):
-          row['ci'] = row['Di_worst'] / (row['Di_best'] + row['Di_worst'])  
-          self.__dfData.set_value(index,'ci', row['ci'])         
+          if (row['Di_best'] + row['Di_worst']) == 0:
+             row['ci'] = 0 
+             self.__dfData.loc[index,'ci'] = 0
+          else:    
+             row['ci'] = row['Di_worst'] / (row['Di_best'] + row['Di_worst'])  
+             self.__dfData.loc[index,'ci'] = row['ci']         
 
       def calc(self):
           self.__dfData = self.__dfData.fillna(self.__dfData.mean())
@@ -141,7 +147,11 @@ class StocksManager(object):
                 self.__dfGrowth.to_sql('growth',self.__engine,if_exists='replace',index_label='code',index=False)     
           try:
              nprg = self.__dfGrowth.loc[stock.get_code()].get('nprg')
+             if isinstance(nprg,pd.Series):
+                nprg = nprg.iat[-1] 
              epsg = self.__dfGrowth.loc[stock.get_code()].get('epsg')
+             if isinstance(epsg,pd.Series):
+                epsg = epsg.iat[-1] 
              stock.set_nprg(nprg)
              stock.set_epsg(epsg)   
           except:
@@ -160,6 +170,8 @@ class StocksManager(object):
                 self.__dfProfit.to_sql('profit',self.__engine,if_exists='replace',index_label='code',index=False)     
           try:
              roe = self.__dfProfit.loc[stock.get_code()].get('roe')
+             if isinstance(roe,pd.Series):
+                roe = roe.iat[-1] 
              stock.set_roe(roe)
           except:
              stock.set_roe(float("nan")) 
