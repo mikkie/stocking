@@ -26,23 +26,44 @@ class Stock(object):
       def set_pe(self,pe):
           self.__pe = pe
 
+      def get_pe(self):
+          return self.__pe    
+
       def set_pb(self,pb):
           self.__pb = pb
+
+      def get_pb(self):
+          return self.__pb    
 
       def set_esp(self,esp):
           self.__esp = esp
 
+      def get_esp(self):
+          return self.__esp    
+
       def set_bvps(self,bvps):
           self.__bvps = bvps
+
+      def get_bvps(self):
+          return self.__bvps    
 
       def set_roe(self,roe):
           self.__roe = roe
 
+      def get_roe(self):
+          return self.__roe
+
       def set_nprg(self,nprg):
           self.__nprg = nprg
 
+      def get_nprg(self):
+          return self.__nprg    
+
       def set_epsg(self,epsg):
           self.__epsg = epsg
+
+      def get_epsg(self):
+          return self.__epsg    
 
       def set_turnover(self,turnover):
           self.__turnover = turnover

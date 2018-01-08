@@ -22,7 +22,7 @@ class Config(object):
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
           self.__bigMoney = [1.2,600,300000] #大单净流入
           self.__report = [2017,4] #报告日期
-          self.__testCodes = ['000738'] #测试代码
+          self.__testCodes = ['000977', '002073', '002184', '002230', '002253', '002362', '002415', '300024', '300188', '300209', '300229', '300367', '600410', '600728', '600756', '603019'] #测试代码
           self.__topsis = {
               'basics' : {
                   'pe' : 0.1,  #市盈率
@@ -105,5 +105,8 @@ class Config(object):
 
       def get_TestCodes(self):
           return self.__testCodes
+
+      def get_topsis(self):
+          return self.__topsis  
 
       pass

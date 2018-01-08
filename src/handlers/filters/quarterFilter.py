@@ -37,9 +37,9 @@ def subProcessTask(df_today,result,start,sm,stockManager,engine,setting,todayStr
         Utils.macd(df_3m)
         Utils.myKdj(df_3m)
         ######################################开始配置计算###########################################
-        data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
-        # if sm.start(code, setting.get_Strategy(), data, setting):
-        buildStockModels(code,data,stockManager) 
+        data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine, 'macd' : None, 'kdj' : None, 'ma' : None, 'turnover' : None, 'volume' : None, 'bigMoney' : None}
+        if sm.start(code, setting.get_Strategy(), data, setting):
+           buildStockModels(code,data,stockManager) 
            
 
 
@@ -68,9 +68,12 @@ def filter(df_todayAll,setting,engine):
     begin = 0
     threads = []
     for i in range(11):
-        end = begin + length // 10
-        if end >= length - 1:
-           end = length 
+        if length < 10:
+            end = length
+        else:    
+            end = begin + length // 10
+            if end >= length - 1:
+               end = length 
         t = threading.Thread(target=subProcessTask, args=(df_todayAll[begin:end],result,threeMbefore,sm,stockManager,engine,setting,todayStr))   
         t.setDaemon(True)
         t.start()
@@ -104,6 +107,9 @@ def filter(df_todayAll,setting,engine):
     #     data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
     #     if sm.start(code, setting.get_Strategy(), data, setting):
     #        result.append(code) 
+    df_res = stockManager.buildDataFrame()
+    for index,row in df_res.iterrows():
+        result.append(index)
     return result 
 
 
