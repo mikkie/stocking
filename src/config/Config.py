@@ -16,7 +16,7 @@ class Config(object):
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3.00 #换手率
           self.__updateToday = True #更新当前实时价格
-          self.__strategy = [] #使用策略
+          self.__strategy = ['rightTrade'] #使用策略
           self.__kLineMA = [0.8,0.6] #K线超过MA5,MA10数量的百分比
           self.__volume = [3,90,1.3,1.5] #量的突变
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
