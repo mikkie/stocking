@@ -215,7 +215,7 @@ else:
     #   df_code.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
       df_codes = df_stocks[df_stocks.code.isin(result)]
       df_codes = df_codes.sort_values('changepercent',ascending=False)
-      print(df_codes)
+    #   print(df_codes)
       df_codes.to_sql('codes',con=engine,if_exists='replace',index=False,index_label='code')
 
 

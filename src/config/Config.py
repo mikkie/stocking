@@ -18,7 +18,7 @@ class Config(object):
           self.__updateToday = True #更新当前实时价格
           self.__strategy = ['turnover','rightTrade','volume','ma'] #使用策略
           self.__kLineMA = [3,1,1] #K线超过MA5,MA10数量的百分比
-          self.__volume = [3,15,1.3,1.5] #量的突变
+          self.__volume = [3,8,1.3,1.4] #量的突变
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
           self.__bigMoney = [1.2,600,300000] #大单净流入
           self.__report = [2017,4] #报告日期
