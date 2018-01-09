@@ -16,7 +16,7 @@ class Config(object):
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3.00 #换手率
           self.__updateToday = True #更新当前实时价格
-          self.__strategy = ['rightTrade'] #使用策略
+          self.__strategy = ['turnover','rightTrade'] #使用策略
           self.__kLineMA = [0.8,0.6] #K线超过MA5,MA10数量的百分比
           self.__volume = [3,90,1.3,1.5] #量的突变
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
@@ -25,19 +25,19 @@ class Config(object):
           self.__testCodes = ['000738','000717'] #测试代码
           self.__topsis = {
               'basics' : {
-                  'pe' : 0.1,  #市盈率
-                  'pb' : 0.04,  #市净率
-                  'esp' : 0.08,  #每股收益率
+                  'pe' : 0.08,  #市盈率
+                  'pb' : 0.02,  #市净率
+                  'esp' : 0.06,  #每股收益率
                   'bvps' : 0.02, #每股净资产
                   'roe' : 0.04, #净资产收益率
-                  'nprg' : 0.08, #净利润增长
-                  'epsg' : 0.04, #每股收益增长
+                  'nprg' : 0.06, #净利润增长
+                  'epsg' : 0.02, #每股收益增长
               },
               'indicator' : {
-                   'turnover' : 0.2, #换手率
-                   'volume' : 0.05, #成交量
-                   'macd' : 0.075, #macd金叉
-                   'kdj' : 0.075, #kdj金叉
+                   'turnover' : 0.15, #换手率
+                   'volume' : 0.1, #成交量
+                   'macd' : 0.125, #macd金叉
+                   'kdj' : 0.125, #kdj金叉
                    'ma' : 0.05, #均线
                    'bigMoney' : 0.15, #主力资金流入
               }
