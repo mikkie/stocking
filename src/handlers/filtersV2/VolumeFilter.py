@@ -15,17 +15,14 @@ class VolumeFilter(object):
                  return ts.get_hist_data(kw['kw']['code'])
              data['df_h'] = Utils.queryData('h_data_' + data['df_3m'].iloc[0]['code'],'code',data['engine'], cb, forceUpdate=config.get_updateToday(),code=data['df_3m'].iloc[0]['code'])   
 
-          df_h_90 = data['df_h'][config.get_Volume()[0]:config.get_Volume()[1]]
-          avg_90 = df_h_90['volume'].mean()
+          df_h_long = data['df_h'][config.get_Volume()[0]:config.get_Volume()[1]]
+          df_h_short = data['df_h'][0:config.get_Volume()[0]]
 
-          df_h_3 = data['df_h'][0:config.get_Volume()[0]]
-          avg_3 = df_h_3['volume'].mean()
+          for index,row in df_h_long.iterrows(): 
+              if row['volume'] > row['v_ma10'] * config.get_Volume()[2]:
+                 return False 
 
-          if avg_3 >= avg_90 * config.get_Volume()[2]:
-             return True
-           
-          df_last_3h = data['df_h'][0:3]
-          for index,row in df_last_3h.iterrows():
+          for index,row in df_h_short.iterrows():
               if row['volume'] < row['v_ma10'] * config.get_Volume()[3]:
                  return False
           return True      
