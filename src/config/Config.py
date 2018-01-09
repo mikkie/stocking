@@ -35,11 +35,11 @@ class Config(object):
               },
               'indicator' : {
                    'turnover' : 0.15, #换手率
-                   'volume' : 0.1, #成交量
-                   'macd' : 0.125, #macd金叉
-                   'kdj' : 0.125, #kdj金叉
-                   'ma' : 0.05, #均线
-                   'bigMoney' : 0.15, #主力资金流入
+                   'volume' : 0.15, #成交量
+                   'macd' : 0.075, #macd金叉
+                   'kdj' : 0.075, #kdj金叉
+                   'ma' : 0.125, #均线
+                   'bigMoney' : 0.125, #主力资金流入
               }
           } 
 
