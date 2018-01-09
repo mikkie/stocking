@@ -84,7 +84,6 @@ class StocksManager(object):
 
       def calc(self):
           self.__dfData = self.__dfData.fillna(self.__dfData.mean())
-          print(self.__dfData)
           self.commonCalc('pe',self.__config.get_topsis()['basics']['pe'],False)
           self.commonCalc('pb',self.__config.get_topsis()['basics']['pb'],False)
           self.commonCalc('esp',self.__config.get_topsis()['basics']['esp'],True)
@@ -102,7 +101,6 @@ class StocksManager(object):
               self.calcDi(index,row,['pe','pb','esp','bvps','nprg','epsg','roe','turnover','volume','ma','macd','kdj','bigMoney'],'_best')
               self.calcDi(index,row,['pe','pb','esp','bvps','nprg','epsg','roe','turnover','volume','ma','macd','kdj','bigMoney'],'_worst')
               self.calcCi(index,row) 
-        #   print(self.__dfData['ci'])
           self.__dfData = self.__dfData.sort_values('ci',ascending=False)    
 
 

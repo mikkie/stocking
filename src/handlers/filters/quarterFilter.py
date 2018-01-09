@@ -108,9 +108,14 @@ def filter(df_todayAll,setting,engine):
     #     if sm.start(code, setting.get_Strategy(), data, setting):
     #        result.append(code) 
     df_res = stockManager.buildDataFrame()
+    i = 0
     for index,row in df_res.iterrows():
-        result.append(index)
-    print(result)
+        if i < 10:
+               result.append(index)
+        else:
+            break   
+        i = i + 1
+    print('Topsis 综合测评结果排序 : ', result)
     return result 
 
 
