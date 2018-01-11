@@ -37,6 +37,7 @@ class StocksManager(object):
           self.buildVolumeForStock(stock)
           self.buildMAForStock(stock)
           self.buildBigMoneyForStock(stock)
+          self.buildConceptForStock(stock)
 
       def buildDataFrame(self):
           array = []
@@ -105,33 +106,37 @@ class StocksManager(object):
 
 
       def callStrategy(self,stock:Stock,strategy):
-          if self.__sm.start(stock.get_code(),strategy,{'df_3m' : stock.get_kdata(),'df_realTime' : stock.get_ktoday(), 'engine' : self.__engine},self.__config) == True:
-             return 1
-          return 0        
+          data = {'code' : stock.get_code, 'df_3m' : stock.get_kdata(),'df_realTime' : stock.get_ktoday(), 'engine' : self.__engine}
+          self.__sm.start(stock.get_code(),[strategy],data,self.__config)
+          return data[strategy]
 
       def buildMACDForStock(self,stock):
           if stock.get_macd() is None:
-             stock.set_macd(self.callStrategy(stock,['macd']))
+             stock.set_macd(self.callStrategy(stock,'macd'))
 
       def buildKDJForStock(self,stock):
           if stock.get_kdj() is None:
-             stock.set_kdj(self.callStrategy(stock,['kdj'])) 
+             stock.set_kdj(self.callStrategy(stock,'kdj')) 
 
       def buildTurnoverForStock(self,stock):
           if stock.get_turnover() is None:
-             stock.set_turnover(self.callStrategy(stock,['turnover']))
+             stock.set_turnover(self.callStrategy(stock,'turnover'))
 
       def buildVolumeForStock(self,stock):
           if stock.get_volume() is None:
-             stock.set_volume(self.callStrategy(stock,['volume']))
+             stock.set_volume(self.callStrategy(stock,'volume'))
 
       def buildMAForStock(self,stock):
           if stock.get_ma() is None:
-             stock.set_ma(self.callStrategy(stock,['ma']))
+             stock.set_ma(self.callStrategy(stock,'ma'))
 
       def buildBigMoneyForStock(self,stock):
           if stock.get_bigMoney() is None:
-             stock.set_bigMoney(self.callStrategy(stock,['bigMoney']))                                  
+             stock.set_bigMoney(self.callStrategy(stock,'bigMoney'))   
+
+      def buildConceptForStock(self,stock):
+          if stock.get_concept() is None:
+             stock.set_concept(self.callStrategy(stock,'concept'))                                      
 
       def buildGrowthForStock(self,stock): 
           code = stock.get_code()

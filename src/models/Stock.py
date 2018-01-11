@@ -99,6 +99,12 @@ class Stock(object):
           self.__bigMoney = bigMoney  
 
       def get_bigMoney(self):
-          return self.__bigMoney                                                   
+          return self.__bigMoney      
+
+      def set_concept(self,concept):
+          self.__concept = concept
+
+      def get_concept(self):
+          return self.__concept                                                   
 
 

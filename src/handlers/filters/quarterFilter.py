@@ -37,7 +37,7 @@ def subProcessTask(df_today,result,start,sm,stockManager,engine,setting,todayStr
         Utils.macd(df_3m)
         Utils.myKdj(df_3m)
         ######################################开始配置计算###########################################
-        data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine, 'macd' : None, 'kdj' : None, 'ma' : None, 'turnover' : None, 'volume' : None, 'bigMoney' : None}
+        data = {'code' : code, 'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine, 'macd' : None, 'kdj' : None, 'ma' : None, 'turnover' : None, 'volume' : None, 'bigMoney' : None, 'concept' : None}
         if sm.start(code, setting.get_Strategy(), data, setting):
            buildStockModels(code,data,stockManager) 
            
@@ -54,6 +54,7 @@ def buildStockModels(code,data,stockManager):
     stock.set_turnover(data['turnover'])
     stock.set_volume(data['volume'])
     stock.set_bigMoney(data['bigMoney'])
+    stock.set_concept(data['concept'])
     stockManager.addStock(stock)
 
 def filter(df_todayAll,setting,engine):
