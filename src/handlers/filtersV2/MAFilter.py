@@ -18,6 +18,10 @@ class MAFilter(object):
           count_higher_ma5 = 0
           count_higher_ma10 = 0
           for index,row in df_last_90h.iterrows():   
+              if row['close'] <= row['open']:
+                 return False
+              if row['high'] - row['close'] >= row['close'] - row['open']:
+                 return False     
               if row['close'] >= row['ma5']:
                  count_higher_ma5 = count_higher_ma5 + 1
               if row['close'] >= row['ma10']:    

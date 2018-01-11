@@ -8,7 +8,7 @@ class Config(object):
           self.__timeStart = '14:25:00' #监控起始时间
           self.__pKm5Change = 0.01 #当日5分钟振幅
           self.__pKM3Change = 0.05 #3个月振幅
-          self.__superSold = [0.05,0.3] #超卖
+          self.__superSold = [0.05,0.2] #超卖
           self.__leftTrade = [5,4,3] #左侧交易
           self.__flatTrade = [90, 10, 1.2, 1.5] #长时间横盘后突破
           self.__longPeriod = 365 #1年
@@ -16,13 +16,13 @@ class Config(object):
           self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3.00 #换手率
           self.__updateToday = True #更新当前实时价格
-          self.__strategy = ['turnover','rightTrade','volume','ma'] #使用策略
-          self.__kLineMA = [3,1,1] #K线超过MA5,MA10数量的百分比
-          self.__volume = [3,8,1.3,1.4] #量的突变
+          self.__strategy = ['turnover','rightTrade'] #使用策略
+          self.__kLineMA = [1,1,1] #K线超过MA5,MA10数量的百分比
+          self.__volume = [2,4,2,2.5] #量的突变
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
           self.__bigMoney = [1.2,600,300000] #大单净流入
           self.__report = [2017,4] #报告日期
-          self.__testCodes = ['000738','000717'] #测试代码
+          self.__testCodes = ['000738'] #测试代码
           self.__topsis = {
               'basics' : {
                   'pe' : 0.08,  #市盈率
