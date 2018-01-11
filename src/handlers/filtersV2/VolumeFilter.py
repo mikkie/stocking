@@ -15,18 +15,26 @@ class VolumeFilter(object):
                  return ts.get_hist_data(kw['kw']['code'])
              data['df_h'] = Utils.queryData('h_data_' + data['df_3m'].iloc[0]['code'],'code',data['engine'], cb, forceUpdate=config.get_updateToday(),code=data['df_3m'].iloc[0]['code'])   
 
-          df_h_long = data['df_h'][config.get_Volume()[0] - 1:config.get_Volume()[1]]
-          df_h_short = data['df_h'][0:config.get_Volume()[0]]
+          df_h_long = data['df_h'][1:4]
+          df_h_short = data['df_h'][0:2]
 
+          #前3天量都不超过前一天2倍
           nextVolume = None
-          for index,row in df_h_long.iterrows(): 
-              if nextVolume is not None and row['volume'] * config.get_Volume()[2] < nextVolume:
-                 return False 
-              nextVolume = row['volume']  
-
-          nextVolume = None  
-          for index,row in df_h_short.iterrows():
-              if nextVolume is not None and row['volume'] * config.get_Volume()[3] > nextVolume:
-                 return False
-              nextVolume = row['volume']
-          return True      
+          vol3 = df_h_long.iloc[2].get('volume')
+          vol2 = df_h_long.iloc[1].get('volume')
+          vol1 = df_h_long.iloc[0].get('volume') 
+          vol0 = df_h_short.iloc[0].get('volume')
+          open = df_h_short.iloc[0].get('open')
+          close = df_h_short.iloc[0].get('close')
+          w = 1
+          if vol2 > vol3 * config.get_Volume()[0]:
+             w = 0.9
+          if vol1 > vol2 * config.get_Volume()[0]: 
+             if w == 0.9:
+                w = 0.7
+             w = 0.8      
+          if close <= open:
+             data['volume'] = 0
+             return False 
+          data['volume'] = w * vol0 / vol1
+          return vol0 > vol1 * config.get_Volume()[1]

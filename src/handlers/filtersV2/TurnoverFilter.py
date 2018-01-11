@@ -17,6 +17,7 @@ class TurnoverFilter(object):
              data['df_h'] = Utils.queryData('h_data_' + data['df_3m'].iloc[0]['code'],'code',data['engine'], cb, forceUpdate=config.get_updateToday(),code=data['df_3m'].iloc[0]['code'])   
           df_h_3 = data['df_h'][0:1]
           for index,row in df_h_3.iterrows(): 
+              data['turnover'] = row['turnover'] #最后1天换手率
               if row['turnover'] < config.get_TurnOver():
                  return False
           return True     

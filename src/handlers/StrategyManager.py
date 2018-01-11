@@ -21,11 +21,9 @@ class StrategyManager(object):
       def start(self,code,strategySequence,data,config):
           for ch in strategySequence:   
               if self.strategyMaps[ch].filter(data,config) == False:
-                 data[ch] = 0 
                  return False  
               else:
                 #  print('%s match strategy %s' % (code,ch)) 
-                 data[ch] = 1    
                  pass  
           return True       
 

@@ -17,13 +17,21 @@ class MAFilter(object):
           df_last_90h = data['df_h'][0:config.get_KLineMA()[0]]
           count_higher_ma5 = 0
           count_higher_ma10 = 0
+          score = 0
+          w = 9
           for index,row in df_last_90h.iterrows():   
-              if row['close'] <= row['open']:
-                 return False
-              if row['high'] - row['close'] >= row['close'] - row['open']:
-                 return False     
-              if row['close'] >= row['ma5']:
-                 count_higher_ma5 = count_higher_ma5 + 1
-              if row['close'] >= row['ma10']:    
-                 count_higher_ma10 = count_higher_ma10 + 1
-          return count_higher_ma5 / 3 > config.get_KLineMA()[1] and count_higher_ma10 / 3 > config.get_KLineMA()[2]     
+              if row['open'] >= row['ma5']:
+                 score = score + 2 * w
+              elif row['open'] >= row['ma10']: 
+                   score = score + 1 * w
+              w = w - 1
+              if w < 1:
+                 w = 1     
+          data['ma'] = score       
+          close = df_last_90h.iloc[0].get('close')
+          open = df_last_90h.iloc[0].get('open')
+          ma5 = df_last_90h.iloc[0].get('ma5')
+          ma10 = df_last_90h.iloc[0].get('ma10')
+          if close <= open:
+             return False
+          return open >= ma5 and open > ma10

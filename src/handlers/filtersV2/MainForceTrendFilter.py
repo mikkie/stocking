@@ -11,13 +11,14 @@ class MainForceTrendFilter(object):
       pass
       
       def filter(self, data, config):
+          data['bigMoney'] = 0
           df = self.getDataByVol(data,config)
-          if self.isInMorethanOut(df,config):
+          if self.isInMorethanOut(df,data,config):
              return True 
           df_amount = self.getDataByAmount(data,config)
-          return self.isInMorethanOut(df_amount,config) 
+          return self.isInMorethanOut(df_amount,data,config) 
 
-      def isInMorethanOut(self,df,config):
+      def isInMorethanOut(self,df,data,config):
           if df is None or len(df) == 0:
                  return False
           df['total'] = df['price'] * df['volume']
@@ -25,6 +26,7 @@ class MainForceTrendFilter(object):
           sell = df.loc[df['type'] == '卖盘', 'total'].sum()
           if buy is None or sell is None:
              return False 
+          data['bigMoney'] = buy - sell 
           return buy > sell * config.get_BigMoney()[0]
 
 
