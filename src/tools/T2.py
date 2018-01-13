@@ -3,6 +3,12 @@ __author__ = 'aqua'
 
 import tushare as ts
 import pandas as pd
+import sys
+print(sys.path)
+from utils.Utils import Utils
+from sqlalchemy import create_engine
+
+engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 
 count = {'-10_-8' : 0 , '-8_-6' : 0 ,'-6_-4' : 0 ,'-4_-2' : 0 ,'-2_0' : 0, '0_2' : 0, '2_4' : 0,'4_6' : 0, '6_8' : 0, '8_10' : 0}
 
@@ -49,15 +55,18 @@ def start(code,count):
     total = df.sum()
     a = df.iloc[0]/total * 100
     b = df.iloc[1]/total * 100
-    # print('当日涨幅次日收阳的概率====\n',a) 
-    # print('当日涨幅次日收阴的概率====\n',b)
+    print('当日涨幅次日收阳的概率====\n',a) 
+    print('当日涨幅次日收阴的概率====\n',b)
     key = a.idxmax()
     count[key] = count[key] + 1
+    print(code)
 
-df = ts.get_today_all()
-for index,row in df.iterrows():
-    code = row['code']
-    start(code,count)
+# def cb(**kw):
+#     return ts.get_today_all()
+# df = Utils.queryData('today_all','code',engine, cb, forceUpdate=False)
+# for index,row in df.iterrows():
+#     code = row['code']
+    start('200444',count)
 
 print(count)    
 
