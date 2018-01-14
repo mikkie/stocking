@@ -21,7 +21,7 @@ class DataHolder(object):
           change = row['change']
           if change == '--':
              change = 0.0 
-          data = {'time' : row['time'], 'price' : float(row['price']), 'change' : float(change), 'volume' : int(row['volume']), 'amount' : float(row['amount']), 'types' : row['type']}
+          data = {'code' : code,'time' : row['time'], 'price' : float(row['price']), 'change' : float(change), 'volume' : int(row['volume']), 'amount' : float(row['amount']), 'types' : row['type']}
           if code in self.__data and self.__data[code] is not None:
              self.__data[code] = self.__data[code].append(data,ignore_index=True)
           else:

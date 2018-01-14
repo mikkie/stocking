@@ -6,6 +6,7 @@ import tushare as ts
 from sqlalchemy.types import VARCHAR
 from sqlalchemy import create_engine
 
+
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 
 df = ts.get_stock_basics() 
