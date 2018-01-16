@@ -6,6 +6,7 @@ import tushare as ts
 from sqlalchemy.types import VARCHAR
 from sqlalchemy import create_engine
 
+print(ts.get_realtime_quotes(['002839']))
 
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 

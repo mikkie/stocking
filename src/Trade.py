@@ -7,7 +7,8 @@ import time
 import threading
 
 def monitoring():
-    print(ts.get_realtime_quotes(['002839','000885']))
+    df = ts.get_realtime_quotes(['002839','000885'])
+    print(df[['code','name','price','bid','ask','b1_v','b1_p','a1_v','a1_p','volume','amount','time']])
     timer = threading.Timer(2, monitoring)
     timer.start()
 
