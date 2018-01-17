@@ -21,8 +21,10 @@ def cb(**kw):
     return ts.get_tick_data(kw['kw']['code'],date='2018-01-12')
 
 maxLength = 0
+
 for code in codeList:
     df = Utils.queryData('tick_' + code, 'code', engine, cb, forceUpdate=False, code=code)
+    net = 0
     if df is not None:
        datas[code] = df 
 
@@ -33,7 +35,7 @@ def monitoring(i):
         pos = len(datas[code]) - 1 - i
         if pos >= 0:
            dh.add_data(code,datas[code].iloc[pos]) 
-        i = i + 1
+    i = i + 1
         # print(dh.get_data(code))
     timer = threading.Timer(3, monitoring,[i])
     timer.start()
