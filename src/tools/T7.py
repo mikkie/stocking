@@ -18,13 +18,9 @@ def addData(df):
     for index,row in df.iterrows():
         code = row['code']
         if code in datas:
-           run = True
-           if datas[code] is not None:
-              lastTime = datas[code].iloc[-1].get('time') 
-              if lastTime == row['time']:
-                 run = False 
-           if run:
-              now = datas[code].append(row)
+           lastTime = datas[code].iloc[-1].get('time') 
+           if lastTime != row['time']:
+              datas[code] = datas[code].append(row)
         else:
            datas[code] = pd.DataFrame([row])
 
@@ -35,7 +31,7 @@ def saveData():
     timer1.start()
         
 def getData():
-    df = ts.get_realtime_quotes(['002736','600506','300698','300487','603098'])
+    df = ts.get_realtime_quotes(['002736','600506','300698','300487','603098','300018'])
     addData(df)
     timer = threading.Timer(2, getData)
     timer.start()
