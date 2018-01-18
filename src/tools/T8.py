@@ -10,9 +10,14 @@ import sys
 sys.path.append('..')
 from config.Config import Config
 
+codes = ['002736','600506','300698','300487','603098','300018']
+src_datas = {}
 datas = {}
 setting = Config()
 engine = create_engine(setting.get_DBurl())
+
+for code in codes:
+    src_datas[code] = pd.read_sql_table('live_' + code, con=engine)
 
 def addData(df):
     for index,row in df.iterrows():
@@ -31,13 +36,18 @@ def saveData():
     timer1 = threading.Timer(180, saveData)
     timer1.start()
         
-def getData():
-    df = ts.get_realtime_quotes(['002736','600506','300698','300487','603098','300018'])
+
+
+def getData(i):
+    df = pd.DataFrame()
+    for code in src_datas:
+        df.append(src_datas[code].lioc[i])
+    i = i + 1    
     addData(df)
-    timer = threading.Timer(2, getData)
+    timer = threading.Timer(2, getData,[i])
     timer.start()
 
-timer = threading.Timer(2, getData)
+timer = threading.Timer(2, getData,[0])
 timer.start()
 
 timer1 = threading.Timer(180, saveData)
