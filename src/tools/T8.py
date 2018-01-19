@@ -29,11 +29,10 @@ def addData(df):
         else:
            datas[code] = pd.DataFrame([row])
 
-def saveData():
+def analyzeData():
     for code in datas:
-        datas[code].to_sql('live_' + code,con=engine,if_exists='replace')
         print(datas[code])
-    timer1 = threading.Timer(180, saveData)
+    timer1 = threading.Timer(1, analyzeData)
     timer1.start()
         
 
@@ -41,7 +40,7 @@ def saveData():
 def getData(i):
     df = pd.DataFrame()
     for code in src_datas:
-        df.append(src_datas[code].lioc[i])
+        df = df.append(src_datas[code].iloc[i])
     i = i + 1    
     addData(df)
     timer = threading.Timer(2, getData,[i])
@@ -50,7 +49,7 @@ def getData(i):
 timer = threading.Timer(2, getData,[0])
 timer.start()
 
-timer1 = threading.Timer(180, saveData)
+timer1 = threading.Timer(1, analyzeData)
 timer1.start()
 
 while True:
