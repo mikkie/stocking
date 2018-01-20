@@ -11,6 +11,6 @@ class Analyze(object):
               
       def calc(self,stock):
           print('=== ' + stock.get_code() + " ===\n")
-          print('=== ' + stock.get_data() + " ===")
+          print(stock.get_data())
                   
               
