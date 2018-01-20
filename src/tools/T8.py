@@ -1,6 +1,6 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
-
+#Mock数据
 import tushare as ts
 import threading
 import time
@@ -17,28 +17,17 @@ datas = {}
 setting = Config()
 analyze = Analyze()
 engine = create_engine(setting.get_DBurl())
+from t1.datas.DataHolder import DataHolder
+from t1.analyze.Analyze import Analyze
+
+dh = DataHolder(codes,setting.get_t1()['need_save_data'],setting.get_t1()['need_recover_data'])
+analyze = Analyze()
 
 for code in codes:
-    src_datas[code] = pd.read_sql_table('live_' + code, con=engine)
-
-def addData(df):
-    for index,row in df.iterrows():
-        code = row['code']
-        if code in datas:
-           lastTime = datas[code]['data'].iloc[-1].get('time') 
-           if lastTime != row['time']:
-              datas[code]['data'] = datas[code]['data'].append(row)
-        else:
-           datas[code] = {}
-           datas[code]['data'] = pd.DataFrame([row])
-           print('')
-
-def analyzeData():
-    analyze.calc(datas)
-    timer1 = threading.Timer(1, analyzeData)
-    timer1.start()
-        
-
+    try:
+       src_datas[code] = pd.read_sql_table('live_' + code, con=engine)
+    except:
+       pass    
 
 def getData(i):
     df = pd.DataFrame()
@@ -46,15 +35,14 @@ def getData(i):
         if i < len(src_datas[code]):
            df = df.append(src_datas[code].iloc[i])
     i = i + 1    
-    addData(df)
-    timer = threading.Timer(0.1, getData,[i])
+    dh.addData(df)
+    analyze.calcMain(dh)
+    global timer 
+    timer = threading.Timer(setting.get_t1()['get_data_inter'], getData,[i])
     timer.start()
 
-timer = threading.Timer(0.1, getData,[0])
+timer = threading.Timer(setting.get_t1()['get_data_inter'], getData,[0])
 timer.start()
-
-timer1 = threading.Timer(1, analyzeData)
-timer1.start()
 
 while True:
       time.sleep(1)

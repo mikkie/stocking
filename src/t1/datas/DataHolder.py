@@ -14,15 +14,15 @@ from config.Config import Config
 
 class DataHolder(object):
 
-      def __init__(self,codes,needSaveData):  
+      def __init__(self,codes,needSaveData,needRecover):  
           self.__data = {}
           self.__setting = Config()
           self.__engine = create_engine(self.__setting.get_DBurl()) 
-          if self.needRecoverData():
+          if needRecover and self.needRecoverData():
              self.recoverData(codes) 
           if needSaveData:
              global timer 
-             timer = threading.Timer(10, self.saveData)
+             timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
              timer.start() 
 
       def recoverData(self,codes):
@@ -57,6 +57,6 @@ class DataHolder(object):
               df = self.__data[code].get_data()
               if df is not None and len(df) > 0:
                  df.to_sql('live_' + code, con = self.__engine, if_exists='replace')
-          timer = threading.Timer(10, self.saveData)
+          timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
           timer.start()           
  

@@ -44,6 +44,15 @@ class Config(object):
                    'concept' : 0.2 #概念题材
               }
           } 
+          self.__t1 = {
+              'get_data_inter' : 2,
+              'save_data_inter' : 10,
+              'need_recover_data' : False,
+              'need_save_data' : True
+          }
+
+      def get_t1(self):
+          return self.__t1    
 
       def get_conceptCodes(self):
           return self.__conceptCodes
