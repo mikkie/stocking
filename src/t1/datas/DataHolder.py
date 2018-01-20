@@ -6,20 +6,40 @@ from .Stock import Stock
 import threading
 import pandas as pd
 from sqlalchemy import create_engine
+import datetime as dt
+import time
 import sys
 sys.path.append('../..')
 from config.Config import Config 
 
 class DataHolder(object):
 
-      def __init__(self,needSaveData):  
+      def __init__(self,codes,needSaveData):  
           self.__data = {}
+          self.__setting = Config()
+          self.__engine = create_engine(self.__setting.get_DBurl()) 
+          if self.needRecoverData():
+             self.recoverData(codes) 
           if needSaveData:
-             self.__setting = Config()
-             self.__engine = create_engine(self.__setting.get_DBurl()) 
              global timer 
              timer = threading.Timer(10, self.saveData)
              timer.start() 
+
+      def recoverData(self,codes):
+          for code in codes:
+              try:
+                 src_data = pd.read_sql_table('live_' + code, con = self.__engine) 
+                 if src_data is not None and len(src_data) > 0:
+                    last = src_data.iloc[-1]
+                    now_date = time.strftime('%Y-%m-%d',time.localtime(time.time())) 
+                    if now_date == last['date']:
+                       self.__data[code] = Stock(code,src_data) 
+              except:
+                 pass           
+
+      def needRecoverData(self):
+          now = dt.datetime.now()
+          return now > dt.datetime(now.year,now.month,now.day,9,15)         
 
       def get_data(self):
           return self.__data

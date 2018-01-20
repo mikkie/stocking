@@ -11,16 +11,17 @@ sys.path.append('..')
 from config.Config import Config
 from t1.datas.DataHolder import DataHolder
 
+codes = ['601901','002736']
 datas = {}
 setting = Config()
 engine = create_engine(setting.get_DBurl())
-dh = DataHolder(True)
+dh = DataHolder(codes,True)
 
 def addData(df):
     dh.addData(df)
 
 def getData():
-    df = ts.get_realtime_quotes(['601901','002736'])
+    df = ts.get_realtime_quotes(codes)
     addData(df)
     global timer
     timer = threading.Timer(2, getData)

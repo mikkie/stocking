@@ -6,9 +6,13 @@ import pandas as pd
 
 class Stock(object):
 
-      def __init__(self, code, row):
+      def __init__(self, code, data):
           self.__code = code
-          self.__data = pd.DataFrame([row])
+          if isinstance(data, pd.Series):
+             self.__data = pd.DataFrame([data])
+          elif isinstance(data, pd.DataFrame):
+               self.__data = data
+                 
 
       def get_code(self):
           return self.__code
