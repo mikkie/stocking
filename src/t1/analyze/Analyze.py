@@ -1,6 +1,7 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
+from ..MyLog import MyLog
 
 class Analyze(object):
  
@@ -10,7 +11,7 @@ class Analyze(object):
               self.calc(data[code])
               
       def calc(self,stock):
-          print('=== ' + stock.get_code() + " ===\n")
-        #   print(stock.get_data())
+          MyLog.info('=== ' + stock.get_code() + " ===\n")
+          MyLog.info(stock.get_data())
                   
               

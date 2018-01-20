@@ -4,7 +4,6 @@ __author__ = 'aqua'
 from .Stock import Stock
 
 import threading
-import logging
 import pandas as pd
 from sqlalchemy import create_engine
 import datetime as dt
@@ -12,16 +11,17 @@ import time
 import sys
 sys.path.append('../..')
 from config.Config import Config 
+from t1.MyLog import MyLog
 
 class DataHolder(object):
 
-      def __init__(self,codes,needSaveData,needRecover):  
+      def __init__(self,codes):  
           self.__data = {}
           self.__setting = Config()
           self.__engine = create_engine(self.__setting.get_DBurl()) 
-          if needRecover and self.needRecoverData():
+          if self.__setting.get_t1()['need_recover_data'] and self.needRecoverData():
              self.recoverData(codes) 
-          if needSaveData:
+          if self.__setting.get_t1()['need_save_data']:
              global timer 
              timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
              timer.start() 
@@ -36,8 +36,8 @@ class DataHolder(object):
                     if now_date == last['date']:
                        self.__data[code] = Stock(code,src_data) 
               except Exception as e:
-                     logging.error('recover data error \n')
-                     logging.error(str(e) +  '\n')
+                     MyLog.error('recover data error \n')
+                     MyLog.error(str(e) +  '\n')
 
       def needRecoverData(self):
           now = dt.datetime.now()
@@ -61,9 +61,9 @@ class DataHolder(object):
                  try: 
                     df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
                  except Exception as e:
-                        logging.error('save data error \n')
-                        logging.error(str(e) +  '\n')
-                        logging.error(df)  
+                        MyLog.error('save data error \n')
+                        MyLog.error(str(e) +  '\n')
+                        MyLog.error(df)  
           timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
           timer.start()           
  

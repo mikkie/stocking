@@ -10,6 +10,7 @@ import sys
 sys.path.append('..')
 from config.Config import Config 
 from trade.Analyze import Analyze
+from t1.MyLog import MyLog
 
 codes = ['601901','002736']
 src_datas = {}
@@ -20,28 +21,29 @@ engine = create_engine(setting.get_DBurl())
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
 
-dh = DataHolder(codes,setting.get_t1()['need_save_data'],setting.get_t1()['need_recover_data'])
+dh = DataHolder(codes)
 analyze = Analyze()
 
 for code in codes:
     try:
        src_datas[code] = pd.read_sql_table('live_' + code, con=engine)
-    except:
-       pass    
+    except Exception as e:
+           MyLog.error('read mock data error \n')
+           MyLog.error(str(e) +  '\n')   
 
-def getData(i):
+def run(i):
     df = pd.DataFrame()
     for code in src_datas:
         if i < len(src_datas[code]):
            df = df.append(src_datas[code].iloc[i])
-    i = i + 1    
     dh.addData(df)
     analyze.calcMain(dh)
+    i = i + 1    
     global timer 
-    timer = threading.Timer(setting.get_t1()['get_data_inter'], getData,[i])
+    timer = threading.Timer(setting.get_t1()['get_data_inter'], run,[i])
     timer.start()
 
-timer = threading.Timer(setting.get_t1()['get_data_inter'], getData,[0])
+timer = threading.Timer(setting.get_t1()['get_data_inter'], run,[0])
 timer.start()
 
 while True:
