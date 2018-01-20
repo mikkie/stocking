@@ -11,7 +11,7 @@ sys.path.append('..')
 from config.Config import Config 
 from trade.Analyze import Analyze
 
-codes = ['002736','600506','300698','300487','603098','300018']
+codes = ['601901','002736']
 src_datas = {}
 datas = {}
 setting = Config()

@@ -4,6 +4,7 @@ __author__ = 'aqua'
 from .Stock import Stock
 
 import threading
+import logging
 import pandas as pd
 from sqlalchemy import create_engine
 import datetime as dt
@@ -34,8 +35,9 @@ class DataHolder(object):
                     now_date = time.strftime('%Y-%m-%d',time.localtime(time.time())) 
                     if now_date == last['date']:
                        self.__data[code] = Stock(code,src_data) 
-              except:
-                 pass           
+              except Exception as e:
+                     logging.error('recover data error \n')
+                     logging.error(str(e) +  '\n')
 
       def needRecoverData(self):
           now = dt.datetime.now()
@@ -56,7 +58,12 @@ class DataHolder(object):
           for code in self.__data:
               df = self.__data[code].get_data()
               if df is not None and len(df) > 0:
-                 df.to_sql('live_' + code, con = self.__engine, if_exists='replace')
+                 try: 
+                    df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
+                 except Exception as e:
+                        logging.error('save data error \n')
+                        logging.error(str(e) +  '\n')
+                        logging.error(df)  
           timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
           timer.start()           
  
