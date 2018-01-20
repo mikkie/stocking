@@ -57,5 +57,5 @@ timer1 = threading.Timer(1, analyzeData)
 timer1.start()
 
 while True:
-      time.sleep(0.01)
+      time.sleep(1)
 pass

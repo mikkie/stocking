@@ -20,7 +20,7 @@ def addData(df):
     dh.addData(df)
 
 def getData():
-    df = ts.get_realtime_quotes(['601901'])
+    df = ts.get_realtime_quotes(['601901','002736'])
     addData(df)
     global timer
     timer = threading.Timer(2, getData)
