@@ -48,7 +48,65 @@ class Config(object):
               'get_data_inter' : 2,
               'save_data_inter' : 10,
               'need_recover_data' : False,
-              'need_save_data' : True
+              'need_save_data' : True,
+              'R_line' : {
+                  'R1' : 0.191,
+                  'R2' : 0.382,
+                  'R3' : 0.5,
+                  'R4' : 0.618,
+                  'R5' : 0.892
+              },
+              'A' : {
+                  'open_p' : [5.0, 10.0],
+                  'time' : '10:00:00',
+                  'min_R' : 'R2',
+                  'speed' : {
+                      'near_pos' : 12,
+                      'threshold' : 1,
+                      'min_single_p' : 0.2
+                  },
+                  'big_money' : {
+                      'single_amount' : 500000,
+                      'total_amount' : 8000000,
+                      'single_volume' : 100000,
+                      'total_volume' : 1500000,
+                      'net' : 5000000
+                  }
+              },
+              'B' : {
+                  'open_p' : [2.0, 5.0],
+                  'time' : '11:00:00',
+                  'min_R' : 'R2',
+                  'speed' : {
+                      'near_pos' : 15,
+                      'threshold' : 1.5,
+                      'min_single_p' : 0.2
+                  },
+                  'big_money' : {
+                      'single_amount' : 500000,
+                      'total_amount' : 10000000,
+                      'single_volume' : 100000,
+                      'total_volume' : 1800000,
+                      'net' : 8000000
+                  }
+              },
+              'C' : {
+                  'open_p' : [-1.0, 2.0],
+                  'time' : '14:50:00',
+                  'min_R' : 'R3',
+                  'speed' : {
+                      'near_pos' : 30,
+                      'threshold' : 2,
+                      'min_single_p' : 0.2
+                  },
+                  'big_money' : {
+                      'single_amount' : 500000,
+                      'total_amount' : 12000000,
+                      'single_volume' : 100000,
+                      'total_volume' : 2000000,
+                      'net' : 8000000
+                  }
+              }
           }
 
       def get_t1(self):
