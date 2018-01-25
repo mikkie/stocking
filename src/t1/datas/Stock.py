@@ -8,6 +8,7 @@ class Stock(object):
 
       def __init__(self, code, data):
           self.__code = code
+          self.__minR = None
           self.__rBreakTimes = {
               'R1' : {
                  'val' : -10,
@@ -33,18 +34,61 @@ class Stock(object):
           self.__speed = {
               'near_speed_count' : 0,
               'total_speed_count' : 0
-          },
+          }
+          self.__bigMoney = {
+               'total_amount' : 0,
+               'total_volume' : 0
+          }
+          self.__netBuy = 0
           if isinstance(data, pd.Series):
              self.__data = pd.DataFrame([data])
           elif isinstance(data, pd.DataFrame):
                self.__data = data
                  
+      def set_minR(self,minR):
+          self.__minR = minR
+
+      def get_minR(self):
+          return self.__minR               
+
+      def addNetBuy(self,net):
+          self.__netBuy = self.__netBuy + net
+
+
+      def get_net(self):
+          return self.__netBuy    
+
+
+      def addBigMoneyTotalAmount(self,amount):
+          self.__bigMoney['total_amount'] = self.__bigMoney['total_amount'] + amount  
+
+
+      def getBigMoneyTotalAmount(self):
+          return self.__bigMoney['total_amount']
+
+
+      def getBigMoneyTotalVolume(self):
+          return self.__bigMoney['total_volume']       
+
+
+      def addBigMoneyTotalVolume(self,volume):
+          self.__bigMoney['total_volume'] = self.__bigMoney['total_volume'] + volume
+
 
       def set_near_speed(self,val):
           self.__speed['near_speed_count'] = val
 
+
+      def get_near_speed(self):
+          return self.__speed['near_speed_count']
+
       def add_total_speed(self,val):
           self.__speed['total_speed_count'] = self.__speed['total_speed_count'] + val     
+
+    
+      def get_total_speed(self):
+          return self.__speed['total_speed_count']
+
 
       def set_r_val(self,key,val):
           self.__rBreakTimes[key]['val'] = val
