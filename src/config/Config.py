@@ -45,6 +45,14 @@ class Config(object):
               }
           } 
           self.__t1 = {
+              'topsis' : {
+                  'net' : 0.2,
+                  'speed_near' : 0.15,
+                  'speed_total' : 0.15,
+                  'bigMoney_amount' : 0.15,
+                  'bigMoney_volume' : 0.15,
+                  'r_break' : 0.2
+              },
               'get_data_inter' : 2,
               'save_data_inter' : 10,
               'need_recover_data' : False,

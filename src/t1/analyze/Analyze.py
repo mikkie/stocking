@@ -2,7 +2,10 @@
 __author__ = 'aqua'
 
 from ..MyLog import MyLog
+import pandas as pd
+import numpy as np
 import datetime as dt
+import cmath
 import sys
 sys.path.append('../..')
 from config.Config import Config 
@@ -14,8 +17,87 @@ class Analyze(object):
  
       def calcMain(self,dh):
           data = dh.get_data()
+          result = []
           for code in data:
-              self.calc(data[code])
+              if self.calc(data[code]):
+                 result.append(data[code])
+          df_res = self.goTopsis(result)
+          print(df_res)
+
+
+      def goTopsis(self,result):
+          df = pd.DataFrame()
+          for stock in result:
+              self.buildData(df,stock)
+          return self.topsisCalc(df)    
+
+
+      def topsisCalc(self,df):
+          df = df.fillna(df.mean())   
+          self.commonCalc(df,'net',self.__config.get_t1()['topsis']['net'],True)
+          self.commonCalc(df,'speed_near',self.__config.get_t1()['topsis']['speed_near'],True)
+          self.commonCalc(df,'speed_total',self.__config.get_t1()['topsis']['speed_total'],True)
+          self.commonCalc(df,'bigMoney_amount',self.__config.get_t1()['topsis']['bigMoney_amount'],True)
+          self.commonCalc(df,'bigMoney_volume',self.__config.get_t1()['topsis']['bigMoney_volume'],True)    
+          self.commonCalc(df,'r_break',self.__config.get_t1()['topsis']['r_break'],False)
+          for index,row in df.iterrows():
+              self.calcDi(df,index,row,['net','speed_near','speed_total','bigMoney_amount','bigMoney_volume','r_break'],'_best')
+              self.calcDi(df,index,row,['net','speed_near','speed_total','bigMoney_amount','bigMoney_volume','r_break'],'_worst')
+              self.calcCi(index,row)  
+          df = df.sort_values('ci',ascending=False)  
+          return df  
+
+      def calcCi(self,df,index,row):
+          if (row['Di_best'] + row['Di_worst']) == 0:
+             row['ci'] = 0 
+             df.loc[index,'ci'] = 0
+          else:    
+             row['ci'] = row['Di_worst'] / (row['Di_best'] + row['Di_worst'])  
+             df.loc[index,'ci'] = row['ci']     
+
+
+      def calcDi(self,df,index,row,columnList,best_worst):
+          temp = 0
+          for column in columnList:
+              temp = temp + np.square(row[column + '_vi'] - row[column + best_worst])
+          row['Di' + best_worst] = cmath.sqrt(temp)
+          df.loc[index,'Di' + best_worst] = row['Di' + best_worst] 
+ 
+
+      def commonCalc(self,df,columnName,weight,positive):
+          temp = cmath.sqrt((df[columnName] * df[columnName]).sum())  
+          #wi*ri
+          if temp == 0:
+             df[columnName + '_vi'] = weight * 0
+          else:
+             df[columnName + '_vi'] = weight * df[columnName] / temp
+          #vi+, vi-
+          if positive == True:
+             df[columnName + '_best'] = df[columnName + '_vi'].max()
+             df[columnName + '_worst'] = df[columnName + '_vi'].min()
+          else:          
+             df[columnName + '_best'] = df[columnName + '_vi'].min()
+             df[columnName + '_worst'] = df[columnName + '_vi'].max()           
+
+ 
+      def buildData(self,df,stock):
+          last_line = stock.get_Lastline()
+          last_line['net'] = stock.get_net()
+          last_line['speed_near'] = stock.get_near_speed()
+          last_line['speed_total'] = stock.get_total_speed()
+          last_line['bigMoney_amount'] = stock.getBigMoneyTotalAmount()
+          last_line['bigMoney_volume'] = stock.getBigMoneyTotalVolume()
+          minR = stock.get_minR()
+          times = 0
+          for i in [1,2,3,4]:
+              if 'R' + i != minR:
+                  times = times + stock.get_rBreakTimes('R' + i)
+              else:
+                  break 
+          last_line['r_break'] = times
+          pd.append(last_line)
+          
+
               
       def calc(self,stock):
           MyLog.info('=== ' + stock.get_code() + " ===\n")
