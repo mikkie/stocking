@@ -33,7 +33,10 @@ class Stock(object):
           }
           self.__speed = {
               'near_speed_count' : 0,
-              'total_speed_count' : 0
+              'total_speed_count' : 0,
+              's100' : 0,
+              's40' : 0,
+              's10' : 0
           }
           self.__bigMoney = {
                'total_amount' : 0,
@@ -44,6 +47,12 @@ class Stock(object):
              self.__data = pd.DataFrame([data])
           elif isinstance(data, pd.DataFrame):
                self.__data = data
+
+      def get_speed(self,key):
+          return self.__speed[key]
+
+      def set_speed(self,key,speed):
+          self.__speed[key] = speed         
                  
       def set_minR(self,minR):
           self.__minR = minR

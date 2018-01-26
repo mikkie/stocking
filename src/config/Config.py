@@ -47,16 +47,23 @@ class Config(object):
           self.__t1 = {
               'topsis' : {
                   'net' : 0.2,
-                  'speed_near' : 0.15,
-                  'speed_total' : 0.15,
+                  'speed_near' : 0.05,
+                  'speed_total' : 0.10,
+                  's100' : 0.05,
+                  's40' : 0.05,
+                  's10' : 0.05,
                   'bigMoney_amount' : 0.15,
                   'bigMoney_volume' : 0.15,
                   'r_break' : 0.2
               },
+              'big_money' : {
+                  'amount' : 500000,
+                  'volume' : 100000
+              },
               'get_data_inter' : 2,
               'save_data_inter' : 10,
               'need_recover_data' : False,
-              'need_save_data' : True,
+              'need_save_data' : False,
               'R_line' : {
                   'R1' : 0.191,
                   'R2' : 0.382,
@@ -83,7 +90,7 @@ class Config(object):
               },
               'B' : {
                   'open_p' : [2.0, 5.0],
-                  'time' : '11:00:00',
+                  'time' : '23:50:00',
                   'min_R' : 'R2',
                   'speed' : {
                       'near_pos' : 15,
