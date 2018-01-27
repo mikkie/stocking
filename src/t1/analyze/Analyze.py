@@ -29,7 +29,7 @@ class Analyze(object):
       def goTopsis(self,result):
           df = pd.DataFrame()
           for stock in result:
-              self.buildData(df,stock)
+              df = self.buildData(df,stock)
           return self.topsisCalc(df)    
 
 
@@ -47,7 +47,7 @@ class Analyze(object):
           for index,row in df.iterrows():
               self.calcDi(df,index,row,['net','speed_near','speed_total','s40','s100','s10','bigMoney_amount','bigMoney_volume','r_break'],'_best')
               self.calcDi(df,index,row,['net','speed_near','speed_total','s40','s100','s10','bigMoney_amount','bigMoney_volume','r_break'],'_worst')
-              self.calcCi(index,row)  
+              self.calcCi(df,index,row)  
           df = df.sort_values('ci',ascending=False)  
           return df  
 
@@ -103,7 +103,8 @@ class Analyze(object):
               else:
                   break 
           data.loc[data['time'] == last_line['time'], 'r_break'] = times
-          pd.append(last_line)
+          last_line = stock.get_Lastline()
+          return df.append([last_line])
           
 
               
