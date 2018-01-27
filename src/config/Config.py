@@ -90,7 +90,7 @@ class Config(object):
               },
               'B' : {
                   'open_p' : [2.0, 5.0],
-                  'time' : '23:50:00',
+                  'time' : '11:00:00',
                   'min_R' : 'R2',
                   'speed' : {
                       'near_pos' : 15,
