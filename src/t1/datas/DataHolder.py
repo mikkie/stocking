@@ -17,6 +17,7 @@ class DataHolder(object):
 
       def __init__(self,codes):  
           self.__data = {}
+          self.__buyed = []
           self.__setting = Config()
           self.__engine = create_engine(self.__setting.get_DBurl()) 
           if self.__setting.get_t1()['need_recover_data'] and self.needRecoverData():
@@ -41,7 +42,13 @@ class DataHolder(object):
 
       def needRecoverData(self):
           now = dt.datetime.now()
-          return now > dt.datetime(now.year,now.month,now.day,9,15)         
+          return now > dt.datetime(now.year,now.month,now.day,9,15)     
+
+      def get_buyed(self):
+          return self.__buyed
+
+      def add_buyed(self,code):
+          self.__buyed.append(code)        
 
       def get_data(self):
           return self.__data

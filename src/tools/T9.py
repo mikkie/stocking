@@ -12,7 +12,7 @@ from config.Config import Config
 from trade.Analyze import Analyze
 from t1.MyLog import MyLog
 
-codes = ['300698']
+codes = ['300487']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -37,7 +37,9 @@ def run(i):
         if i < len(src_datas[code]):
            df = df.append(src_datas[code].iloc[i])
     dh.addData(df)
-    analyze.calcMain(dh)
+    code = analyze.calcMain(dh)
+    if code != '':
+       dh.add_buyed(code)
 
 for i in range(5200):
     run(i)

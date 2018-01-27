@@ -45,6 +45,10 @@ class Config(object):
               }
           } 
           self.__t1 = {
+              'trade' : {
+                 'addPrice' : 0.02,
+                 'volume' : 500
+              },
               'topsis' : {
                   'net' : 0.2,
                   'speed_near' : 0.05,
@@ -73,7 +77,7 @@ class Config(object):
               },
               'A' : {
                   'open_p' : [5.0, 10.0],
-                  'time' : '10:00:00',
+                  'time' : '15:00:00',
                   'min_R' : 'R2',
                   'speed' : {
                       'near_pos' : 12,

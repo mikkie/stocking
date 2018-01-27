@@ -17,13 +17,24 @@ class Analyze(object):
  
       def calcMain(self,dh):
           data = dh.get_data()
+          finalCode = ''
           result = []
           for code in data:
+              if code in dh.get_buyed():
+                 continue 
               if self.calc(data[code]):
                  result.append(data[code])
           if len(result) != 0:
              df_res = self.goTopsis(result)
-             print(df_res)
+             finalCode = self.outputRes(df_res)
+          return finalCode   
+
+
+      def outputRes(self,df_res):
+          df_final = df_res.iloc[0]
+          trade = self.__config.get_t1()['trade']
+          print('在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume'])))
+          return df_final['code']       
 
 
       def goTopsis(self,result):
@@ -109,7 +120,7 @@ class Analyze(object):
 
               
       def calc(self,stock):
-          MyLog.info('=== ' + stock.get_code() + " ===\n")
+        #   MyLog.info('=== ' + stock.get_code() + " ===\n")
           if not self.canCalc(stock):
              return False 
           open_p = self.getOpenPercent(stock)
