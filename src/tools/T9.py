@@ -12,7 +12,7 @@ from config.Config import Config
 from trade.Analyze import Analyze
 from t1.MyLog import MyLog
 
-codes = ['300698']
+codes = ['300698','002736','300487']
 src_datas = {}
 datas = {}
 setting = Config()
