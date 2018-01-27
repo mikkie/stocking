@@ -283,7 +283,7 @@ class Analyze(object):
                  return t1[key] 
 
       def isStockMatch(self,stock,conf):
-          if not self.isTimeMatch(conf):
+          if not self.isTimeMatch(stock,conf):
              return False
           if not self.isReachMinR(stock):
              return False
@@ -327,9 +327,9 @@ class Analyze(object):
 
 
 
-      def isTimeMatch(self,conf):
-          now = dt.datetime.now()
-          timeStr = now.strftime('%H:%M:%S')
+      def isTimeMatch(self,stock,conf):
+          lastLine = stock.get_Lastline()
+          timeStr = lastLine['time']
           return timeStr <= conf['time']
 
 
