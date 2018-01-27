@@ -77,7 +77,7 @@ class Config(object):
               },
               'A' : {
                   'open_p' : [5.0, 10.0],
-                  'time' : '15:00:00',
+                  'time' : '10:00:00',
                   'min_R' : 'R2',
                   'speed' : {
                       'near_pos' : 12,
