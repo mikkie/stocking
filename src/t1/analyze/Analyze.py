@@ -33,7 +33,7 @@ class Analyze(object):
       def outputRes(self,df_res):
           df_final = df_res.iloc[0]
           trade = self.__config.get_t1()['trade']
-          print('在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume'])))
+          print('在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume'])))
           return df_final['code']       
 
 
