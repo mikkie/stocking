@@ -35,7 +35,6 @@ def run(codes,dh):
     global timer
     timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
     timer.start()
-    pass
 
 threads = []
 codes = get_today_all_codes()
