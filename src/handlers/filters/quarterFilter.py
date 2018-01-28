@@ -11,6 +11,7 @@ from utils.Utils import Utils
 from ..StrategyManager import StrategyManager
 from models.StocksManager import StocksManager
 from models.Stock import Stock
+from t1.MyLog import MyLog
 import threading
 from time import sleep
 
@@ -117,6 +118,7 @@ def filter(df_todayAll,setting,engine):
             break   
         i = i + 1
     print('Topsis 综合测评结果排序 : ', result)
+    MyLog.info('Topsis 综合测评结果排序 : %s' % result)
     return result 
 
 
