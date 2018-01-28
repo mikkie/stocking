@@ -150,7 +150,9 @@ class Analyze(object):
           lastLine = stock.get_Lastline() 
           if float(lastLine.get('open')) == 0.0:
              return False
-          lastSecondLine = stock.get_LastSecondline() 
+          lastSecondLine = stock.get_LastSecondline()
+          if lastSecondLine is None:
+             return False  
           if float(lastSecondLine.get('open')) == 0.0:
              return False    
           return True     

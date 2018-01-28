@@ -112,10 +112,7 @@ def filter(df_todayAll,setting,engine):
     df_res = stockManager.buildDataFrame()
     i = 0
     for index,row in df_res.iterrows():
-        if i < 10:
-               result.append(index)
-        else:
-            break   
+        result.append(index)
         i = i + 1
     print('Topsis 综合测评结果排序 : ', result)
     MyLog.info('Topsis 综合测评结果排序 : %s' % result)
