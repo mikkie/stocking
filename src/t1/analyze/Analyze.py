@@ -20,7 +20,7 @@ class Analyze(object):
           finalCode = ''
           result = []
           for code in data:
-              if code in dh.get_buyed():
+              if code in dh.get_buyed() or code in self.__config.get_ignore():
                  continue 
               try:  
                  if self.calc(data[code],dh):
