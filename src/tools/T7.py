@@ -36,7 +36,7 @@ def run(codes,dh):
        if res != '':
           dh.add_buyed(res)
     except Exception as e:
-           MyLog.error(str(e))
+           MyLog.error('get data error %s %s' % (codes,str(e)))
     finally:               
            global timer
            timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
