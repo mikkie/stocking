@@ -39,6 +39,7 @@ def run(codes,dh):
     except Exception as e:
            MyLog.error('get data error %s %s' % (codes,str(e)))
     finally:               
+           global timer
            timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
            timer.start()
 
@@ -57,6 +58,8 @@ for i in range(num_threads):
         if code in code_list:
            code_list = code_list.remove(code)  
     dh = DataHolder(code_list)
+    if code_list is None:
+       print(code_list) 
     t = threading.Thread(target=run, args=(code_list,dh))   
     t.setDaemon(True)
     t.start()
