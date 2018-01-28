@@ -10,6 +10,7 @@ sys.path.append('..')
 from config.Config import Config
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
+from t1.MyLog import MyLog
 from utils.Utils import Utils
 from sqlalchemy import create_engine
 
@@ -27,15 +28,19 @@ def run(codes,dh):
     if len(dh.get_buyed()) > 0:
        for code in dh.get_buyed():
            if code in codes:
-              codes = codes.remove(code) 
-    df = ts.get_realtime_quotes(codes)
-    dh.addData(df)
-    res = analyze.calcMain(dh)
-    if res != '':
-       dh.add_buyed(res) 
-    global timer
-    timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
-    timer.start()
+              codes = codes.remove(code)
+    try:
+       df = ts.get_realtime_quotes(codes)
+       dh.addData(df)
+       res = analyze.calcMain(dh)
+       if res != '':
+          dh.add_buyed(res)
+    except Exception as e:
+           MyLog.error(str(e))
+    finally:               
+           global timer
+           timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
+           timer.start()
 
 threads = []
 codes = get_today_all_codes()
