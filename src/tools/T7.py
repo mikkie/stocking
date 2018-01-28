@@ -24,14 +24,15 @@ def get_today_all_codes():
     return df_todayAll['code']
 
 def run(codes,dh):
-    df = ts.get_realtime_quotes(codes)
-    dh.addData(df)
-    res = analyze.calcMain(dh)
-    if res != '':
-       dh.add_buyed(res) 
-    global timer
-    timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
-    timer.start()
+    # df = ts.get_realtime_quotes(codes)
+    # dh.addData(df)
+    # res = analyze.calcMain(dh)
+    # if res != '':
+    #    dh.add_buyed(res) 
+    # global timer
+    # timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
+    # timer.start()
+    pass
 
 threads = []
 codes = get_today_all_codes()
@@ -45,7 +46,8 @@ for i in range(num_threads):
     df_codes = codes[begin:end]
     code_list = df_codes.tolist()
     for code in setting.get_ignore():
-        code_list = code_list.remove(code)  
+        if code in code_list:
+           code_list = code_list.remove(code)  
     dh = DataHolder(code_list)
     t = threading.Thread(target=run, args=(code_list,dh))   
     t.setDaemon(True)
