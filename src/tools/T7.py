@@ -30,11 +30,12 @@ def run(codes,dh):
            if code in codes:
               codes = codes.remove(code)
     try:
-       df = ts.get_realtime_quotes(codes)
-       dh.addData(df)
-       res = analyze.calcMain(dh)
-       if res != '':
-          dh.add_buyed(res)
+       if len(codes) > 0: 
+          df = ts.get_realtime_quotes(codes)
+          dh.addData(df)
+          res = analyze.calcMain(dh)
+          if res != '':
+             dh.add_buyed(res)
     except Exception as e:
            MyLog.error('get data error %s %s' % (codes,str(e)))
     finally:               
