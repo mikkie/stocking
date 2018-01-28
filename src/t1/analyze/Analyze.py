@@ -23,7 +23,7 @@ class Analyze(object):
               if code in dh.get_buyed():
                  continue 
               try:  
-                 if self.calc(data[code]):
+                 if self.calc(data[code],dh):
                     result.append(data[code])
               except Exception as e:
                      last_line = data[code].get_Lastline()
@@ -131,13 +131,14 @@ class Analyze(object):
           
 
               
-      def calc(self,stock):
+      def calc(self,stock,dh):
         #   MyLog.info('=== ' + stock.get_code() + " ===\n")
           if not self.canCalc(stock):
              return False 
           open_p = self.getOpenPercent(stock)
           conf = self.getConfig(open_p)  
           if conf is None:
+             dh.add_buyed(stock.get_code()) 
              return False 
           self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
