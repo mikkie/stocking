@@ -20,8 +20,9 @@ class Analyze(object):
           finalCode = ''
           result = []
           for code in data:
-              if code in dh.get_buyed():
-                 continue 
+              if len(dh.get_buyed()) > 0:
+                 if code in dh.get_buyed():
+                    continue 
               try:  
                  if self.calc(data[code],dh):
                     result.append(data[code])

@@ -24,9 +24,10 @@ def get_today_all_codes():
     return df_todayAll['code']
 
 def run(codes,dh):
-    for code in dh.get_buyed():
-        if code in codes:
-           codes = codes.remove(code) 
+    if len(dh.get_buyed()) > 0:
+       for code in dh.get_buyed():
+           if code in codes:
+              codes = codes.remove(code) 
     df = ts.get_realtime_quotes(codes)
     dh.addData(df)
     res = analyze.calcMain(dh)
