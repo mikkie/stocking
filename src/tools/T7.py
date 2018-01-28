@@ -39,7 +39,6 @@ def run(codes,dh):
     except Exception as e:
            MyLog.error('get data error %s %s' % (codes,str(e)))
     finally:               
-           global timer
            timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
            timer.start()
 
