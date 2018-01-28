@@ -22,11 +22,23 @@ class Analyze(object):
           for code in data:
               if code in dh.get_buyed():
                  continue 
-              if self.calc(data[code]):
-                 result.append(data[code])
+              try:  
+                 if self.calc(data[code]):
+                    result.append(data[code])
+              except Exception as e:
+                     last_line = data[code].get_Lastline()
+                     MyLog.error(last_line['time'] + ' :calc ' + code + ' error')
+                     MyLog.error(str(e))      
           if len(result) != 0:
-             df_res = self.goTopsis(result)
-             finalCode = self.outputRes(df_res)
+             try:
+                df_res = self.goTopsis(result)
+                finalCode = self.outputRes(df_res)
+             except Exception as e:
+                    codes = []
+                    for stock in result:
+                        codes.append(stock.get_code())
+                    MyLog.error('calc topsis error %s' % codes)
+                    MyLog.error(str(e))   
           return finalCode   
 
 
