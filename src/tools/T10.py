@@ -37,7 +37,6 @@ def run(codeSplits,dh):
                df = ts.get_realtime_quotes(codeList)
                df_total= df_total.append(df)
         dh.addData(df_total)
-        print('add data use time = %d ms' % (addDataTime - startTime))
         res = analyze.calcMain(dh)
         if res != '':
            dh.add_buyed(res)
