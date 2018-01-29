@@ -62,6 +62,7 @@ class DataHolder(object):
                self.__data[code] = Stock(code,row) 
 
       def addData(self,df):
+          df[['b1_v','a1_v']] = df[['b1_v','a1_v']].fillna(value = 0)
           df.apply(self.addDataHandler,axis=1)
 
       def saveData(self):
