@@ -26,7 +26,6 @@ def get_today_all_codes():
 
 def run(codeSplits,dh):
     try:
-        startTime = int(round(time.time() * 1000))
         df_total = pd.DataFrame()
         if len(dh.get_buyed()) > 0:
            for codeList in codeSplits: 
@@ -37,18 +36,11 @@ def run(codeSplits,dh):
             if len(codeList) > 0: 
                df = ts.get_realtime_quotes(codeList)
                df_total= df_total.append(df)
-        getDataTime = int(round(time.time() * 1000))       
-        print('get data use time = %d ms' % (getDataTime - startTime))       
         dh.addData(df_total)
-        addDataTime = int(round(time.time() * 1000))
         print('add data use time = %d ms' % (addDataTime - startTime))
         res = analyze.calcMain(dh)
         if res != '':
            dh.add_buyed(res)
-        calcDataTime = int(round(time.time() * 1000))
-        print('calc data use time = %d ms' % (calcDataTime - startTime))   
-        # print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))    
-        # print(codes)
     except Exception as e:
            MyLog.error('get data error %s %s' % (codes,str(e)))
     finally:               
@@ -78,6 +70,3 @@ for i in range(num_splits):
 
 run(codeSplits,dh)
 
-while True:
-      time.sleep(1)
-pass

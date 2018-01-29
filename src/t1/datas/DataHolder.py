@@ -53,13 +53,16 @@ class DataHolder(object):
       def get_data(self):
           return self.__data
 
-      def addData(self,df):
-          for index,row in df.iterrows():
-              code = row['code']
-              if code in self.__data and self.__data[code].len() > 0:
+
+      def addDataHandler(self,row):
+          code = row['code']
+          if code in self.__data and self.__data[code].len() > 0:
                  self.__data[code].add_Line(row)
-              else:
-                 self.__data[code] = Stock(code,row)
+          else:
+               self.__data[code] = Stock(code,row) 
+
+      def addData(self,df):
+          df.apply(self.addDataHandler,axis=1)
 
       def saveData(self):
           for code in self.__data:
