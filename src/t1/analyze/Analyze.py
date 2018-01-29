@@ -215,6 +215,8 @@ class Analyze(object):
              stock.add_total_speed(p)     
 
       def convertToFloat(self,str):
+          if str == '':
+             return 0 
           try:
               return float(str)
           except Exception as e:
