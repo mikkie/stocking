@@ -65,7 +65,7 @@ class Config(object):
                   'amount' : 500000,
                   'volume' : 100000
               },
-              'get_data_inter' : 2,
+              'get_data_inter' : 1,
               'save_data_inter' : 10,
               'need_recover_data' : False,
               'need_save_data' : False,

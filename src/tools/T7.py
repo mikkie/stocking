@@ -25,17 +25,17 @@ def get_today_all_codes():
     return df_todayAll['code']
 
 def run(codes,dh):
-    if len(dh.get_buyed()) > 0:
-       for code in dh.get_buyed():
-           if code in codes:
-              codes.remove(code)
+    # if len(dh.get_buyed()) > 0:
+    #    for code in dh.get_buyed():
+    #        if code in codes:
+    #           codes.remove(code)
     try:
-        if len(codes) > 0: 
-           df = ts.get_realtime_quotes(codes)
-           dh.addData(df)
-           res = analyze.calcMain(dh)
-           if res != '':
-              dh.add_buyed(res)
+        # if len(codes) > 0: 
+        #    df = ts.get_realtime_quotes(codes)
+        #    dh.addData(df)
+        #    res = analyze.calcMain(dh)
+        #    if res != '':
+        #       dh.add_buyed(res)
            print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))    
            print(codes)
     except Exception as e:
@@ -44,7 +44,6 @@ def run(codes,dh):
            global timer
            timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codes,dh])
            timer.start()
-           pass
 
 threads = []
 codes = get_today_all_codes()
@@ -61,8 +60,6 @@ for i in range(num_threads):
         if code in code_list:
            code_list.remove(code)  
     dh = DataHolder(code_list)
-    if code_list is None:
-       print(code_list) 
     t = threading.Thread(target=run, args=(code_list,dh))   
     t.setDaemon(True)
     t.start()
