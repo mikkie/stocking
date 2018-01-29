@@ -69,6 +69,7 @@ class Config(object):
               'save_data_inter' : 10,
               'need_recover_data' : False,
               'need_save_data' : False,
+              'split_size' : 500,
               'R_line' : {
                   'R1' : 0.191,
                   'R2' : 0.382,
