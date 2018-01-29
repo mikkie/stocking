@@ -46,7 +46,7 @@ def run(codeSplits,dh):
            MyLog.error('get data error %s %s' % (codes,str(e)))
     finally:               
            global timer
-           timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codeLists,codeSplits,dh])
+           timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codeSplits,dh])
            timer.start()
 
 codeSplits = []
