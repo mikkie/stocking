@@ -26,31 +26,35 @@ def get_today_all_codes():
 
 def run(codeSplits,dh):
     try:
-        df_total = pd.DataFrame()
-        if len(dh.get_buyed()) > 0:
-           for codeList in codeSplits: 
-               for code in dh.get_buyed():
-                   if code in codeList:
-                      codeList.remove(code)
-        for codeList in codeSplits:
-            if len(codeList) > 0: 
-               df = ts.get_realtime_quotes(codeList)
-               df_total= df_total.append(df)
-        dh.addData(df_total)
-        res = analyze.calcMain(dh)
-        if res != '':
-           dh.add_buyed(res)
+        now = time.strftime('%H:%M:%S',time.localtime(time.time()))
+        if (now >= setting.get_t1()['stop']['am_start'] and now <= setting.get_t1()['stop']['am_stop']) or (now >= setting.get_t1()['stop']['pm_start'] and now <= setting.get_t1()['stop']['pm_stop']): 
+           df_total = pd.DataFrame()
+           if len(dh.get_buyed()) > 0:
+              for codeList in codeSplits: 
+                  for code in dh.get_buyed():
+                      if code in codeList:
+                         codeList.remove(code)
+           for codeList in codeSplits:
+               if len(codeList) > 0: 
+                  df = ts.get_realtime_quotes(codeList)
+                  df_total= df_total.append(df)
+           if len(df_total) > 0:
+              dh.addData(df_total)
+              res = analyze.calcMain(dh)
+              if res != '':
+                 dh.add_buyed(res)
     except Exception as e:
            MyLog.error('error %s' % str(e))
-    finally:               
-           global timer
-           timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codeSplits,dh])
-           timer.start()
+    finally: 
+           now = time.strftime('%H:%M:%S',time.localtime(time.time()))
+           if now < setting.get_t1()['stop']['pm_stop']:                
+              global timer
+              timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codeSplits,dh])
+              timer.start()
 
 codeSplits = []
-# codes = get_today_all_codes()
-# codeLists = codes.tolist()
-codeLists = ['300487']
+codes = get_today_all_codes()
+codeLists = codes.tolist()
 for code in setting.get_ignore():
     if code in codeLists:
        codeLists.remove(code)  

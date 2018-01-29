@@ -295,7 +295,7 @@ class Analyze(object):
           t1 = self.__config.get_t1()
           keys = ['A','B','C']
           for key in keys:
-              if t1[key]['open_p'][0] < open_p and open_p < t1[key]['open_p'][1]:
+              if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
       def isStockMatch(self,stock,conf):
