@@ -41,15 +41,16 @@ def run(codeSplits,dh):
         if res != '':
            dh.add_buyed(res)
     except Exception as e:
-           MyLog.error('get data error %s %s' % (codes,str(e)))
+           MyLog.error('error %s' % str(e))
     finally:               
            global timer
            timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codeSplits,dh])
            timer.start()
 
 codeSplits = []
-codes = get_today_all_codes()
-codeLists = codes.tolist()
+# codes = get_today_all_codes()
+# codeLists = codes.tolist()
+codeLists = ['300487']
 for code in setting.get_ignore():
     if code in codeLists:
        codeLists.remove(code)  
