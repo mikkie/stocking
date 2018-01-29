@@ -18,6 +18,13 @@ setting = Config()
 engine = create_engine(setting.get_DBurl())
 analyze = Analyze()
 
+
+def init():
+    df = ts.get_today_all()
+    df = df[df['changepercent'] >= -1.0]
+    df.to_sql('today_all',con=engine,if_exists='replace',index=False,index_label='code')
+    
+
 def get_today_all_codes():
     def cb(**kw):
         return ts.get_today_all()
@@ -39,8 +46,12 @@ def run(codeSplits,dh):
                   df = ts.get_realtime_quotes(codeList)
                   df_total= df_total.append(df)
            if len(df_total) > 0:
+            #   a = int(round(time.time() * 1000)) 
               dh.addData(df_total)
+            #   b = int(round(time.time() * 1000))
+            #   print('add data time = %d' % (b - a))
               res = analyze.calcMain(dh)
+            #   print('calc data time = %d' % (int(round(time.time() * 1000)) - b))
               if res != '':
                  dh.add_buyed(res)
     except Exception as e:
@@ -49,7 +60,7 @@ def run(codeSplits,dh):
            now = time.strftime('%H:%M:%S',time.localtime(time.time()))
            if now < setting.get_t1()['stop']['pm_stop']:                
               global timer
-              timer = threading.Timer(setting.get_t1()['get_data_inter'], run, args=[codeSplits,dh])
+              timer = threading.Timer(0, run, args=[codeSplits,dh])
               timer.start()
 
 codeSplits = []
@@ -72,5 +83,6 @@ for i in range(num_splits):
     if begin >= length:
        break
 
+# init()
 run(codeSplits,dh)
 
