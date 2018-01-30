@@ -61,8 +61,9 @@ def run(codeList,dh):
 if __name__ == '__main__':
    print('main process %s.' % os.getpid()) 
    pool = Pool(setting.get_t1()['process_num'])
-   codes = get_today_all_codes()
-   codeLists = codes.tolist()
+#    codes = get_today_all_codes()
+#    codeLists = codes.tolist()
+   codeLists = ['002496','600516','600158','002460','002466','000426']
    for code in setting.get_ignore():
        if code in codeLists:
           codeLists.remove(code)  
