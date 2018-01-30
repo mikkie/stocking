@@ -46,11 +46,12 @@ class Config(object):
               }
           } 
           self.__t1 = {
+              'process_num' : 3,
               'stop' : {
                   'am_start' : '09:10:00',
                   'am_stop' : '11:30:00',
                   'pm_start' : '12:55:00',
-                  'pm_stop' : '23:00:00',
+                  'pm_stop' : '15:00:00',
               },
               'trade' : {
                  'addPrice' : 0.02,
@@ -72,9 +73,9 @@ class Config(object):
                   'volume' : 100000
               },
               'get_data_inter' : 1,
-              'save_data_inter' : 10,
+              'save_data_inter' : 60,
               'need_recover_data' : False,
-              'need_save_data' : False,
+              'need_save_data' : True,
               'split_size' : 500,
               'R_line' : {
                   'R1' : 0.191,
