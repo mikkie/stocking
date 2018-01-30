@@ -187,16 +187,19 @@ class Analyze(object):
           l = stock.len()
           for i in [30, 120, 300]:
               pos = l
-              if i/3 < l:
-                 pos = i/3
+              if int(i/3) < l:
+                 pos = int(i/3)
               df_temp = data.tail(pos)    
               for index,row in df_temp.iterrows(): 
                   if float(row['open']) != 0.0:
                      row_time = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
-                     deltaS = (last_line - row_time).seconds
-                     if deltaS <= i and deltaS > 0:
+                     deltaS = (now_time - row_time).seconds
+                     if deltaS == 0:
+                        stock.set_speed('v' + str(i),0)
+                        break 
+                     if deltaS <= i and deltaS >= i - 15:
                         p = (float(last_line.get('price')) - float(row['price'])) / float(row['open']) * 100 
-                        stock.set_speed('v' + str(i),p) 
+                        stock.set_speed('v' + str(i),p / deltaS) 
                         break  
 
       def convertToFloat(self,str):
@@ -317,10 +320,14 @@ class Analyze(object):
           s = 10 - p
           tt = [s/v30,s/v120,s/v300]
           count = 0
+          matchCount = 2
           for t in tt:
               if t < 60:
                  count = count + 1
           flag = (count >= 2)
+          if conf['open_p'] == 5.0:
+             if tt[0] < 30:
+                flag = True  
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match speed ***') 
              MyLog.info('v30 speed ' + str(v30))

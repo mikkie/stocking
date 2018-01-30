@@ -131,5 +131,5 @@ class Stock(object):
              if lastTime != row['time']:
                 self.__data = self.__data.append(row) 
                 row_date = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
-                if (row_date - last_date).seconds > 3:
+                if row['time'] >= '09:30:00' and (row_date - last_date).seconds > 3:
                    MyLog.warn('%s get data is more than 3s' % row['code']) 

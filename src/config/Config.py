@@ -73,7 +73,7 @@ class Config(object):
               'get_data_inter' : 1,
               'save_data_inter' : 60,
               'need_recover_data' : False,
-              'need_save_data' : True,
+              'need_save_data' : False,
               'split_size' : 500,
               'R_line' : {
                   'R1' : 0.191,
