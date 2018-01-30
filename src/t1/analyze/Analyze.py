@@ -235,7 +235,9 @@ class Analyze(object):
 
       def updateBigMoney(self,stock,conf):
           lastLine = stock.get_Lastline()
+          now_time = dt.datetime.strptime(lastLine['date'] + ' ' + lastLine['time'], '%Y-%m-%d %H:%M:%S')
           lastSeconfLine = stock.get_LastSecondline()
+          last_time = dt.datetime.strptime(lastSeconfLine['date'] + ' ' + lastSeconfLine['time'], '%Y-%m-%d %H:%M:%S')
           last_amount = float(lastLine.get('amount'))
           last_sec_amount = float(lastSeconfLine.get('amount'))
           last_volume = float(lastLine.get('volume'))
@@ -244,18 +246,18 @@ class Analyze(object):
           volume = last_volume - last_sec_volume
           big_amount = self.__config.get_t1()['big_money']['amount']
           big_volume = self.__config.get_t1()['big_money']['volume']
-          type = self.theLastIsSellOrBuy(stock)
-          if type == 'drive_buy':
-             if amount >= big_amount or volume >= big_volume:
-                stock.addNetBuy(last_amount - last_sec_amount)  
-             if amount >= conf['big_money']['single_amount']:
-                 stock.addBigMoneyTotalAmount(amount)
-             if volume >= conf['big_money']['single_volume']:
-                 stock.addBigMoneyTotalVolume(volume) 
-          elif type == 'drive_sell':
-               if amount >= big_amount or volume >= big_volume:
-                  stock.addNetBuy(last_sec_amount - last_amount)           
-
+          deltaS = (now_time - last_time).seconds
+          if deltaS <= 3 and (amount >= big_amount or volume >= big_volume):
+             type = self.theLastIsSellOrBuy(stock)
+             if type == 'drive_buy': 
+                stock.addNetBuy(last_amount - last_sec_amount)
+                if amount >= conf['big_money']['single_amount']:
+                   stock.addBigMoneyTotalAmount(amount)
+                if volume >= conf['big_money']['single_volume']:
+                   stock.addBigMoneyTotalVolume(volume) 
+             elif type == 'drive_sell':  
+                  stock.addNetBuy(last_sec_amount - last_amount)  
+          
              
       def updateBreakRtimes(self,stock,conf):
           now_p = self.getCurrentPercent(stock)
