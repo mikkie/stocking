@@ -20,5 +20,9 @@ class MyLog(object):
       def error(msg):
           logging.error(msg)
 
+      @staticmethod
+      def warn(msg):
+          logging.warn(msg)    
+
 
 

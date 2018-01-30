@@ -3,6 +3,8 @@
 __author__ = 'aqua'
 
 import pandas as pd
+import datetime as dt
+from ..MyLog import MyLog
 
 class Stock(object):
 
@@ -125,5 +127,9 @@ class Stock(object):
           lastLine = self.get_Lastline()
           if lastLine is not None:
              lastTime = lastLine.get('time') 
+             last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
                 self.__data = self.__data.append(row) 
+                row_date = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
+                if (row_date - last_date).seconds > 3:
+                   MyLog.warn('%s get data is more than 3s' % row[code]) 
