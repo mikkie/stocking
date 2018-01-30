@@ -59,11 +59,9 @@ class Config(object):
               },
               'topsis' : {
                   'net' : 0.2,
-                  'speed_near' : 0.05,
-                  'speed_total' : 0.10,
-                  's100' : 0.05,
-                  's40' : 0.05,
-                  's10' : 0.05,
+                  's100' : 0.1,
+                  's40' : 0.1,
+                  's10' : 0.1,
                   'bigMoney_amount' : 0.15,
                   'bigMoney_volume' : 0.15,
                   'r_break' : 0.2
@@ -88,11 +86,6 @@ class Config(object):
                   'open_p' : [5.0, 10.0],
                   'time' : '10:00:00',
                   'min_R' : 'R2',
-                  'speed' : {
-                      'near_pos' : 12,
-                      'threshold' : 1,
-                      'min_single_p' : 0.2
-                  },
                   'big_money' : {
                       'single_amount' : 500000,
                       'total_amount' : 8000000,
@@ -105,11 +98,6 @@ class Config(object):
                   'open_p' : [2.0, 5.0],
                   'time' : '11:00:00',
                   'min_R' : 'R2',
-                  'speed' : {
-                      'near_pos' : 15,
-                      'threshold' : 1.5,
-                      'min_single_p' : 0.2
-                  },
                   'big_money' : {
                       'single_amount' : 500000,
                       'total_amount' : 10000000,
@@ -122,11 +110,6 @@ class Config(object):
                   'open_p' : [-1.0, 2.0],
                   'time' : '14:50:00',
                   'min_R' : 'R3',
-                  'speed' : {
-                      'near_pos' : 30,
-                      'threshold' : 2,
-                      'min_single_p' : 0.2
-                  },
                   'big_money' : {
                       'single_amount' : 500000,
                       'total_amount' : 12000000,

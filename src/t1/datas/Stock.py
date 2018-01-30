@@ -32,11 +32,9 @@ class Stock(object):
               }
           }
           self.__speed = {
-              'near_speed_count' : 0,
-              'total_speed_count' : 0,
-              's100' : 0,
-              's40' : 0,
-              's10' : 0
+              'v300' : 0,
+              'v120' : 0,
+              'v30' : 0
           }
           self.__bigMoney = {
                'total_amount' : 0,
@@ -82,22 +80,6 @@ class Stock(object):
 
       def addBigMoneyTotalVolume(self,volume):
           self.__bigMoney['total_volume'] = self.__bigMoney['total_volume'] + volume
-
-
-      def set_near_speed(self,val):
-          self.__speed['near_speed_count'] = val
-
-
-      def get_near_speed(self):
-          return self.__speed['near_speed_count']
-
-      def add_total_speed(self,val):
-          self.__speed['total_speed_count'] = self.__speed['total_speed_count'] + val     
-
-    
-      def get_total_speed(self):
-          return self.__speed['total_speed_count']
-
 
       def set_r_val(self,key,val):
           self.__rBreakTimes[key]['val'] = val

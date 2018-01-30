@@ -62,15 +62,15 @@ class Analyze(object):
           self.commonCalc(df,'net',self.__config.get_t1()['topsis']['net'],True)
           self.commonCalc(df,'speed_near',self.__config.get_t1()['topsis']['speed_near'],True)
           self.commonCalc(df,'speed_total',self.__config.get_t1()['topsis']['speed_total'],True)
-          self.commonCalc(df,'s40',self.__config.get_t1()['topsis']['s40'],True)
-          self.commonCalc(df,'s100',self.__config.get_t1()['topsis']['s100'],True)
-          self.commonCalc(df,'s10',self.__config.get_t1()['topsis']['s10'],True)
+          self.commonCalc(df,'v120',self.__config.get_t1()['topsis']['v120'],True)
+          self.commonCalc(df,'v300',self.__config.get_t1()['topsis']['v300'],True)
+          self.commonCalc(df,'v30',self.__config.get_t1()['topsis']['v30'],True)
           self.commonCalc(df,'bigMoney_amount',self.__config.get_t1()['topsis']['bigMoney_amount'],True)
           self.commonCalc(df,'bigMoney_volume',self.__config.get_t1()['topsis']['bigMoney_volume'],True)    
           self.commonCalc(df,'r_break',self.__config.get_t1()['topsis']['r_break'],False)
           for index,row in df.iterrows():
-              self.calcDi(df,index,row,['net','speed_near','speed_total','s40','s100','s10','bigMoney_amount','bigMoney_volume','r_break'],'_best')
-              self.calcDi(df,index,row,['net','speed_near','speed_total','s40','s100','s10','bigMoney_amount','bigMoney_volume','r_break'],'_worst')
+              self.calcDi(df,index,row,['net','speed_near','speed_total','v120','v300','v30','bigMoney_amount','bigMoney_volume','r_break'],'_best')
+              self.calcDi(df,index,row,['net','speed_near','speed_total','v120','v300','v30','bigMoney_amount','bigMoney_volume','r_break'],'_worst')
               self.calcCi(df,index,row)  
           df = df.sort_values('ci',ascending=False)  
           return df  
@@ -114,9 +114,9 @@ class Analyze(object):
           data.loc[data['time'] == last_line['time'], 'net'] = stock.get_net()
           data.loc[data['time'] == last_line['time'], 'speed_near'] = stock.get_near_speed()
           data.loc[data['time'] == last_line['time'], 'speed_total'] = stock.get_total_speed()
-          data.loc[data['time'] == last_line['time'], 's100'] = stock.get_speed('s100')
-          data.loc[data['time'] == last_line['time'], 's40'] = stock.get_speed('s40')
-          data.loc[data['time'] == last_line['time'], 's10'] = stock.get_speed('s10')
+          data.loc[data['time'] == last_line['time'], 'v300'] = stock.get_speed('v300')
+          data.loc[data['time'] == last_line['time'], 'v120'] = stock.get_speed('v120')
+          data.loc[data['time'] == last_line['time'], 'v30'] = stock.get_speed('v30')
           data.loc[data['time'] == last_line['time'], 'bigMoney_amount'] = stock.getBigMoneyTotalAmount()
           data.loc[data['time'] == last_line['time'], 'bigMoney_volume'] = stock.getBigMoneyTotalVolume()
           minR = stock.get_minR()
@@ -170,7 +170,7 @@ class Analyze(object):
 
       def updateStock(self,stock,conf):
           self.updateBreakRtimes(stock,conf)
-          self.updateSpeedCount(stock,conf)
+          self.updateSpeed(stock)
           try:
              self.updateBigMoney(stock,conf)
           except Exception as e:
@@ -183,36 +183,21 @@ class Analyze(object):
       def updateSpeed(self,stock):
           data = stock.get_data()
           last_line = stock.get_Lastline()
+          now_time = dt.datetime.strptime(last_line['date'] + ' ' + last_line['time'], '%Y-%m-%d %H:%M:%S')
           l = stock.len()
-          for i in [10, 40, 100]:
+          for i in [30, 120, 300]:
               pos = l
-              if i < l:
-                 pos = i
+              if i/3 < l:
+                 pos = i/3
               df_temp = data.tail(pos)    
               for index,row in df_temp.iterrows(): 
                   if float(row['open']) != 0.0:
-                     p = (float(last_line.get('price')) - float(row['price'])) / float(row['open']) * 100 
-                     stock.set_speed('s' + str(i),p) 
-                     break  
-
-
-      def updateSpeedCount(self,stock,conf):
-          self.updateSpeed(stock)
-          data = stock.get_data()
-          last_line = stock.get_Lastline()
-          pre_pos = conf['speed']['near_pos']
-          if pre_pos > stock.len():
-             pre_pos = stock.len() 
-          df_temp = data.tail(pre_pos)
-          for index,row in df_temp.iterrows():
-              if float(row['open']) != 0.0:
-                 p = (float(last_line.get('price')) - float(row['price'])) / float(row['open']) * 100 
-                 stock.set_near_speed(p)
-                 break
-          last_second_line = stock.get_LastSecondline()
-          p = (float(last_line.get('price')) - float(last_second_line.get('price'))) / float(last_line.get('open')) * 100 
-          if p >= conf['speed']['min_single_p'] or p <= conf['speed']['min_single_p'] * -1:
-             stock.add_total_speed(p)     
+                     row_time = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
+                     deltaS = (last_line - row_time).seconds
+                     if deltaS <= i and deltaS > 0:
+                        p = (float(last_line.get('price')) - float(row['price'])) / float(row['open']) * 100 
+                        stock.set_speed('v' + str(i),p) 
+                        break  
 
       def convertToFloat(self,str):
           if str == '':
@@ -308,7 +293,7 @@ class Analyze(object):
           if not self.isNetMatch(stock,conf):
              return False      
           if stock.get_minR() != 'R5':
-             if not self.isPeedMatch(stock,conf) and not self.isBigMoneyMatch(stock,conf):
+             if not self.isSpeedMatch(stock,conf) and not self.isBigMoneyMatch(stock,conf):
                 return False 
           return self.isLastTwoMatch(stock)
 
@@ -322,15 +307,25 @@ class Analyze(object):
           price3 = float(data.iloc[-2].get('price')) 
           return price - price2 > 0 and price2 - price3 >= 0
           
-
-
-      def isPeedMatch(self,stock,conf):
-          flag = stock.get_near_speed() >= conf['speed']['threshold'] or stock.get_total_speed() >= conf['speed']['threshold']
+      def isSpeedMatch(self,stock,conf):
+          v30 = stock.get_speed('v30')
+          v120 = stock.get_speed('v120')
+          v300 = stock.get_speed('v300')
+          p = self.getCurrentPercent(stock)
+          s = 10 - p
+          tt = [s/v30,s/v120,s/v300]
+          count = 0
+          for t in tt:
+              if t < 60:
+                 count = count + 1
+          flag = (count >= 2)
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match speed ***') 
-             MyLog.info('near speed ' + str(stock.get_near_speed()))
-             MyLog.info('total speed ' + str(stock.get_total_speed()))
+             MyLog.info('v30 speed ' + str(v30))
+             MyLog.info('v120 speed ' + str(v120))
+             MyLog.info('v300 speed ' + str(v300))
           return flag    
+
 
       def isBigMoneyMatch(self,stock,conf):
           flag = stock.getBigMoneyTotalAmount() >= conf['big_money']['total_amount'] or stock.getBigMoneyTotalVolume() >= conf['big_money']['total_volume']
