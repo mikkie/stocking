@@ -1,0 +1,65 @@
+child process 41112 iAdding job process 62680, calc data time = 2428
+process 62680, calc data time = 229prprocess 40288, calc data time = 263prprocess 62680, calc data time = 253prprocess 62680, calc data time = 28proprocess 40288, calc data time = 3procprocess 62680, calc data time = proceprocess 62680, calc data time =procesprocess 62680, calc data time processprocess 62680, calc data timeprocess process 62680, calc data timeprocess process 40288, calc data timprocess 1process 62680, calc data timprocess 1process 62680, calc data tiprocess 16process 62680, calc data tiprocess 16process 40288, calc data tprocess 168process 62680, calc data time = 294
+trigger: interval[0:00:03], next run at: 2018-01-31 17:04:48 CST)" (scheduled at 2018-01-31 17:04:48.055588+08:00)
+Next wakeup is due at 2018-01-31 17:04:51.055588+08:00 (in 2.986500 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:04:51 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:04:51 CST)" (scheduled at 2018-01-31 17:04:51.055588+08:00)
+Next wakeup is due at 2018-01-31 17:04:54.055588+08:00 (in 2.988500 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:04:54 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:04:54 CST)" (scheduled at 2018-01-31 17:04:54.055588+08:00)
+Next wakeup is due at 2018-01-31 17:04:57.055588+08:00 (in 2.990000 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:04:57 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:04:57 CST)" (scheduled at 2018-01-31 17:04:57.055588+08:00)
+Next wakeup is due at 2018-01-31 17:05:00.055588+08:00 (in 2.976000 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:00 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:00 CST)" (scheduled at 2018-01-31 17:05:00.055588+08:00)
+Next wakeup is due at 2018-01-31 17:05:03.055588+08:00 (in 2.986000 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:03 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:03 CST)" (scheduled at 2018-01-31 17:05:03.055588+08:00)
+Next wakeup is due at 2018-01-31 17:05:06.055588+08:00 (in 2.975500 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:06 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:06 CST)" (scheduled at 2018-01-31 17:05:06.055588+08:00)
+Next wakeup is due at 2018-01-31 17:05:09.055588+08:00 (in 2.977000 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:09 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:09 CST)" (scheduled at 2018-01-31 17:05:09.055588+08:00)
+Next wakeup is due at 2018-01-31 17:05:12.055588+08:00 (in 2.986500 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:12 CST)" executed successfully
+Looking for jobs to run
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:12 CST)" (scheduled at 2018-01-31 17:05:12.055588+08:00)
+Next wakeup is due at 2018-01-31 17:05:15.055588+08:00 (in 2.987500 seconds)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:15 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:18.055588+08:00 (in 2.999000 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:18 CST)" (scheduled at 2018-01-31 17:05:15.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:18 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:21.055588+08:00 (in 2.986500 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:21 CST)" (scheduled at 2018-01-31 17:05:18.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:21 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:24.055588+08:00 (in 2.987500 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:24 CST)" (scheduled at 2018-01-31 17:05:21.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:24 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:27.055588+08:00 (in 2.994500 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:27 CST)" (scheduled at 2018-01-31 17:05:24.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:27 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:30.055588+08:00 (in 2.990500 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:30 CST)" (scheduled at 2018-01-31 17:05:27.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:30 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:33.055588+08:00 (in 2.981500 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:33 CST)" (scheduled at 2018-01-31 17:05:30.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:33 CST)" executed successfully
+Looking for jobs to run
+Next wakeup is due at 2018-01-31 17:05:36.055588+08:00 (in 2.996000 seconds)
+Running job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:36 CST)" (scheduled at 2018-01-31 17:05:33.055588+08:00)
+Job "getData (trigger: interval[0:00:03], next run at: 2018-01-31 17:05:36 CST)" executed successfully

@@ -13,60 +13,52 @@ from t1.analyze.Analyze import Analyze
 from t1.MyLog import MyLog
 from utils.Utils import Utils
 from sqlalchemy import create_engine
-from multiprocessing import Pool, Queue
+import multiprocessing as mp
 import os
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 setting = Config()
 engine = create_engine(setting.get_DBurl())
 analyze = Analyze()
 
+def run(queue):
+        try:
+            dh = None
+            df = queue.get(True)
+            while df is not None and len(df) > 0:
+                  s = int(round(time.time() * 1000))
+                  if dh is None:
+                     codeList = df['code'].tolist()
+                     dh = DataHolder(codeList) 
+                  dh.addData(df)
+                  res = analyze.calcMain(dh)
+                  if res != '':
+                     dh.add_buyed(res)
+                  MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
+                  df = queue.get(True)     
+        except Exception as e:
+               MyLog.error('error %s' % str(e))
 
-def get_today_all_codes():
-    def cb(**kw):
-        return ts.get_today_all()
-    df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=False)
-    df_todayAll = df_todayAll[df_todayAll['changepercent'] >= -1.0]
-    return df_todayAll['code']
 
-def run(codeList,dh):
-    try:
-        s = int(round(time.time() * 1000))
-        if dh is None:
-           dh = DataHolder(codeList) 
-        now = time.strftime('%H:%M:%S',time.localtime(time.time()))
-        if (now >= setting.get_t1()['stop']['am_start'] and now <= setting.get_t1()['stop']['am_stop']) or (now >= setting.get_t1()['stop']['pm_start'] and now <= setting.get_t1()['stop']['pm_stop']): 
-           if len(dh.get_buyed()) > 0:
-              for code in dh.get_buyed():
-                  if code in codeList:
-                     codeList.remove(code)
-           if len(codeList) > 0: 
-              df = ts.get_realtime_quotes(codeList)
-           if len(df) > 0:
-            #   a = int(round(time.time() * 1000)) 
-              dh.addData(df)
-            #   b = int(round(time.time() * 1000))
-            #   print('process %s, add data time = %d' % (os.getpid(),(b - a)))
-              res = analyze.calcMain(dh)
-            #   print('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - b)))
-              if res != '':
-                 dh.add_buyed(res)
-    except Exception as e:
-           MyLog.error('error %s' % str(e))
-    finally: 
-           now = time.strftime('%H:%M:%S',time.localtime(time.time()))
-           if now < setting.get_t1()['stop']['pm_stop']:                
-              global timer
-              timer = threading.Timer(0, run, args=[codeList,dh])
-              timer.start()
-              e = int(round(time.time() * 1000))
-              print('process %s, run once time = %d' % (os.getpid(),(e - s)))
 
 if __name__ == '__main__':
-   print('main process %s.' % os.getpid()) 
-   pool = Pool(setting.get_t1()['process_num'])
-   codes = get_today_all_codes()
+   MyLog.debug('main process %s.' % os.getpid()) 
+
+   def init(forceUpdate):
+       def cb(**kw):
+           return ts.get_today_all()
+       df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
+       df_todayAll = df_todayAll[df_todayAll['changepercent'] >= -1.0]
+       return df_todayAll['code']
+
+   pool = mp.Pool(setting.get_t1()['process_num'])
+   manager = mp.Manager()
+
+   codes = init(False)
    codeLists = codes.tolist()
-#    codeLists = ['002496','600516','600158','002460','002466','000426']
+   codeSplitMaps = {} 
+   queueList = []
+
    for code in setting.get_ignore():
        if code in codeLists:
           codeLists.remove(code)  
@@ -78,11 +70,27 @@ if __name__ == '__main__':
        if end > length:
           end = length 
        code_split = codeLists[begin:end]
-       pool.apply_async(run, args=(code_split,None))
+       codeSplitMaps[i] = code_split
+       queue = manager.Queue()
+       queueList.append(queue)
+       pool.apply_async(run, (queue,))
        begin = end
        if begin >= length:
           break
+
+   sched = BlockingScheduler()
+
+   @sched.scheduled_job('interval', seconds=3)
+   def getData():
+       dataMap = {}
+       for key in codeSplitMaps:
+           df = ts.get_realtime_quotes(codeSplitMaps[key])
+           dataMap[key] = df
+       for i in range(num_splits):
+           queueList[i].put(dataMap[i])
+
+   sched.start()
    pool.close()
    pool.join()
 else:
-    print('process %s is running' % os.getpid())     
+    MyLog.debug('child process %s is running' % os.getpid())     

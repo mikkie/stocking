@@ -46,9 +46,9 @@ class Config(object):
               }
           } 
           self.__t1 = {
-              'process_num' : 4,
+              'process_num' : 3,
               'stop' : {
-                  'am_start' : '09:10:00',
+                  'am_start' : '09:00:00',
                   'am_stop' : '11:30:00',
                   'pm_start' : '12:55:00',
                   'pm_stop' : '23:00:00',
@@ -74,7 +74,7 @@ class Config(object):
               'save_data_inter' : 60,
               'need_recover_data' : False,
               'need_save_data' : False,
-              'split_size' : 500,
+              'split_size' : 850,
               'R_line' : {
                   'R1' : 0.191,
                   'R2' : 0.382,

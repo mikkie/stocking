@@ -4,7 +4,7 @@ __author__ = 'aqua'
 import logging
 
 root_logger = logging.getLogger()
-root_logger.setLevel(logging.INFO)
+root_logger.setLevel(logging.DEBUG)
 fileHandler = logging.FileHandler("../log/stocking.log", "w",encoding = "UTF-8")
 consoleHandler = logging.StreamHandler()
 root_logger.addHandler(fileHandler)
@@ -22,7 +22,11 @@ class MyLog(object):
 
       @staticmethod
       def warn(msg):
-          logging.warn(msg)    
+          logging.warn(msg)
+
+      @staticmethod
+      def debug(msg):
+          logging.debug(msg)        
 
 
 

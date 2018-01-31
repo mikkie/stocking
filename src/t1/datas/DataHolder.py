@@ -57,8 +57,10 @@ class DataHolder(object):
 
       def addDataHandler(self,row):
           code = row['code']
+          if code in self.get_buyed():
+             return 
           if code in self.__data and self.__data[code].len() > 0:
-                 self.__data[code].add_Line(row)
+             self.__data[code].add_Line(row)
           else:
                self.__data[code] = Stock(code,row) 
 
