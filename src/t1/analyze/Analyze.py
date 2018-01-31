@@ -197,7 +197,7 @@ class Analyze(object):
                      if deltaS == 0:
                         stock.set_speed('v' + str(i),0)
                         break 
-                     if deltaS <= i and deltaS >= i - 9:
+                     if deltaS <= i and deltaS >= i - 6:
                         p = (float(last_line.get('price')) - float(row['price'])) / float(row['open']) * 100 
                         stock.set_speed('v' + str(i),p / deltaS) 
                         break  
