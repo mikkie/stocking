@@ -46,12 +46,12 @@ class Config(object):
               }
           } 
           self.__t1 = {
-              'process_num' : 1,
+              'process_num' : 4,
               'stop' : {
                   'am_start' : '09:10:00',
                   'am_stop' : '11:30:00',
                   'pm_start' : '12:55:00',
-                  'pm_stop' : '15:00:00',
+                  'pm_stop' : '23:00:00',
               },
               'trade' : {
                  'addPrice' : 0.02,

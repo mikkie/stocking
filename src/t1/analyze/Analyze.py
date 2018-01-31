@@ -317,16 +317,15 @@ class Analyze(object):
           v120 = stock.get_speed('v120')
           v300 = stock.get_speed('v300')
           p = self.getCurrentPercent(stock)
-          s = 10 - p
-          tt = [s/v30,s/v120,s/v300]
+          v_list = [v30,v120,v300]
           count = 0
           matchCount = 2
-          for t in tt:
-              if t < 60:
+          for v in v_list:
+              if v > 0.0333:
                  count = count + 1
           flag = (count >= 2)
           if conf['open_p'] == 5.0:
-             if tt[0] < 30:
+             if v_list[0] > 0.0333:
                 flag = True  
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match speed ***') 

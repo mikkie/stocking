@@ -30,6 +30,7 @@ def get_today_all_codes():
 
 def run(codeList,dh):
     try:
+        s = int(round(time.time() * 1000))
         if dh is None:
            dh = DataHolder(codeList) 
         now = time.strftime('%H:%M:%S',time.localtime(time.time()))
@@ -57,13 +58,15 @@ def run(codeList,dh):
               global timer
               timer = threading.Timer(0, run, args=[codeList,dh])
               timer.start()
+              e = int(round(time.time() * 1000))
+              print('process %s, run once time = %d' % (os.getpid(),(e - s)))
 
 if __name__ == '__main__':
    print('main process %s.' % os.getpid()) 
    pool = Pool(setting.get_t1()['process_num'])
-#    codes = get_today_all_codes()
-#    codeLists = codes.tolist()
-   codeLists = ['002496','600516','600158','002460','002466','000426']
+   codes = get_today_all_codes()
+   codeLists = codes.tolist()
+#    codeLists = ['002496','600516','600158','002460','002466','000426']
    for code in setting.get_ignore():
        if code in codeLists:
           codeLists.remove(code)  
