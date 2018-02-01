@@ -57,7 +57,7 @@ if __name__ == '__main__':
    codes = init(False)
    codeLists = codes.tolist()
    codeSplitMaps = {} 
-   queueList = []
+   queueMaps = {}
 
    for code in setting.get_ignore():
        if code in codeLists:
@@ -72,7 +72,7 @@ if __name__ == '__main__':
        code_split = codeLists[begin:end]
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
-       queueList.append(queue)
+       queueMaps[i] = queue
        pool.apply_async(run, (queue,))
        begin = end
        if begin >= length:
@@ -84,7 +84,7 @@ if __name__ == '__main__':
    def getData():
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           queueList[key].put(df)
+           queueMaps[key].put(df)
         #    for debug     
         #    d = df[df['code'] == '002460']
         #    if d is not None and len(d) > 0:
