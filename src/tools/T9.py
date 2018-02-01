@@ -12,7 +12,7 @@ from config.Config import Config
 from trade.Analyze import Analyze
 from t1.MyLog import MyLog
 
-codes = ['603058']
+codes = ['002460']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -21,7 +21,7 @@ engine = create_engine(setting.get_DBurl())
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
 
-dh = DataHolder(codes)
+dh = DataHolder(codes,False)
 analyze = Analyze()
 
 for code in codes:

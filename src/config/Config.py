@@ -59,9 +59,9 @@ class Config(object):
               },
               'topsis' : {
                   'net' : 0.3,
-                  's100' : 0.15,
-                  's40' : 0.15,
-                  's10' : 0.2,
+                  'v300' : 0.15,
+                  'v120' : 0.15,
+                  'v30' : 0.2,
                   'r_break' : 0.2
               },
               'big_money' : {
@@ -70,7 +70,10 @@ class Config(object):
                   'threshold' : 0.6
               },
               'speed' : {
-                  'threshold' : 0.0333
+                  'v30_ratio' : 0.7,
+                  'v30' : 0.0267,
+                  'v120' : 0.0167,
+                  'v300' : 0.0083
               },
               'get_data_inter' : 2,
               'save_data_inter' : 60,

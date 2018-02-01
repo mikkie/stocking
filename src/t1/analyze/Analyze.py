@@ -46,7 +46,9 @@ class Analyze(object):
       def outputRes(self,df_res):
           df_final = df_res.iloc[0]
           trade = self.__config.get_t1()['trade']
-          MyLog.info('在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume'])))
+          info = '在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume']))
+          MyLog.info(info)
+          print(info)
           return df_final['code']       
 
 
@@ -190,7 +192,7 @@ class Analyze(object):
                         stock.set_speed('v' + str(i),0)
                         break 
                      if deltaS <= i and deltaS >= i - 6:
-                        p = (float(last_line.get('price')) - float(row['price'])) / float(row['open']) * 100 
+                        p = (float(last_line.get('price')) - float(row['price'])) / float(row['pre_close']) * 100 
                         stock.set_speed('v' + str(i),p / deltaS) 
                         break  
 
@@ -288,7 +290,7 @@ class Analyze(object):
           if not self.isNetMatch(stock,conf):
              return False      
           if stock.get_minR() != 'R5':
-             if not self.isSpeedMatch(stock,conf) and not self.isBigMoneyMatch(stock,conf):
+             if not self.isSpeedMatch(stock,conf) or not self.isBigMoneyMatch(stock,conf):
                 return False 
           return self.isLastTwoMatch(stock)
 
@@ -308,20 +310,19 @@ class Analyze(object):
           v300 = stock.get_speed('v300')
           p = self.getCurrentPercent(stock)
           v_list = [v30,v120,v300]
-          count = 0
-          matchCount = 2
-          for v in v_list:
-              if v > self.__config.get_t1()['speed']['threshold']:
-                 count = count + 1
-          flag = (count >= 2)
-          if conf['open_p'] == 5.0:
-             if v_list[0] > self.__config.get_t1()['speed']['threshold']:
-                flag = True  
+          flag = False
+          if v_list[0] * 30 >= (10 - p) * self.__config.get_t1()['speed']['v30_ratio']:
+             flag = True    
+          elif v_list[0] >= self.__config.get_t1()['speed']['v30'] and (v_list[1] >= self.__config.get_t1()['speed']['v120'] or v_list[2] >= self.__config.get_t1()['speed']['v300']):
+               flag = True
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match speed ***') 
              MyLog.info('v30 speed ' + str(v30))
              MyLog.info('v120 speed ' + str(v120))
              MyLog.info('v300 speed ' + str(v300))
+             print('v30 speed ' + str(v30))
+             print('v120 speed ' + str(v120))
+             print('v300 speed ' + str(v300))
           return flag    
 
 
@@ -330,7 +331,9 @@ class Analyze(object):
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match big_money ***') 
              MyLog.info('big money net ' + str(stock.get_net()))
-             MyLog.info('big money in ' + str(stock.getBigMoneyIn()))  
+             MyLog.info('big money in ' + str(stock.getBigMoneyIn()))
+             print('big money net ' + str(stock.get_net()))
+             print('big money in ' + str(stock.getBigMoneyIn()))  
           return flag     
 
       def isNetMatch(self,stock,conf):
