@@ -70,7 +70,7 @@ class Config(object):
                   'threshold' : 0.6
               },
               'speed' : {
-                  'v30_ratio' : 0.7,
+                  'v30_ratio' : 0.5,
                   'v30' : 0.0267,
                   'v120' : 0.0167,
                   'v300' : 0.0083
