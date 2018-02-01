@@ -320,6 +320,7 @@ class Analyze(object):
              MyLog.info('v30 speed ' + str(v30))
              MyLog.info('v120 speed ' + str(v120))
              MyLog.info('v300 speed ' + str(v300))
+             print('*** ' + stock.get_code() + ' match speed ***') 
              print('v30 speed ' + str(v30))
              print('v120 speed ' + str(v120))
              print('v300 speed ' + str(v300))
@@ -332,6 +333,7 @@ class Analyze(object):
              MyLog.info('*** ' + stock.get_code() + ' match big_money ***') 
              MyLog.info('big money net ' + str(stock.get_net()))
              MyLog.info('big money in ' + str(stock.getBigMoneyIn()))
+             print('*** ' + stock.get_code() + ' match big_money ***')
              print('big money net ' + str(stock.get_net()))
              print('big money in ' + str(stock.getBigMoneyIn()))  
           return flag     
