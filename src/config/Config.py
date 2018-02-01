@@ -72,7 +72,7 @@ class Config(object):
               'speed' : {
                   'threshold' : 0.0333
               },
-              'get_data_inter' : 3,
+              'get_data_inter' : 2,
               'save_data_inter' : 60,
               'need_recover_data' : False,
               'split_size' : 600,

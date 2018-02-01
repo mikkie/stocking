@@ -56,7 +56,6 @@ if __name__ == '__main__':
 
    codes = init(False)
    codeLists = codes.tolist()
-#    codeLists = ['600158','601838','000995','300029','300277','600828','300737','000736','603058']
    codeSplitMaps = {} 
    queueList = []
 
@@ -81,7 +80,7 @@ if __name__ == '__main__':
 
    sched = BlockingScheduler()
 
-   @sched.scheduled_job('interval', seconds=2)
+   @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
