@@ -16,14 +16,14 @@ from t1.MyLog import MyLog
 
 class DataHolder(object):
 
-      def __init__(self,codes):  
+      def __init__(self,codes,saveData):  
           self.__data = {}
           self.__buyed = []
           self.__setting = Config()
           self.__engine = create_engine(self.__setting.get_DBurl()) 
           if self.__setting.get_t1()['need_recover_data'] and self.needRecoverData():
              self.recoverData(codes) 
-          if self.__setting.get_t1()['need_save_data']:
+          if saveData:
              global timer 
              timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
              timer.start() 

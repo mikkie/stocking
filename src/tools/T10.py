@@ -29,7 +29,7 @@ def run(queue):
                   s = int(round(time.time() * 1000))
                   if dh is None:
                      codeList = df['code'].tolist()
-                     dh = DataHolder(codeList) 
+                     dh = DataHolder(codeList,False) 
                   dh.addData(df)
                   res = analyze.calcMain(dh)
                   if res != '':
