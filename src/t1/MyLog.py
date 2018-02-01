@@ -4,7 +4,7 @@ __author__ = 'aqua'
 import logging
 
 root_logger = logging.getLogger()
-root_logger.setLevel(logging.DEBUG)
+root_logger.setLevel(logging.ERROR)
 fileHandler = logging.FileHandler("../log/stocking.log", "w",encoding = "UTF-8")
 consoleHandler = logging.StreamHandler()
 root_logger.addHandler(fileHandler)

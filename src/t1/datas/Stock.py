@@ -40,7 +40,9 @@ class Stock(object):
           }
           self.__bigMoney = {
                'total_amount' : 0,
-               'total_volume' : 0
+               'total_volume' : 0,
+               'in' : 0,
+               'out' : 0
           }
           self.__netBuy = 0
           if isinstance(data, pd.Series):
@@ -63,25 +65,21 @@ class Stock(object):
       def addNetBuy(self,net):
           self.__netBuy = self.__netBuy + net
 
-
       def get_net(self):
           return self.__netBuy    
 
+      def addBigMoneyIn(self,inAmount):  
+          self.__bigMoney['in'] = self.__bigMoney['in'] + inAmount
 
-      def addBigMoneyTotalAmount(self,amount):
-          self.__bigMoney['total_amount'] = self.__bigMoney['total_amount'] + amount  
+      def getBigMoneyIn(self):
+          return self.__bigMoney['in'] 
 
+      def addBigMoneyOut(self,outAmount):  
+          self.__bigMoney['out'] = self.__bigMoney['out'] + outAmount 
 
-      def getBigMoneyTotalAmount(self):
-          return self.__bigMoney['total_amount']
+      def getBigMoneyOut(self):
+          return self.__bigMoney['out']       
 
-
-      def getBigMoneyTotalVolume(self):
-          return self.__bigMoney['total_volume']       
-
-
-      def addBigMoneyTotalVolume(self,volume):
-          self.__bigMoney['total_volume'] = self.__bigMoney['total_volume'] + volume
 
       def set_r_val(self,key,val):
           self.__rBreakTimes[key]['val'] = val

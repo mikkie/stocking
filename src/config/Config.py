@@ -48,33 +48,35 @@ class Config(object):
           self.__t1 = {
               'process_num' : 3,
               'stop' : {
-                  'am_start' : '09:00:00',
+                  'am_start' : '09:14:00',
                   'am_stop' : '11:30:00',
                   'pm_start' : '12:55:00',
-                  'pm_stop' : '23:00:00',
+                  'pm_stop' : '15:00:00',
               },
               'trade' : {
                  'addPrice' : 0.02,
                  'volume' : 500
               },
               'topsis' : {
-                  'net' : 0.2,
-                  's100' : 0.1,
-                  's40' : 0.1,
-                  's10' : 0.1,
-                  'bigMoney_amount' : 0.15,
-                  'bigMoney_volume' : 0.15,
+                  'net' : 0.3,
+                  's100' : 0.15,
+                  's40' : 0.15,
+                  's10' : 0.2,
                   'r_break' : 0.2
               },
               'big_money' : {
                   'amount' : 500000,
-                  'volume' : 100000
+                  'volume' : 100000,
+                  'threshold' : 0.6
               },
-              'get_data_inter' : 1,
+              'speed' : {
+                  'threshold' : 0.0333
+              },
+              'get_data_inter' : 3,
               'save_data_inter' : 60,
               'need_recover_data' : False,
-              'need_save_data' : False,
-              'split_size' : 850,
+              'need_save_data' : True,
+              'split_size' : 600,
               'R_line' : {
                   'R1' : 0.191,
                   'R2' : 0.382,
@@ -87,10 +89,6 @@ class Config(object):
                   'time' : '10:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'single_amount' : 500000,
-                      'total_amount' : 8000000,
-                      'single_volume' : 100000,
-                      'total_volume' : 1500000,
                       'net' : 5000000
                   }
               },
@@ -99,10 +97,6 @@ class Config(object):
                   'time' : '11:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'single_amount' : 500000,
-                      'total_amount' : 10000000,
-                      'single_volume' : 100000,
-                      'total_volume' : 1800000,
                       'net' : 8000000
                   }
               },
@@ -111,10 +105,6 @@ class Config(object):
                   'time' : '14:50:00',
                   'min_R' : 'R3',
                   'big_money' : {
-                      'single_amount' : 500000,
-                      'total_amount' : 12000000,
-                      'single_volume' : 100000,
-                      'total_volume' : 2000000,
                       'net' : 8000000
                   }
               }

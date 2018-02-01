@@ -56,6 +56,7 @@ if __name__ == '__main__':
 
    codes = init(False)
    codeLists = codes.tolist()
+#    codeLists = ['600158','601838','000995','300029','300277','600828','300737','000736','603058']
    codeSplitMaps = {} 
    queueList = []
 
@@ -80,14 +81,15 @@ if __name__ == '__main__':
 
    sched = BlockingScheduler()
 
-   @sched.scheduled_job('interval', seconds=3)
+   @sched.scheduled_job('interval', seconds=2)
    def getData():
-       dataMap = {}
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           dataMap[key] = df
-       for i in range(num_splits):
-           queueList[i].put(dataMap[i])
+           queueList[key].put(df)
+        #    for debug     
+        #    d = df[df['code'] == '002460']
+        #    if d is not None and len(d) > 0:
+        #       print(d.iloc[0]['time'])
 
    sched.start()
    pool.close()

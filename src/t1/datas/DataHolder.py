@@ -72,7 +72,7 @@ class DataHolder(object):
               df = self.__data[code].get_data()
               if df is not None and len(df) > 0:
                  try: 
-                    df.to_sql('live_' + code, con = self.__engine, if_exists='append', index=False)
+                    df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
                  except Exception as e:
                         MyLog.error('save data error \n')
                         MyLog.error(str(e) +  '\n')

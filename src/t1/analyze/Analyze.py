@@ -60,17 +60,13 @@ class Analyze(object):
       def topsisCalc(self,df):
           df = df.fillna(df.mean())   
           self.commonCalc(df,'net',self.__config.get_t1()['topsis']['net'],True)
-          self.commonCalc(df,'speed_near',self.__config.get_t1()['topsis']['speed_near'],True)
-          self.commonCalc(df,'speed_total',self.__config.get_t1()['topsis']['speed_total'],True)
           self.commonCalc(df,'v120',self.__config.get_t1()['topsis']['v120'],True)
           self.commonCalc(df,'v300',self.__config.get_t1()['topsis']['v300'],True)
           self.commonCalc(df,'v30',self.__config.get_t1()['topsis']['v30'],True)
-          self.commonCalc(df,'bigMoney_amount',self.__config.get_t1()['topsis']['bigMoney_amount'],True)
-          self.commonCalc(df,'bigMoney_volume',self.__config.get_t1()['topsis']['bigMoney_volume'],True)    
           self.commonCalc(df,'r_break',self.__config.get_t1()['topsis']['r_break'],False)
           for index,row in df.iterrows():
-              self.calcDi(df,index,row,['net','speed_near','speed_total','v120','v300','v30','bigMoney_amount','bigMoney_volume','r_break'],'_best')
-              self.calcDi(df,index,row,['net','speed_near','speed_total','v120','v300','v30','bigMoney_amount','bigMoney_volume','r_break'],'_worst')
+              self.calcDi(df,index,row,['net','v120','v300','v30','r_break'],'_best')
+              self.calcDi(df,index,row,['net','v120','v300','v30','r_break'],'_worst')
               self.calcCi(df,index,row)  
           df = df.sort_values('ci',ascending=False)  
           return df  
@@ -112,13 +108,9 @@ class Analyze(object):
           data = stock.get_data()
           last_line = stock.get_Lastline()
           data.loc[data['time'] == last_line['time'], 'net'] = stock.get_net()
-          data.loc[data['time'] == last_line['time'], 'speed_near'] = stock.get_near_speed()
-          data.loc[data['time'] == last_line['time'], 'speed_total'] = stock.get_total_speed()
           data.loc[data['time'] == last_line['time'], 'v300'] = stock.get_speed('v300')
           data.loc[data['time'] == last_line['time'], 'v120'] = stock.get_speed('v120')
           data.loc[data['time'] == last_line['time'], 'v30'] = stock.get_speed('v30')
-          data.loc[data['time'] == last_line['time'], 'bigMoney_amount'] = stock.getBigMoneyTotalAmount()
-          data.loc[data['time'] == last_line['time'], 'bigMoney_volume'] = stock.getBigMoneyTotalVolume()
           minR = stock.get_minR()
           times = 0
           for i in [1,2,3,4]:
@@ -250,15 +242,13 @@ class Analyze(object):
           big_amount = self.__config.get_t1()['big_money']['amount']
           big_volume = self.__config.get_t1()['big_money']['volume']
           deltaS = (now_time - last_time).seconds
-          if deltaS <= 3 and (amount >= big_amount or volume >= big_volume):
+          if amount >= big_amount or volume >= big_volume:
              type = self.theLastIsSellOrBuy(stock)
              if type == 'drive_buy': 
+                stock.addBigMoneyIn(last_amount - last_sec_amount)
                 stock.addNetBuy(last_amount - last_sec_amount)
-                if amount >= conf['big_money']['single_amount']:
-                   stock.addBigMoneyTotalAmount(amount)
-                if volume >= conf['big_money']['single_volume']:
-                   stock.addBigMoneyTotalVolume(volume) 
              elif type == 'drive_sell':  
+                  stock.addBigMoneyOut(last_amount - last_sec_amount)
                   stock.addNetBuy(last_sec_amount - last_amount)  
           
              
@@ -321,11 +311,11 @@ class Analyze(object):
           count = 0
           matchCount = 2
           for v in v_list:
-              if v > 0.0333:
+              if v > self.__config.get_t1()['speed']['threshold']:
                  count = count + 1
           flag = (count >= 2)
           if conf['open_p'] == 5.0:
-             if v_list[0] > 0.0333:
+             if v_list[0] > self.__config.get_t1()['speed']['threshold']:
                 flag = True  
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match speed ***') 
@@ -336,16 +326,15 @@ class Analyze(object):
 
 
       def isBigMoneyMatch(self,stock,conf):
-          flag = stock.getBigMoneyTotalAmount() >= conf['big_money']['total_amount'] or stock.getBigMoneyTotalVolume() >= conf['big_money']['total_volume']
+          flag = stock.get_net() / stock.getBigMoneyIn() > self.__config.get_t1()['big_money']['threshold']
           if flag == True:
              MyLog.info('*** ' + stock.get_code() + ' match big_money ***') 
-             MyLog.info('big money amount ' + str(stock.getBigMoneyTotalAmount()))
-             MyLog.info('big money volume ' + str(stock.getBigMoneyTotalVolume()))  
+             MyLog.info('big money net ' + str(stock.get_net()))
+             MyLog.info('big money in ' + str(stock.getBigMoneyIn()))  
           return flag     
 
       def isNetMatch(self,stock,conf):
           return stock.get_net() >= conf['big_money']['net']
-
 
 
       def isTimeMatch(self,stock,conf):
