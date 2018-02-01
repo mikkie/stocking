@@ -1,0 +1,14 @@
+Job "getData (trigger: interval[0:00:02], next run at: 2018-02-01 14:52:02 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 87, in getData
+    queueMaps[key].put(df)
+  File "<string>", line 2, in put
+  File "D:\Python35\lib\multiprocessing\managers.py", line 716, in _callmethod
+    conn.send((self._id, methodname, args, kwds))
+  File "D:\Python35\lib\multiprocessing\connection.py", line 206, in send
+    self._send_bytes(ForkingPickler.dumps(obj))
+  File "D:\Python35\lib\multiprocessing\connection.py", line 290, in _send_bytes
+    nwritten, err = ov.GetOverlappedResult(True)
+BrokenPipeError: [WinError 109] The pipe has been ended
