@@ -9,6 +9,7 @@ import cmath
 import sys
 sys.path.append('../..')
 from config.Config import Config 
+from utils.Utils import Utils
 
 class Analyze(object):
     
@@ -46,7 +47,7 @@ class Analyze(object):
       def outputRes(self,df_res):
           df_final = df_res.iloc[0]
           trade = self.__config.get_t1()['trade']
-          info = '在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume']))
+          info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume']))
           MyLog.info(info)
           print(info)
           return df_final['code']       
@@ -316,26 +317,19 @@ class Analyze(object):
           elif v_list[0] >= self.__config.get_t1()['speed']['v30'] and (v_list[1] >= self.__config.get_t1()['speed']['v120'] or v_list[2] >= self.__config.get_t1()['speed']['v300']):
                flag = True
           if flag == True:
-             MyLog.info('*** ' + stock.get_code() + ' match speed ***') 
-             MyLog.info('v30 speed ' + str(v30))
-             MyLog.info('v120 speed ' + str(v120))
-             MyLog.info('v300 speed ' + str(v300))
-             print('*** ' + stock.get_code() + ' match speed ***') 
-             print('v30 speed ' + str(v30))
-             print('v120 speed ' + str(v120))
-             print('v300 speed ' + str(v300))
+             last_line = stock.get_Lastline() 
+             info = '[%s] *** [%s] match speed at %s %s,v30=%s,v120=%s,v300=%s ***' % (Utils.getCurrentTime(),stock.get_code(),last_line['date'],last_line['time'],str(v30),str(v120),str(v300))
+             MyLog.info(info)
+             print(info)
           return flag    
 
 
       def isBigMoneyMatch(self,stock,conf):
           flag = stock.get_net() / stock.getBigMoneyIn() > self.__config.get_t1()['big_money']['threshold']
           if flag == True:
-             MyLog.info('*** ' + stock.get_code() + ' match big_money ***') 
-             MyLog.info('big money net ' + str(stock.get_net()))
-             MyLog.info('big money in ' + str(stock.getBigMoneyIn()))
-             print('*** ' + stock.get_code() + ' match big_money ***')
-             print('big money net ' + str(stock.get_net()))
-             print('big money in ' + str(stock.getBigMoneyIn()))  
+             info = '[%s] *** [%s] match big_money at %s %s,net=%s,in=%s ***' % (Utils.getCurrentTime(),stock.get_code(),str(stock.get_net()),str(stock.getBigMoneyIn()))
+             MyLog.info(info) 
+             print(info)
           return flag     
 
       def isNetMatch(self,stock,conf):

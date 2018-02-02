@@ -77,6 +77,7 @@ class DataHolder(object):
                         MyLog.error('save data error \n')
                         MyLog.error(str(e) +  '\n')
                         MyLog.error(df)  
+          print('save data ' + time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))              
           timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
           timer.start()           
  

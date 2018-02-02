@@ -4,9 +4,13 @@ __author__ = 'aqua'
 import numpy as np
 import pandas as pd
 import talib as ta
+import time
 
 class Utils(object):
       pass
+
+      def getCurrentTime():
+          return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
       @staticmethod
       def queryData(tableName, indexLabel, engine, cb, forceUpdate=False, **kw):   
