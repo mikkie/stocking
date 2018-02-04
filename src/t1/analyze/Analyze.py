@@ -129,7 +129,7 @@ class Analyze(object):
               
       def calc(self,stock,dh):
         #   MyLog.info('=== ' + stock.get_code() + " ===\n")
-          if not self.canCalc(stock):
+          if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
           conf = self.getConfig(open_p)  
@@ -141,9 +141,38 @@ class Analyze(object):
           return self.isStockMatch(stock,conf)   
 
 
-      def canCalc(self,stock):
+      def isJHJJMatch(self,stock,dh):
+          lastLine = stock.get_Lastline()
+          now_time = dt.datetime.strptime(lastLine['time'], '%H:%M:%S')
+          if now_time >= '09:30:00':
+             return True 
+          if stock.len() >= 2:
+             lastSecondLine = stock.get_LastSecondline()
+             if now_time > '09:17:00' and now_time < '09:20:00':
+                volume = float(lastLine.get('volume'))
+                amount = float(lastLine.get('amount')) 
+                lastVolume = float(lastSecondLine.get('volume'))
+                lastAmount = float(lastSecondLine.get('amount')) 
+                if volume < lastVolume * 0.5 or amount < lastAmount * 0.5:
+                   dh.add_buyed(stock.get_code())
+                   return False
+             if now_time > '09:24:30' and now_time < '09:25:03':  
+                volume = float(lastLine.get('volume'))
+                amount = float(lastLine.get('amount'))  
+                if volume <= 2000 or amount <= 5000000:
+                   dh.add_buyed(stock.get_code()) 
+                   return False
+             return True      
+          return False
+              
+                   
+
+
+      def canCalc(self,stock,dh):
           if stock.len() < 0:
              return False
+          if not self.isJHJJMatch(stock,dh):
+             return False    
           lastLine = stock.get_Lastline() 
           if float(lastLine.get('open')) == 0.0:
              return False
