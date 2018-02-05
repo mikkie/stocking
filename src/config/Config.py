@@ -67,13 +67,13 @@ class Config(object):
               'big_money' : {
                   'amount' : 500000,
                   'volume' : 100000,
-                  'threshold' : 0.6
+                  'threshold' : 0.7
               },
               'speed' : {
-                  'v30_ratio' : 0.5,
-                  'v30' : 0.0267,
-                  'v120' : 0.0167,
-                  'v300' : 0.0083
+                  'v30_ratio' : 0.7,
+                  'v30' : 0.05,
+                  'v120' : 0.025,
+                  'v300' : 0.013
               },
               'get_data_inter' : 2,
               'save_data_inter' : 60,
@@ -99,15 +99,15 @@ class Config(object):
                   'time' : '11:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 8000000
+                      'net' : 7000000
                   }
               },
               'C' : {
                   'open_p' : [-1.0, 2.0],
                   'time' : '14:50:00',
-                  'min_R' : 'R3',
+                  'min_R' : 'R4',
                   'big_money' : {
-                      'net' : 8000000
+                      'net' : 7000000
                   }
               }
           }
