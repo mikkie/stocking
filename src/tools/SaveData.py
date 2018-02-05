@@ -6,7 +6,7 @@ import sys
 sys.path.append('..')
 from t1.datas.DataHolder import DataHolder
 
-codeList = ['300092','603676','603058','300343']
+codeList = ['300058','603009','002911','603080','603499','601313']
 sched = BlockingScheduler()
 dh = DataHolder(codeList,True)
 

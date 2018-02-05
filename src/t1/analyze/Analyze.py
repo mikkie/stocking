@@ -143,23 +143,23 @@ class Analyze(object):
 
       def isJHJJMatch(self,stock,dh):
           lastLine = stock.get_Lastline()
-          now_time = dt.datetime.strptime(lastLine['time'], '%H:%M:%S')
+          now_time = lastLine['time']
           if now_time >= '09:30:00':
              return True 
           if stock.len() >= 2:
              lastSecondLine = stock.get_LastSecondline()
              if now_time > '09:17:00' and now_time < '09:20:00':
-                volume = float(lastLine.get('volume'))
-                amount = float(lastLine.get('amount')) 
-                lastVolume = float(lastSecondLine.get('volume'))
-                lastAmount = float(lastSecondLine.get('amount')) 
-                if volume < lastVolume * 0.5 or amount < lastAmount * 0.5:
+                b1_v = float(lastLine.get('b1_v'))
+                b1_amount = float(lastLine.get('b1_p')) * b1_v * 100
+                lastB1_v = float(lastSecondLine.get('b1_v'))
+                lastB1_amount = float(lastSecondLine.get('b1_p')) * lastB1_v * 100
+                if b1_v < lastB1_v * 0.5 or b1_amount < lastB1_amount * 0.5:
                    dh.add_buyed(stock.get_code())
                    return False
              if now_time > '09:24:30' and now_time < '09:25:03':  
-                volume = float(lastLine.get('volume'))
-                amount = float(lastLine.get('amount'))  
-                if volume <= 2000 or amount <= 5000000:
+                b1_v = float(lastLine.get('b1_v'))
+                b1_amount = float(lastLine.get('b1_p')) *  b1_v * 100
+                if b1_v <= 2000 or b1_amount <= 5000000:
                    dh.add_buyed(stock.get_code()) 
                    return False
              return True      
@@ -356,7 +356,8 @@ class Analyze(object):
       def isBigMoneyMatch(self,stock,conf):
           flag = stock.get_net() / stock.getBigMoneyIn() > self.__config.get_t1()['big_money']['threshold']
           if flag == True:
-             info = '[%s] *** [%s] match big_money at %s %s,net=%s,in=%s ***' % (Utils.getCurrentTime(),stock.get_code(),str(stock.get_net()),str(stock.getBigMoneyIn()))
+             last_line = stock.get_Lastline() 
+             info = '[%s] *** [%s] match big_money at %s %s,net=%s,in=%s ***' % (Utils.getCurrentTime(),stock.get_code(),last_line['date'],last_line['time'],str(stock.get_net()),str(stock.getBigMoneyIn()))
              MyLog.info(info) 
              print(info)
           return flag     
