@@ -149,15 +149,15 @@ class Analyze(object):
           if stock.len() >= 2:
              lastSecondLine = stock.get_LastSecondline()
              if now_time > '09:17:00' and now_time < '09:20:00':
-                b1_v = float(lastLine.get('b1_v'))
+                b1_v = self.convertToFloat(lastLine.get('b1_v'))
                 b1_amount = float(lastLine.get('b1_p')) * b1_v * 100
-                lastB1_v = float(lastSecondLine.get('b1_v'))
+                lastB1_v = self.convertToFloat(lastSecondLine.get('b1_v'))
                 lastB1_amount = float(lastSecondLine.get('b1_p')) * lastB1_v * 100
                 if b1_v < lastB1_v * 0.5 or b1_amount < lastB1_amount * 0.5:
                    dh.add_buyed(stock.get_code())
                    return False
              if now_time > '09:24:30' and now_time < '09:25:03':  
-                b1_v = float(lastLine.get('b1_v'))
+                b1_v = self.convertToFloat(lastLine.get('b1_v'))
                 b1_amount = float(lastLine.get('b1_p')) *  b1_v * 100
                 if b1_v <= 2000 or b1_amount <= 5000000:
                    dh.add_buyed(stock.get_code()) 
