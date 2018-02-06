@@ -2,6 +2,7 @@
 __author__ = 'aqua'
 
 from ..MyLog import MyLog
+from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
 import datetime as dt
@@ -10,11 +11,13 @@ import sys
 sys.path.append('../..')
 from config.Config import Config 
 from utils.Utils import Utils
+import threading
 
 class Analyze(object):
     
       def __init__(self):
           self.__config = Config()
+          self.__engine = create_engine(self.__config.get_DBurl())
  
       def calcMain(self,dh):
           data = dh.get_data()
@@ -35,6 +38,7 @@ class Analyze(object):
              try:
                 df_res = self.goTopsis(result)
                 finalCode = self.outputRes(df_res)
+                self.saveData(finalCode,result)
              except Exception as e:
                     codes = []
                     for stock in result:
@@ -43,6 +47,22 @@ class Analyze(object):
                     MyLog.error(str(e))   
           return finalCode   
 
+
+      def save(self,data):
+          try: 
+              code = data.iloc[0]['code']
+              data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
+          except Exception as e:
+                 MyLog.error('save [%s] data error \n' % code)
+                 MyLog.error(str(e) +  '\n')
+
+      def saveData(self,code,result):
+          for stock in result:
+              if code == stock.get_code():
+                 data = stock.get_data()
+                 t = threading.Thread(target=self.save, args=(data,)) 
+                 t.start()  
+                 break
 
       def outputRes(self,df_res):
           df_final = df_res.iloc[0]
