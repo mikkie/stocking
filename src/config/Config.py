@@ -8,7 +8,7 @@ class Config(object):
           self.__timeStart = '14:25:00' #监控起始时间
           self.__pKm5Change = 0.01 #当日5分钟振幅
           self.__pKM3Change = 0.05 #3个月振幅
-          self.__superSold = [0.05,0.4] #超卖
+          self.__superSold = [0.05,0.2] #超卖
           self.__leftTrade = [5,4,3] #左侧交易
           self.__flatTrade = [90, 10, 1.2, 1.5] #长时间横盘后突破
           self.__longPeriod = 365 #1年
@@ -70,8 +70,8 @@ class Config(object):
                   'threshold' : 0.7
               },
               'speed' : {
-                  'v30_ratio' : 0.6,
-                  'v30' : 0.04,
+                  'v30_ratio' : 0.55,
+                  'v30' : 0.036,
                   'v120' : 0.02,
                   'v300' : 0.013
               },
