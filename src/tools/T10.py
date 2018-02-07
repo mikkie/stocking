@@ -54,9 +54,9 @@ if __name__ == '__main__':
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
 
-   codes = init(True)
+   codes = init(False)
    codeLists = codes.tolist()
-#    codeLists = ['600313']
+#    codeLists = ['000816']
    codeSplitMaps = {} 
    queueMaps = {}
 

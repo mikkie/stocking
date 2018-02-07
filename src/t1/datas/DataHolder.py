@@ -60,8 +60,10 @@ class DataHolder(object):
           else:
                self.__data[code] = Stock(code,row)
           if (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.3:
-             t = threading.Thread(target=self.saveData, args=(self.__data[code].get_data(),)) 
-             t.start()
+             if not (code in self.get_buyed()): 
+                self.add_buyed(code) 
+                t = threading.Thread(target=self.saveData, args=(self.__data[code].get_data(),)) 
+                t.start()
 
 
       def addData(self,df):
@@ -71,6 +73,7 @@ class DataHolder(object):
           try: 
               code = data.iloc[0]['code']
               data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
+              print('[%s] reach 10 save data' % code)
           except Exception as e:
                  MyLog.error('save [%s] data error \n' % code)
                  MyLog.error(str(e) +  '\n')
