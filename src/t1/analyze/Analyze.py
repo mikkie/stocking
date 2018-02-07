@@ -179,7 +179,7 @@ class Analyze(object):
              if now_time > '09:24:30' and now_time < '09:25:03':  
                 b1_v = self.convertToFloat(lastLine.get('b1_v'))
                 b1_amount = float(lastLine.get('b1_p')) *  b1_v * 100
-                if b1_v <= 2000 or b1_amount <= 5000000:
+                if b1_v <= 1000 or b1_amount <= 3000000:
                    dh.add_buyed(stock.get_code()) 
                    return False
              return True      
