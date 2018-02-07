@@ -16,17 +16,13 @@ from t1.MyLog import MyLog
 
 class DataHolder(object):
 
-      def __init__(self,codes,saveData):  
+      def __init__(self,codes):  
           self.__data = {}
           self.__buyed = []
           self.__setting = Config()
           self.__engine = create_engine(self.__setting.get_DBurl()) 
           if self.__setting.get_t1()['need_recover_data'] and self.needRecoverData():
              self.recoverData(codes) 
-          if saveData:
-             global timer 
-             timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
-             timer.start() 
 
       def recoverData(self,codes):
           for code in codes:
@@ -62,22 +58,20 @@ class DataHolder(object):
           if code in self.__data and self.__data[code].len() > 0:
              self.__data[code].add_Line(row)
           else:
-               self.__data[code] = Stock(code,row) 
+               self.__data[code] = Stock(code,row)
+          if (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.3:
+             t = threading.Thread(target=self.saveData, args=(self.__data[code].get_data(),)) 
+             t.start()
+
 
       def addData(self,df):
           df.apply(self.addDataHandler,axis=1)
 
-      def saveData(self):
-          for code in self.__data:
-              df = self.__data[code].get_data()
-              if df is not None and len(df) > 0:
-                 try: 
-                    df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
-                 except Exception as e:
-                        MyLog.error('save data error \n')
-                        MyLog.error(str(e) +  '\n')
-                        MyLog.error(df)  
-          print('save data ' + time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))              
-          timer = threading.Timer(self.__setting.get_t1()['save_data_inter'], self.saveData)
-          timer.start()           
+      def saveData(self,data):
+          try: 
+              code = data.iloc[0]['code']
+              data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
+          except Exception as e:
+                 MyLog.error('save [%s] data error \n' % code)
+                 MyLog.error(str(e) +  '\n')
  

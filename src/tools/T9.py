@@ -21,7 +21,7 @@ engine = create_engine(setting.get_DBurl())
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
 
-dh = DataHolder(codes,False)
+dh = DataHolder(codes)
 analyze = Analyze()
 
 for code in codes:

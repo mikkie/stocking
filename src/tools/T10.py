@@ -29,7 +29,7 @@ def run(queue):
                   s = int(round(time.time() * 1000))
                   if dh is None:
                      codeList = df['code'].tolist()
-                     dh = DataHolder(codeList,False) 
+                     dh = DataHolder(codeList) 
                   dh.addData(df)
                   res = analyze.calcMain(dh)
                   if res != '':
@@ -56,6 +56,7 @@ if __name__ == '__main__':
 
    codes = init(True)
    codeLists = codes.tolist()
+#    codeLists = ['600313']
    codeSplitMaps = {} 
    queueMaps = {}
 
