@@ -67,7 +67,7 @@ class Config(object):
               'big_money' : {
                   'amount' : 500000,
                   'volume' : 100000,
-                  'threshold' : 0.7
+                  'threshold' : 0.5
               },
               'speed' : {
                   'v30_ratio' : 0.55,
