@@ -35,26 +35,43 @@ def run(queue):
                   if res != '':
                      dh.add_buyed(res,True)
                   MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
-                  df = queue.get(True)     
+                  df = queue.get(True)   
         except Exception as e:
                MyLog.error('error %s' % str(e))
 
 
 
 if __name__ == '__main__':
-   MyLog.debug('main process %s.' % os.getpid()) 
+   print('main process %s.' % os.getpid()) 
 
    def init(forceUpdate):
        def cb(**kw):
            return ts.get_today_all()
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
-       return df_todayAll['code']
+       strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+       while strTime < '09:30:06':
+             time.sleep(0.1)
+             strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+       step = setting.get_t1()['split_size']
+       start = 0
+       codeList = []
+       length = len(df_todayAll)
+       while start < length:
+             end = start + step
+             if end >= length:
+                end = length 
+             df_temp = df_todayAll.iloc[start:end]
+             df = ts.get_realtime_quotes(df_temp['code'].tolist())
+             df = df[df.apply(analyze.isOpenMatch, axis=1)]
+             for code in df['code'].tolist():
+                 codeList.append(code)
+             start = end
+       return codeList
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
 
-   codes = init(False)
-   codeLists = codes.tolist()
+   codeLists = init(False)
 #    codeLists = ['300063']
    codeSplitMaps = {} 
    queueMaps = {}
@@ -63,6 +80,7 @@ if __name__ == '__main__':
        if code in codeLists:
           codeLists.remove(code)  
    length = len(codeLists)
+   print('calc stocks size %d' % length) 
    begin = 0
    num_splits = length // setting.get_t1()['split_size'] + 1
    for i in range(num_splits):
@@ -95,4 +113,4 @@ if __name__ == '__main__':
    pool.close()
    pool.join()
 else:
-    MyLog.debug('child process %s is running' % os.getpid())     
+    print('child process %s is running' % os.getpid())     
