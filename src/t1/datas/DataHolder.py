@@ -63,7 +63,7 @@ class DataHolder(object):
              self.__data[code].add_Line(row)
           else:
                self.__data[code] = Stock(code,row)
-          if (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.3:
+          if float(row['pre_close']) != 0 and (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.3:
              if not (code in self.get_buyed()): 
                 self.add_buyed(code,True) 
 
