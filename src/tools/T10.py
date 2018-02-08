@@ -48,7 +48,6 @@ if __name__ == '__main__':
        def cb(**kw):
            return ts.get_today_all()
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
-    #    df_todayAll = df_todayAll[df_todayAll['changepercent'] >= -1.0]
        return df_todayAll['code']
 
    pool = mp.Pool(setting.get_t1()['process_num'])
