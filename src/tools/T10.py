@@ -33,7 +33,7 @@ def run(queue):
                   dh.addData(df)
                   res = analyze.calcMain(dh)
                   if res != '':
-                     dh.add_buyed(res)
+                     dh.add_buyed(res,True)
                   MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
                   df = queue.get(True)     
         except Exception as e:
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
    codes = init(False)
    codeLists = codes.tolist()
-#    codeLists = ['000816']
+#    codeLists = ['300063']
    codeSplitMaps = {} 
    queueMaps = {}
 
@@ -87,9 +87,10 @@ if __name__ == '__main__':
            df = ts.get_realtime_quotes(codeSplitMaps[key])
            queueMaps[key].put(df)
         #    for debug     
-        #    d = df[df['code'] == '002460']
+        #    d = df[df['code'] == '300063']
         #    if d is not None and len(d) > 0:
-        #       print(d.iloc[0]['time'])
+        #       print('key=' + str(key))
+        #       print('300063')
 
    sched.start()
    pool.close()

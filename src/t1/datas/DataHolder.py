@@ -13,6 +13,7 @@ import sys
 sys.path.append('../..')
 from config.Config import Config 
 from t1.MyLog import MyLog
+from concurrent.futures import ThreadPoolExecutor
 
 class DataHolder(object):
 
@@ -20,6 +21,7 @@ class DataHolder(object):
           self.__data = {}
           self.__buyed = []
           self.__setting = Config()
+          self.__tpe = ThreadPoolExecutor(5)
           self.__engine = create_engine(self.__setting.get_DBurl()) 
           if self.__setting.get_t1()['need_recover_data'] and self.needRecoverData():
              self.recoverData(codes) 
@@ -44,8 +46,10 @@ class DataHolder(object):
       def get_buyed(self):
           return self.__buyed
 
-      def add_buyed(self,code):
-          self.__buyed.append(code)        
+      def add_buyed(self,code,save=False):
+          self.__buyed.append(code)
+          if save:
+             self.__tpe.submit(self.saveData,self.__data[code].get_data())
 
       def get_data(self):
           return self.__data
@@ -61,10 +65,7 @@ class DataHolder(object):
                self.__data[code] = Stock(code,row)
           if (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.3:
              if not (code in self.get_buyed()): 
-                self.add_buyed(code) 
-                t = threading.Thread(target=self.saveData, args=(self.__data[code].get_data(),)) 
-                t.start()
-
+                self.add_buyed(code,True) 
 
       def addData(self,df):
           df.apply(self.addDataHandler,axis=1)

@@ -46,7 +46,7 @@ class Config(object):
               }
           } 
           self.__t1 = {
-              'process_num' : 3,
+              'process_num' : 6,
               'stop' : {
                   'am_start' : '09:14:00',
                   'am_stop' : '11:30:00',

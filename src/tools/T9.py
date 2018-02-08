@@ -40,7 +40,7 @@ def run(i):
        dh.addData(df)
        code = analyze.calcMain(dh)
        if code != '':
-          dh.add_buyed(code)
+          dh.add_buyed(code,False)
 
 for i in range(5200):
     run(i)

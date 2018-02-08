@@ -154,7 +154,7 @@ class Analyze(object):
           open_p = self.getOpenPercent(stock)
           conf = self.getConfig(open_p)  
           if conf is None:
-             dh.add_buyed(stock.get_code()) 
+             dh.add_buyed(stock.get_code(),False) 
              return False 
           self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
@@ -174,13 +174,13 @@ class Analyze(object):
                 lastB1_v = self.convertToFloat(lastSecondLine.get('b1_v'))
                 lastB1_amount = float(lastSecondLine.get('b1_p')) * lastB1_v * 100
                 if b1_v < lastB1_v * 0.5 or b1_amount < lastB1_amount * 0.5:
-                   dh.add_buyed(stock.get_code())
+                   dh.add_buyed(stock.get_code(),True)
                    return False
              if now_time > '09:24:30' and now_time < '09:25:03':  
                 b1_v = self.convertToFloat(lastLine.get('b1_v'))
                 b1_amount = float(lastLine.get('b1_p')) *  b1_v * 100
                 if b1_v <= 1000 or b1_amount <= 3000000:
-                   dh.add_buyed(stock.get_code()) 
+                   dh.add_buyed(stock.get_code(),True) 
                    return False
              return True      
           return False
