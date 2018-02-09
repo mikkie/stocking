@@ -248,7 +248,7 @@ class Analyze(object):
                      if deltaS <= i and deltaS >= i - 6:
                         p = (float(last_line.get('price')) - float(row['price'])) / float(row['pre_close']) * 100 
                         stock.set_speed('v' + str(i),p / deltaS) 
-                        print('speed %s = %f' % ('v' + str(i),p / deltaS))
+                        # print('speed %s = %f' % ('v' + str(i),p / deltaS))
                         break  
 
       def convertToFloat(self,str):
@@ -298,7 +298,7 @@ class Analyze(object):
           volume = last_volume - last_sec_volume
           big_amount = self.__config.get_t1()['big_money']['amount']
           big_volume = self.__config.get_t1()['big_money']['volume']
-          deltaS = (now_time - last_time).seconds
+        #   print('price=%s,amount=%s' % (lastLine['price'],amount))
           if amount >= big_amount or volume >= big_volume:
              type = self.theLastIsSellOrBuy(stock)
              if type == 'drive_buy': 
