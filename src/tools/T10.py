@@ -49,7 +49,7 @@ if __name__ == '__main__':
            return ts.get_today_all()
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       while strTime < '09:30:06':
+       while strTime < '09:30:01':
              time.sleep(0.1)
              strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        step = setting.get_t1()['split_size']

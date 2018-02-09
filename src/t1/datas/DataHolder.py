@@ -48,8 +48,8 @@ class DataHolder(object):
 
       def add_buyed(self,code,save=False):
           self.__buyed.append(code)
-          if save:
-             self.__tpe.submit(self.saveData,self.__data[code].get_data())
+        #   if save:
+            #  self.__tpe.submit(self.saveData,self.__data[code].get_data())
 
       def get_data(self):
           return self.__data
@@ -63,7 +63,7 @@ class DataHolder(object):
              self.__data[code].add_Line(row)
           else:
                self.__data[code] = Stock(code,row)
-          if float(row['pre_close']) != 0 and (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.3:
+          if float(row['pre_close']) != 0 and (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.9:
              if not (code in self.get_buyed()): 
                 self.add_buyed(code,True) 
 
@@ -72,10 +72,11 @@ class DataHolder(object):
 
       def saveData(self,data):
           try: 
-              code = data.iloc[0]['code']
+              line = data.iloc[0]
+              code = line['code']
               data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
               print('[%s] reach 10 save data' % code)
           except Exception as e:
-                 MyLog.error('save [%s] data error \n' % code)
+                 MyLog.error('[%s %s] save [%s] data error \n' % (line['date'],line['time'],code))
                  MyLog.error(str(e) +  '\n')
  
