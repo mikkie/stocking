@@ -28,7 +28,7 @@ def getData():
 def initData(setting):
     def cb(**kw):
         return ts.get_today_all()
-    df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=False)
+    df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=True)
     priceRange = setting.get_PriceRange()
     if str(sys.argv[2]) == '1': #test
          specificList = getSpecificCode(setting)
