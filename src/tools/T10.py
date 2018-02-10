@@ -44,34 +44,33 @@ def run(queue):
 if __name__ == '__main__':
    print('main process %s.' % os.getpid()) 
 
-   def init(forceUpdate):
-       def cb(**kw):
-           return ts.get_today_all()
-       df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
-       strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       while strTime < '09:30:01':
-             time.sleep(0.1)
-             strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       step = setting.get_t1()['split_size']
-       start = 0
-       codeList = []
-       length = len(df_todayAll)
-       while start < length:
-             end = start + step
-             if end >= length:
-                end = length 
-             df_temp = df_todayAll.iloc[start:end]
-             df = ts.get_realtime_quotes(df_temp['code'].tolist())
-             df = df[df.apply(analyze.isOpenMatch, axis=1)]
-             for code in df['code'].tolist():
-                 codeList.append(code)
-             start = end
-       return codeList
+   def init():
+       df_codes = Utils.queryData('codes','code',engine, None, forceUpdate=False)
+       return df_codes['code'].tolist()
+    #    strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+    #    while strTime < '09:30:01':
+    #          time.sleep(0.1)
+    #          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+    #    step = setting.get_t1()['split_size']
+    #    start = 0
+    #    codeList = []
+    #    length = len(df_todayAll)
+    #    while start < length:
+    #          end = start + step
+    #          if end >= length:
+    #             end = length 
+    #          df_temp = df_todayAll.iloc[start:end]
+    #          df = ts.get_realtime_quotes(df_temp['code'].tolist())
+    #          df = df[df.apply(analyze.isOpenMatch, axis=1)]
+    #          for code in df['code'].tolist():
+    #              codeList.append(code)
+    #          start = end
+    #    return codeList
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
 
-   codeLists = init(False)
+   codeLists = init()
 #    codeLists = ['300063']
    codeSplitMaps = {} 
    queueMaps = {}
@@ -82,7 +81,10 @@ if __name__ == '__main__':
    length = len(codeLists)
    print('calc stocks size %d' % length) 
    begin = 0
-   num_splits = length // setting.get_t1()['split_size'] + 1
+   less = 1
+   if length % setting.get_t1()['split_size'] == 0: 
+      less = 0
+   num_splits = length // setting.get_t1()['split_size'] + less
    for i in range(num_splits):
        end = begin + setting.get_t1()['split_size']
        if end > length:
