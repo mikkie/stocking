@@ -185,9 +185,9 @@ class Analyze(object):
     #       return False
 
       def isOpenMatch(self,row):
-          if float(row['pre_close']) == 0:
+          if float(row['pre_close']) == 0 or float(row['open']) == 0:
              return False
-          return (float(row['open']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= -1
+          return (float(row['open']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= -1.0
               
                    
 

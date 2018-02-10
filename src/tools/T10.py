@@ -48,6 +48,8 @@ if __name__ == '__main__':
        def cb(**kw):
            return ts.get_today_all()
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
+    #    df_todayAll = df_todayAll[(df_todayAll['changepercent'] >= -1.0) & (df_todayAll['changepercent'] != 0.0)]
+    #    return df_todayAll['code'].tolist()
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        while strTime < '09:30:01':
              time.sleep(0.1)
@@ -72,6 +74,7 @@ if __name__ == '__main__':
    manager = mp.Manager()
 
    codeLists = init(False)
+   print('calc stocks %s' % codeLists)
 #    codeLists = ['300063']
    codeSplitMaps = {} 
    queueMaps = {}
