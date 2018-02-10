@@ -44,33 +44,34 @@ def run(queue):
 if __name__ == '__main__':
    print('main process %s.' % os.getpid()) 
 
-   def init():
-       df_codes = Utils.queryData('codes','code',engine, None, forceUpdate=False)
-       return df_codes['code'].tolist()
-    #    strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-    #    while strTime < '09:30:01':
-    #          time.sleep(0.1)
-    #          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-    #    step = setting.get_t1()['split_size']
-    #    start = 0
-    #    codeList = []
-    #    length = len(df_todayAll)
-    #    while start < length:
-    #          end = start + step
-    #          if end >= length:
-    #             end = length 
-    #          df_temp = df_todayAll.iloc[start:end]
-    #          df = ts.get_realtime_quotes(df_temp['code'].tolist())
-    #          df = df[df.apply(analyze.isOpenMatch, axis=1)]
-    #          for code in df['code'].tolist():
-    #              codeList.append(code)
-    #          start = end
-    #    return codeList
+   def init(forceUpdate):
+       def cb(**kw):
+           return ts.get_today_all()
+       df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
+       strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+       while strTime < '09:30:01':
+             time.sleep(0.1)
+             strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+       step = setting.get_t1()['split_size']
+       start = 0
+       codeList = []
+       length = len(df_todayAll)
+       while start < length:
+             end = start + step
+             if end >= length:
+                end = length 
+             df_temp = df_todayAll.iloc[start:end]
+             df = ts.get_realtime_quotes(df_temp['code'].tolist())
+             df = df[df.apply(analyze.isOpenMatch, axis=1)]
+             for code in df['code'].tolist():
+                 codeList.append(code)
+             start = end
+       return codeList
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
 
-   codeLists = init()
+   codeLists = init(False)
 #    codeLists = ['300063']
    codeSplitMaps = {} 
    queueMaps = {}
