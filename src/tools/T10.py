@@ -51,7 +51,7 @@ if __name__ == '__main__':
     #    df_todayAll = df_todayAll[df_todayAll.apply(analyze.isOpenMatch2, axis=1)]
     #    return df_todayAll['code'].tolist()
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       while strTime < '09:00:01':
+       while strTime < '09:30:01':
              time.sleep(0.1)
              strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        step = setting.get_t1()['split_size']
