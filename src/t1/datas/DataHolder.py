@@ -48,8 +48,8 @@ class DataHolder(object):
 
       def add_buyed(self,code,save=False):
           self.__buyed.append(code)
-        #   if save:
-            #  self.__tpe.submit(self.saveData,self.__data[code].get_data())
+          if save:
+             self.__tpe.submit(self.saveData,self.__data[code].get_data())
 
       def get_data(self):
           return self.__data

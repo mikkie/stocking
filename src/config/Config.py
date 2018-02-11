@@ -76,7 +76,6 @@ class Config(object):
                   'v300' : 0.013
               },
               'get_data_inter' : 2,
-              'save_data_inter' : 60,
               'need_recover_data' : False,
               'split_size' : 880,
               'R_line' : {
