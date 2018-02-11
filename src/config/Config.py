@@ -70,7 +70,7 @@ class Config(object):
                   'threshold' : 0.5
               },
               'speed' : {
-                  'v30_ratio' : 1,
+                  'v30_ratio' : 0.8,
                   'v30' : 0.036,
                   'v120' : 0.02,
                   'v300' : 0.013
@@ -91,7 +91,7 @@ class Config(object):
                   'time' : '10:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 1000000
+                      'net' : 3000000
                   }
               },
               'B' : {
@@ -99,7 +99,7 @@ class Config(object):
                   'time' : '11:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 2000000
+                      'net' : 5000000
                   }
               },
               'C' : {
@@ -107,7 +107,7 @@ class Config(object):
                   'time' : '14:50:00',
                   'min_R' : 'R4',
                   'big_money' : {
-                      'net' : 2000000
+                      'net' : 5000000
                   }
               }
           }
