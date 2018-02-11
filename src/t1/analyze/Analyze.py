@@ -396,7 +396,8 @@ class Analyze(object):
           return flag     
 
       def isNetMatch(self,stock,conf):
-          return stock.get_net() >= conf['big_money']['net']
+          last_line = stock.get_Lastline()
+          return stock.get_net() >= conf['big_money']['net'] * float(last_line['price'])
 
 
       def isTimeMatch(self,stock,conf):

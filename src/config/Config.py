@@ -91,7 +91,7 @@ class Config(object):
                   'time' : '10:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 2500000
+                      'net' : 200000
                   }
               },
               'B' : {
@@ -99,7 +99,7 @@ class Config(object):
                   'time' : '11:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 3000000
+                      'net' : 250000
                   }
               },
               'C' : {
@@ -107,7 +107,7 @@ class Config(object):
                   'time' : '14:50:00',
                   'min_R' : 'R4',
                   'big_money' : {
-                      'net' : 3000000
+                      'net' : 250000
                   }
               }
           }
