@@ -67,7 +67,7 @@ class Config(object):
               'big_money' : {
                   'amount' : 500000,
                   'volume' : 100000,
-                  'threshold' : 0.5
+                  'threshold' : 0.45
               },
               'speed' : {
                   'v30_ratio' : 0.8,
@@ -91,7 +91,7 @@ class Config(object):
                   'time' : '10:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 3000000
+                      'net' : 2500000
                   }
               },
               'B' : {
@@ -99,7 +99,7 @@ class Config(object):
                   'time' : '11:00:00',
                   'min_R' : 'R2',
                   'big_money' : {
-                      'net' : 5000000
+                      'net' : 3000000
                   }
               },
               'C' : {
@@ -107,7 +107,7 @@ class Config(object):
                   'time' : '14:50:00',
                   'min_R' : 'R4',
                   'big_money' : {
-                      'net' : 5000000
+                      'net' : 3000000
                   }
               }
           }
