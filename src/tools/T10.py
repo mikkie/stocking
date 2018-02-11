@@ -73,7 +73,7 @@ if __name__ == '__main__':
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
 
-   codeLists = init(False)
+   codeLists = init(True)
    print('calc stocks %s' % codeLists)
 #    codeLists = ['300063']
    codeSplitMaps = {} 
