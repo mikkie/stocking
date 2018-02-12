@@ -32,8 +32,9 @@ def run(queue):
                      dh = DataHolder(codeList) 
                   dh.addData(df)
                   res = analyze.calcMain(dh)
-                  if res != '':
-                     dh.add_buyed(res,True)
+                  if len(res) > 0:
+                     for code in res: 
+                         dh.add_buyed(code,True)
                   MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
                   df = queue.get(True)   
         except Exception as e:

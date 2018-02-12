@@ -38,9 +38,10 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       code = analyze.calcMain(dh)
-       if code != '':
-          dh.add_buyed(code,False)
+       codes = analyze.calcMain(dh)
+       if len(codes) > 0:
+          for code in codes: 
+              dh.add_buyed(code,False)
 
 for i in range(5200):
     run(i)

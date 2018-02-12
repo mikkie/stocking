@@ -23,6 +23,7 @@ class Analyze(object):
           data = dh.get_data()
           finalCode = ''
           result = []
+          codes = []
           for code in data:
               if len(dh.get_buyed()) > 0:
                  if code in dh.get_buyed():
@@ -35,17 +36,15 @@ class Analyze(object):
                      MyLog.error(last_line['time'] + ' :calc ' + code + ' error')
                      MyLog.error(str(e))      
           if len(result) != 0:
-             try:
-                df_res = self.goTopsis(result)
-                finalCode = self.outputRes(df_res)
-                self.saveData(finalCode,result)
-             except Exception as e:
-                    codes = []
-                    for stock in result:
-                        codes.append(stock.get_code())
-                    MyLog.error('calc topsis error %s' % codes)
-                    MyLog.error(str(e))   
-          return finalCode   
+             for stock in result: 
+                 try:
+                     last_line = stock.get_Lastline()
+                     self.outputRes(last_line)
+                     self.saveData(stock)
+                 except Exception as e:
+                        MyLog.error('outputRes error %s' % stock.get_code())
+                        MyLog.error(str(e))   
+          return codes   
 
 
       def save(self,data):
@@ -55,22 +54,19 @@ class Analyze(object):
           except Exception as e:
                  MyLog.error('save [%s] data error \n' % code)
                  MyLog.error(str(e) +  '\n')
+                 
 
-      def saveData(self,code,result):
-          for stock in result:
-              if code == stock.get_code():
-                 data = stock.get_data()
-                 t = threading.Thread(target=self.save, args=(data,)) 
-                 t.start()  
-                 break
+      def saveData(self,stock):
+          data = stock.get_data()
+          t = threading.Thread(target=self.save, args=(data,)) 
+          t.start()  
 
-      def outputRes(self,df_res):
-          df_final = df_res.iloc[0]
+
+      def outputRes(self,df_final):
           trade = self.__config.get_t1()['trade']
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), str(float(df_final['price']) + trade['addPrice']), df_final['code'], df_final['name'], str(trade['volume']))
           MyLog.info(info)
           print(info)
-          return df_final['code']       
 
 
       def goTopsis(self,result):
