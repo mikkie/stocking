@@ -86,13 +86,18 @@ if __name__ == '__main__':
           codeLists.remove(code)  
    length = len(codeLists)
    print('calc stocks size %d' % length) 
+   step = setting.get_t1()['split_size']
+   x = length // setting.get_t1()['process_num']
+   y = length % setting.get_t1()['process_num']
+   if x + y < setting.get_t1()['split_size']:
+      step = x + y
    begin = 0
    less = 1
-   if length % setting.get_t1()['split_size'] == 0: 
+   if length % step == 0: 
       less = 0
-   num_splits = length // setting.get_t1()['split_size'] + less
+   num_splits = length // step + less
    for i in range(num_splits):
-       end = begin + setting.get_t1()['split_size']
+       end = begin + step
        if end > length:
           end = length 
        code_split = codeLists[begin:end]
