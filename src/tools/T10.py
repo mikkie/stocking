@@ -22,6 +22,7 @@ engine = create_engine(setting.get_DBurl())
 analyze = Analyze()
 
 def run(queue):
+        print('child process %s is running' % os.getpid())
         try:
             dh = None
             df = queue.get(True)
@@ -119,5 +120,3 @@ if __name__ == '__main__':
    sched.start()
    pool.close()
    pool.join()
-else:
-    print('child process %s is running' % os.getpid())     

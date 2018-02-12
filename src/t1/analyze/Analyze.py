@@ -40,6 +40,7 @@ class Analyze(object):
                  try:
                      last_line = stock.get_Lastline()
                      self.outputRes(last_line)
+                     codes.append(stock.get_code())
                      self.saveData(stock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
@@ -54,7 +55,7 @@ class Analyze(object):
           except Exception as e:
                  MyLog.error('save [%s] data error \n' % code)
                  MyLog.error(str(e) +  '\n')
-                 
+
 
       def saveData(self,stock):
           data = stock.get_data()
