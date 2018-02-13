@@ -221,13 +221,26 @@ class Analyze(object):
       def updateStock(self,stock,conf):
           self.updateBreakRtimes(stock,conf)
           self.updateSpeed(stock)
+          self.updatePriceVolumeMap(stock)
           try:
              self.updateBigMoney(stock,conf)
           except Exception as e:
                  MyLog.error('updateBigMoney error \n') 
                  MyLog.error(str(e) +  '\n')
 
-              
+
+
+      def updatePriceVolumeMap(self,stock):
+          try:
+             last_line = stock.get_Lastline()
+             time = last_line['time']
+             if time > self.__config.get_t1()['stop']['am_stop'] and time < self.__config.get_t1()['stop']['pm_start']:
+                return 
+             stock.addPriceVolumeMap(last_line['date'],last_line['time'],float(last_line['price']),float(last_line['volume']))
+          except Exception as e:
+                 MyLog.error('updatePriceVolumeMap error \n') 
+                 MyLog.error(str(e) +  '\n')   
+
 
 
       def updateSpeed(self,stock):
@@ -384,10 +397,11 @@ class Analyze(object):
 
 
       def isBigMoneyMatch(self,stock,conf):
-          flag = stock.get_net() / stock.getBigMoneyIn() > self.__config.get_t1()['big_money']['threshold']
+          p = stock.get_net() / stock.getBigMoneyIn()
+          flag = p > self.__config.get_t1()['big_money']['threshold']
           if flag == True:
              last_line = stock.get_Lastline() 
-             info = '[%s] *** [%s] match big_money at %s %s,net=%s,in=%s ***' % (Utils.getCurrentTime(),stock.get_code(),last_line['date'],last_line['time'],str(stock.get_net()),str(stock.getBigMoneyIn()))
+             info = '[%s] *** [%s] match big_money at %s %s,net=%s,in=%s,p=%s ***' % (Utils.getCurrentTime(),stock.get_code(),last_line['date'],last_line['time'],str(stock.get_net()),str(stock.getBigMoneyIn()),str(p * 100))
              MyLog.info(info) 
              print(info)
           return flag     

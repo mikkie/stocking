@@ -50,7 +50,7 @@ class Config(object):
               'stop' : {
                   'am_start' : '09:14:00',
                   'am_stop' : '11:30:00',
-                  'pm_start' : '12:55:00',
+                  'pm_start' : '13:00:00',
                   'pm_stop' : '15:00:00',
               },
               'trade' : {

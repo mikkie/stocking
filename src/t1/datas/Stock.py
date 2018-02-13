@@ -5,6 +5,7 @@ __author__ = 'aqua'
 import pandas as pd
 import datetime as dt
 from ..MyLog import MyLog
+import datetime as dt
 
 class Stock(object):
 
@@ -45,10 +46,24 @@ class Stock(object):
                'out' : 0
           }
           self.__netBuy = 0
+          self.__priceVolumeMap = {
+              'last_time' : None,
+              'pvMap' : []
+          }
           if isinstance(data, pd.Series):
              self.__data = pd.DataFrame([data])
           elif isinstance(data, pd.DataFrame):
                self.__data = data
+
+
+      def addPriceVolumeMap(self,date,time,price,volume):
+          nowDateTime = dt.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M:%S') 
+          if self.__priceVolumeMap['last_time'] is not None:
+             if (nowDateTime - self.__priceVolumeMap['last_time']).seconds < 30:
+                return 
+          self.__priceVolumeMap['last_time'] = nowDateTime
+          self.__priceVolumeMap['pvMap'].append({'price' : price,'volume' : volume})
+
 
       def get_speed(self,key):
           return self.__speed[key]
