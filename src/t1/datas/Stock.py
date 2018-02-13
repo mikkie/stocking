@@ -56,6 +56,10 @@ class Stock(object):
                self.__data = data
 
 
+      def getPriceVolumeMap(self):
+          return self.__priceVolumeMap['pvMap']
+
+
       def addPriceVolumeMap(self,date,time,price,volume):
           nowDateTime = dt.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M:%S') 
           if self.__priceVolumeMap['last_time'] is not None:

@@ -364,8 +364,17 @@ class Analyze(object):
              return False      
           if stock.get_minR() != 'R5':
              if not self.isSpeedMatch(stock,conf) or not self.isBigMoneyMatch(stock,conf):
-                return False 
+                return False
+        #   if not self.isPriceVolumeMapMatch(stock):
+        #      return False    
           return self.isLastTwoMatch(stock)
+
+
+      def isPriceVolumeMapMatch(self,stock):
+          pvMap = stock.getPriceVolumeMap()
+          if len(pvMap) < 5:
+             return True
+
 
 
       def isLastTwoMatch(self,stock):
