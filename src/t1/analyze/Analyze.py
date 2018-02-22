@@ -263,7 +263,7 @@ class Analyze(object):
                      if deltaS <= i and deltaS >= i - 6:
                         p = (float(last_line.get('price')) - float(row['price'])) / float(row['pre_close']) * 100 
                         stock.set_speed('v' + str(i),p / deltaS) 
-                        print('speed %s = %f' % ('v' + str(i),p / deltaS))
+                        # print('speed %s = %f' % ('v' + str(i),p / deltaS))
                         break  
 
       def convertToFloat(self,str):
@@ -318,13 +318,13 @@ class Analyze(object):
           type = self.theLastIsSellOrBuy(stock)
           if type == 'drive_buy': 
              stock.addBigMoneyIn(last_amount - last_sec_amount)
-             print('in = %f' % stock.getBigMoneyIn())
+            #  print('in = %f' % stock.getBigMoneyIn())
              stock.addNetBuy(last_amount - last_sec_amount)
-             print('net = %f' % stock.get_net())
+            #  print('net = %f' % stock.get_net())
           elif type == 'drive_sell':  
                stock.addBigMoneyOut(last_amount - last_sec_amount)
                stock.addNetBuy(last_sec_amount - last_amount)  
-               print('net = %f' % stock.get_net())
+            #    print('net = %f' % stock.get_net())
           
              
       def updateBreakRtimes(self,stock,conf):
