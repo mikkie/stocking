@@ -40,7 +40,8 @@ def subProcessTask(df_today,result,start,sm,stockManager,engine,setting,todayStr
         ######################################开始配置计算###########################################
         data = {'code' : code, 'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine, 'macd' : None, 'kdj' : None, 'ma' : None, 'turnover' : None, 'volume' : None, 'bigMoney' : None, 'concept' : None}
         if sm.start(code, setting.get_Strategy(), data, setting):
-           buildStockModels(code,data,stockManager) 
+        #    buildStockModels(code,data,stockManager) 
+           result.append(code)
            
 
 
@@ -109,11 +110,13 @@ def filter(df_todayAll,setting,engine):
     #     data = {'df_3m' : df_3m,'df_realTime' : row, 'engine' : engine}
     #     if sm.start(code, setting.get_Strategy(), data, setting):
     #        result.append(code) 
-    df_res = stockManager.buildDataFrame()
-    i = 0
-    for index,row in df_res.iterrows():
-        result.append(index)
-        i = i + 1
+    
+    
+    # df_res = stockManager.buildDataFrame()
+    # i = 0
+    # for index,row in df_res.iterrows():
+    #     result.append(index)
+    #     i = i + 1
     print('Topsis 综合测评结果排序 : ', result)
     MyLog.info('Topsis 综合测评结果排序 : %s' % result)
     return result 
