@@ -47,6 +47,7 @@ class Stock(object):
           }
           self.__netBuy = 0
           self.__priceVolumeMap = {
+              'last_volume' : 0,
               'last_time' : None,
               'pvMap' : []
           }
@@ -66,7 +67,9 @@ class Stock(object):
              if (nowDateTime - self.__priceVolumeMap['last_time']).seconds < 30:
                 return 
           self.__priceVolumeMap['last_time'] = nowDateTime
-          self.__priceVolumeMap['pvMap'].append({'price' : price,'volume' : volume})
+          vol = volume - self.__priceVolumeMap['last_volume']
+          self.__priceVolumeMap['last_volume'] = volume
+          self.__priceVolumeMap['pvMap'].append({'price' : price,'volume' : vol})
 
 
       def get_speed(self,key):

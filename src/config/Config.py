@@ -78,6 +78,7 @@ class Config(object):
               'get_data_inter' : 2,
               'need_recover_data' : False,
               'split_size' : 880,
+              'pvRatio' : 1.5,
               'R_line' : {
                   'R1' : 0.191,
                   'R2' : 0.382,
