@@ -1,0 +1,10 @@
+save [002073] data error 
+
+`live_002073`
+
+s.OperationalError) (1051, "Unknown table 'stocking.live_300236'") [SQL: '\nDROP TABLE live_300236']
+
+[2018-02-26 09:29:03] save [300056] data error 
+
+(_mysql_exceptions.OperationalError) (1050, "Table 'live_300056' already exists") [SQL: '\nCREATE TABLE live_300056 (\n\tname TEXT, \n\topen TEXT, \n\tpre_close TEXT, \n\tprice TEXT, \n\thigh TEXT, \n\tlow TEXT, \n\tbid TEXT, \n\task TEXT, \n\tvolume TEXT, \n\tamount TEXT, \n\tb1_v TEXT, \n\tb1_p TEXT, \n\tb2_v TEXT, \n\tb2_p TEXT, \n\tb3_v TEXT, \n\tb3_p TEXT, \n\tb4_v TEXT, \n\tb4_p TEXT, \n\tb5_v TEXT, \n\tb5_p TEXT, \n\ta1_v TEXT, \n\ta1_p TEXT, \n\ta2_v TEXT, \n\ta2_p TEXT, \n\ta3_v TEXT, \n\ta3_p TEXT, \n\ta4_v TEXT, \n\ta4_p TEXT, \n\ta5_v TEXT, \n\ta5_p TEXT, \n\tdate TEXT, \n\ttime TEXT, \n\tcode TEXT\n)\n\n']
+
