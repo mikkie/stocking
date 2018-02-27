@@ -16,13 +16,13 @@ engine = create_engine(setting.get_DBurl())
 #     return ts.get_today_all()
 # Utils.queryData('today_all','code',engine, cb, forceUpdate=True)
 
-# def cb1(**kw):
-#     return ts.xsg_data()
-# Utils.queryData('xsg','code',engine, cb1, forceUpdate=True)
+def cb1(**kw):
+    return ts.xsg_data()
+Utils.queryData('xsg','code',engine, cb1, forceUpdate=True)
 
-def cb2(**kw):
-    return ts.fund_holdings(2017, 4)
-Utils.queryData('fund','code',engine, cb2, forceUpdate=True)
+# def cb2(**kw):
+#     return ts.fund_holdings(2017, 4)
+# Utils.queryData('fund','code',engine, cb2, forceUpdate=True)
 
 # def cb3(**kw):
 #     return ts.inst_tops(days=10)
