@@ -12,9 +12,9 @@ from sqlalchemy import create_engine
 setting = Config()
 engine = create_engine(setting.get_DBurl())
 
-# def cb(**kw):
-#     return ts.get_today_all()
-# Utils.queryData('today_all','code',engine, cb, forceUpdate=True)
+def cb(**kw):
+    return ts.get_today_all()
+Utils.queryData('today_all','code',engine, cb, forceUpdate=True)
 
 def cb1(**kw):
     return ts.xsg_data()
