@@ -1,7 +1,7 @@
 var codes = [];
 var j = 0;
 var start = function(){
-    trArray = document.getElementById('S_HQ_CONTAINER_ypuaz').firstChild.children[1].children;
+    trArray = document.getElementById('S_HQ_CONTAINER_s1w0p').firstChild.children[1].children;
     for(var i = 0; i < trArray.length; i++){
        tr = trArray[i];
        td = tr.children[0];

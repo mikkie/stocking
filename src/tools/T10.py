@@ -10,29 +10,36 @@ sys.path.append('..')
 from config.Config import Config
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
+from t1.analyze.Concept import Concept
 from t1.MyLog import MyLog
 from utils.Utils import Utils
 from sqlalchemy import create_engine
 import multiprocessing as mp
 import os
 from apscheduler.schedulers.blocking import BlockingScheduler
+import datetime as dt
 
 setting = Config()
 engine = create_engine(setting.get_DBurl())
-analyze = Analyze()
+thshy = pd.read_sql_table('thshy', con=engine)
+thsgn = pd.read_sql_table('concept', con=engine)
+analyze = Analyze(thshy,thsgn)
+concept = Concept()
 
 def run(queue):
         print('child process %s is running' % os.getpid())
         try:
             dh = None
-            df = queue.get(True)
+            data = queue.get(True)
+            df = data['df']
+            hygn = data['hygn']
             while df is not None and len(df) > 0:
                   s = int(round(time.time() * 1000))
                   if dh is None:
                      codeList = df['code'].tolist()
                      dh = DataHolder(codeList) 
                   dh.addData(df)
-                  res = analyze.calcMain(dh)
+                  res = analyze.calcMain(dh,hygn)
                   if len(res) > 0:
                      for code in res: 
                          dh.add_buyed(code,True)
@@ -80,6 +87,10 @@ if __name__ == '__main__':
 #    codeLists = ['300063']
    codeSplitMaps = {} 
    queueMaps = {}
+   interDataHolder = {
+      'currentTime' : dt.datetime.now(),
+      'hygn' : concept.getCurrentTopHYandConcept()
+   }
 
    for code in setting.get_ignore():
        if code in codeLists:
@@ -113,9 +124,14 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
+       print('process %s.' % os.getpid()) 
+       now = dt.datetime.now()
+       if (now - interDataHolder['currentTime']).seconds > 30:
+          interDataHolder['currentTime'] = now
+          interDataHolder['hygn'] = concept.getCurrentTopHYandConcept() 
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           queueMaps[key].put(df)
+           queueMaps[key].put({'df' : df,'hygn' : interDataHolder['hygn']})
         #    for debug     
         #    d = df[df['code'] == '300063']
         #    if d is not None and len(d) > 0:
@@ -123,5 +139,6 @@ if __name__ == '__main__':
         #       print('300063')
 
    sched.start()
+
    pool.close()
    pool.join()

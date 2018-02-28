@@ -9,20 +9,22 @@ from sqlalchemy import create_engine
 import sys
 sys.path.append('..')
 from config.Config import Config 
-from trade.Analyze import Analyze
 from t1.MyLog import MyLog
+from t1.datas.DataHolder import DataHolder
+from t1.analyze.Analyze import Analyze
+from t1.analyze.Concept import Concept
 
 codes = ['000788']
 src_datas = {}
 datas = {}
 setting = Config()
-analyze = Analyze()
 engine = create_engine(setting.get_DBurl())
-from t1.datas.DataHolder import DataHolder
-from t1.analyze.Analyze import Analyze
-
 dh = DataHolder(codes)
-analyze = Analyze()
+thshy = pd.read_sql_table('thshy', con=engine)
+thsgn = pd.read_sql_table('concept', con=engine)
+analyze = Analyze(thshy,thsgn)
+concept = Concept()
+hygn = concept.getCurrentTopHYandConcept()
 
 for code in codes:
     try:
@@ -38,7 +40,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(dh)
+       codes = analyze.calcMain(dh,hygn)
        if len(codes) > 0:
           for code in codes: 
               dh.add_buyed(code,False)

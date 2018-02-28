@@ -75,6 +75,7 @@ class Config(object):
                   'v120' : 0.02,
                   'v300' : 0.013
               },
+              'get_hygn_inter' : 15,
               'get_data_inter' : 2,
               'need_recover_data' : False,
               'split_size' : 880,

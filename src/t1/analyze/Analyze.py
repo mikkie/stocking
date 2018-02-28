@@ -15,11 +15,28 @@ import threading
 
 class Analyze(object):
     
-      def __init__(self):
+      def __init__(self,thshy,thsgn):
           self.__config = Config()
           self.__engine = create_engine(self.__config.get_DBurl())
+          self.__hygnData = self.initHYGN(thshy,thsgn)
+
+
+      def initHYGN(self,thshy,thsgn):
+          data = {}
+          for index,row in thshy.iterrows():
+              if row['code'] not in data:
+                 data[row['code']] = {'hy' : [],'gn' : []}
+              if row['hy'] not in data[row['code']]['hy']:
+                 data[row['code']]['hy'].append(row['hy'])
+          for index,row in thsgn.iterrows():
+              if row['code'] not in data:
+                 data[row['code']] = {'hy' : [],'gn' : []}
+              if row['cont'] not in data[row['code']]['gn']:
+                 data[row['code']]['gn'].append(row['cont'])
+          return data                  
+              
  
-      def calcMain(self,dh):
+      def calcMain(self,dh,hygn):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -29,7 +46,7 @@ class Analyze(object):
                  if code in dh.get_buyed():
                     continue 
               try:  
-                 if self.calc(data[code],dh):
+                 if self.calc(data[code],dh,hygn):
                     result.append(data[code])
               except Exception as e:
                      last_line = data[code].get_Lastline()
@@ -144,7 +161,7 @@ class Analyze(object):
           
 
               
-      def calc(self,stock,dh):
+      def calc(self,stock,dh,hygn):
           if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
@@ -154,7 +171,7 @@ class Analyze(object):
              return False 
           self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(stock,conf)   
+          return self.isStockMatch(stock,conf,hygn)   
 
 
     #   def isJHJJMatch(self,stock,dh):
@@ -355,7 +372,7 @@ class Analyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,stock,conf):
+      def isStockMatch(self,stock,conf,hygn):
           if not self.isTimeMatch(stock,conf):
              return False
           if not self.isReachMinR(stock):
@@ -366,8 +383,30 @@ class Analyze(object):
              if not self.isSpeedMatch(stock,conf) or not self.isBigMoneyMatch(stock,conf):
                 return False
           if not self.isPriceVolumeMapMatch(stock):
-             return False    
+             return False   
+          if not self.isHygnMatch(stock,hygn):
+             return False   
           return self.isLastTwoMatch(stock)
+
+
+      def isHygnMatch(self,stock,hygn):
+          code = stock.get_code()
+          stockHYGN = self.__hygnData[code]
+          shys = stockHYGN['hy'] 
+          sgns = stockHYGN['gn']
+          for shy in shys:
+              for hy in hygn['hy']:
+                  if shy == hy:
+                     return True
+          for sgn in sgns:
+              for gn in hygn['gn']:
+                  if sgn == gn:
+                     return True 
+          return False                     
+              
+
+
+
 
 
       def isPriceVolumeMapMatch(self,stock):

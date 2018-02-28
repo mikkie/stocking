@@ -12,3 +12,6 @@ class Trade(object):
 
       def buy(self,code,amout,price):
           self.__user.buy(code, price=price, amount=amout)
+
+trade = Trade()
+trade.buy('',500,)          
