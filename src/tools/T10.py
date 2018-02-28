@@ -31,9 +31,9 @@ def run(queue):
         try:
             dh = None
             data = queue.get(True)
-            df = data['df']
-            hygn = data['hygn']
-            while df is not None and len(df) > 0:
+            while data is not None and data['df'] is not None and len(data['df']) > 0:
+                  df = data['df']
+                  hygn = data['hygn']
                   s = int(round(time.time() * 1000))
                   if dh is None:
                      codeList = df['code'].tolist()
@@ -44,7 +44,7 @@ def run(queue):
                      for code in res: 
                          dh.add_buyed(code,True)
                   MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
-                  df = queue.get(True)   
+                  data = queue.get(True)   
         except Exception as e:
                MyLog.error('error %s' % str(e))
 
@@ -124,7 +124,6 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
-       print('process %s.' % os.getpid()) 
        now = dt.datetime.now()
        if (now - interDataHolder['currentTime']).seconds > 30:
           interDataHolder['currentTime'] = now
