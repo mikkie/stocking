@@ -375,6 +375,8 @@ class Analyze(object):
       def isStockMatch(self,stock,conf,hygn):
           if not self.isTimeMatch(stock,conf):
              return False
+          if not self.isHygnMatch(stock,hygn):
+             return False  
           if not self.isReachMinR(stock):
              return False
           if not self.isNetMatch(stock,conf):
@@ -383,8 +385,6 @@ class Analyze(object):
              if not self.isSpeedMatch(stock,conf) or not self.isBigMoneyMatch(stock,conf):
                 return False
           if not self.isPriceVolumeMapMatch(stock):
-             return False   
-          if not self.isHygnMatch(stock,hygn):
              return False   
           return self.isLastTwoMatch(stock)
 
