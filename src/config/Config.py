@@ -17,7 +17,7 @@ class Config(object):
           self.__turnOver = 3 #换手率
           self.__updateToday = True #更新当前实时价格
           self.__strategy = ['twoDay10'] #使用策略
-          self.__kLineMA = [10] #K线超过MA5,MA10数量
+          self.__kLineMA = [3] #K线超过MA5,MA10数量
           self.__volume = [2,2.5] #量的突变
           self.__basics = [2017,3,20,1,5,15,30] #基础过滤
           self.__bigMoney = [1.2,600,300000] #大单净流入
