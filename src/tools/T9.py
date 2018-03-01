@@ -13,6 +13,7 @@ from t1.MyLog import MyLog
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
 from t1.analyze.Concept import Concept
+from t1.analyze.NetMoney import NetMoney
 
 codes = ['000788']
 src_datas = {}
@@ -24,7 +25,9 @@ thshy = pd.read_sql_table('thshy', con=engine)
 thsgn = pd.read_sql_table('concept', con=engine)
 analyze = Analyze(thshy,thsgn)
 concept = Concept()
+netMoney = NetMoney()
 hygn = concept.getCurrentTopHYandConcept()
+net = netMoney.getNetMoneyRatio()
 
 for code in codes:
     try:
@@ -40,7 +43,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(dh,hygn)
+       codes = analyze.calcMain(dh,hygn,net)
        if len(codes) > 0:
           for code in codes: 
               dh.add_buyed(code,False)

@@ -36,7 +36,7 @@ class Analyze(object):
           return data                  
               
  
-      def calcMain(self,dh,hygn):
+      def calcMain(self,dh,hygn,netMoney):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -46,7 +46,7 @@ class Analyze(object):
                  if code in dh.get_buyed():
                     continue 
               try:  
-                 if self.calc(data[code],dh,hygn):
+                 if self.calc(data[code],dh,hygn,netMoney):
                     result.append(data[code])
               except Exception as e:
                      last_line = data[code].get_Lastline()
@@ -161,7 +161,7 @@ class Analyze(object):
           
 
               
-      def calc(self,stock,dh,hygn):
+      def calc(self,stock,dh,hygn,netMoney):
           if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
@@ -171,7 +171,7 @@ class Analyze(object):
              return False 
           self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(stock,conf,hygn)   
+          return self.isStockMatch(stock,conf,hygn,netMoney)   
 
 
     #   def isJHJJMatch(self,stock,dh):
@@ -238,12 +238,12 @@ class Analyze(object):
       def updateStock(self,stock,conf):
           self.updateBreakRtimes(stock,conf)
           self.updateSpeed(stock)
-          self.updatePriceVolumeMap(stock)
-          try:
-             self.updateBigMoney(stock,conf)
-          except Exception as e:
-                 MyLog.error('updateBigMoney error \n') 
-                 MyLog.error(str(e) +  '\n')
+        #   self.updatePriceVolumeMap(stock)
+        #   try:
+        #      self.updateBigMoney(stock,conf)
+        #   except Exception as e:
+        #          MyLog.error('updateBigMoney error \n') 
+        #          MyLog.error(str(e) +  '\n')
 
 
 
@@ -372,36 +372,46 @@ class Analyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,stock,conf,hygn):
+      def isStockMatch(self,stock,conf,hygn,netMoney):
           if not self.isTimeMatch(stock,conf):
              return False
           if not self.isHygnMatch(stock,hygn):
              return False  
           if not self.isReachMinR(stock):
              return False
-          if not self.isNetMatch(stock,conf):
-             return False      
+        #   if not self.isNetMatch(stock,conf):
+        #      return False      
           if stock.get_minR() != 'R5':
-             if not self.isSpeedMatch(stock,conf) or not self.isBigMoneyMatch(stock,conf):
+             if not self.isSpeedMatch(stock,conf):
                 return False
-          if not self.isPriceVolumeMapMatch(stock):
-             return False   
+        #   if not self.isPriceVolumeMapMatch(stock):
+        #      return False  
+          if not self.netMoneyRatioMatch(stock,netMoney):
+             return False  
           return self.isLastTwoMatch(stock)
+
+
+      def netMoneyRatioMatch(self,stock,netMoney):
+          return stock.get_code() in netMoney
 
 
       def isHygnMatch(self,stock,hygn):
           code = stock.get_code()
+          if code not in self.__hygnData:
+             return False 
           stockHYGN = self.__hygnData[code]
-          shys = stockHYGN['hy'] 
-          sgns = stockHYGN['gn']
-          for shy in shys:
-              for hy in hygn['hy']:
-                  if shy == hy:
-                     return True
-          for sgn in sgns:
-              for gn in hygn['gn']:
-                  if sgn == gn:
-                     return True 
+          if 'hy' in stockHYGN:
+             shys = stockHYGN['hy'] 
+             for shy in shys:
+                 for hy in hygn['hy']:
+                     if shy == hy:
+                        return True
+          if 'gn' in stockHYGN:          
+             sgns = stockHYGN['gn']
+             for sgn in sgns:
+                 for gn in hygn['gn']:
+                     if sgn == gn:
+                        return True 
           return False                     
               
 

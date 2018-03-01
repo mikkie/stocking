@@ -22,11 +22,17 @@ class Concept(object):
           self.__gnURL = 'http://data.10jqka.com.cn/funds/gnzjl/'
 
       def getCurrentTopHYandConcept(self):
-          response = requests.get(self.__hyURL,headers=self.__header, verify=False)
-          hyNames = self.parse(response.text)
-          response = requests.get(self.__gnURL,headers=self.__header, verify=False)
-          gnNames = self.parse(response.text)
-          return {'hy' : hyNames,'gn' : gnNames}
+          try:
+              response = requests.get(self.__hyURL,headers=self.__header, verify=False)
+              hyNames = self.parse(response.text)
+              response = requests.get(self.__gnURL,headers=self.__header, verify=False)
+              gnNames = self.parse(response.text)
+              return {'hy' : hyNames,'gn' : gnNames}
+          except:
+              print('call top 6 concept failed')
+              return None
+
+                  
 
 
       def parse(self,html):
