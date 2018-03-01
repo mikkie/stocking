@@ -18,14 +18,14 @@ class NetMoney(object):
               'Referer':'http://vip.stock.finance.sina.com.cn/moneyflow/',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
-          self.__URL = 'http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/MoneyFlow.ssl_bkzj_ssggzj?page=1&num=100&sort=ratioamount&asc=0&bankuai=&shichang='
+          self.__URL = 'http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/MoneyFlow.ssl_bkzj_ssggzj?page=1&num=300&sort=ratioamount&asc=0&bankuai=&shichang='
 
       def getNetMoneyRatio(self):
           try:
              response = requests.get(self.__URL,headers=self.__header, verify=False)
              return self.parse(response.text)
           except:
-                print('call top 100 net money failed')
+                print('call top 300 net money failed')
                 return None     
 
 
