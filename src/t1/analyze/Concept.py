@@ -40,7 +40,7 @@ class Concept(object):
           page = etree.HTML(html)
           trs = page.xpath('//table[@class="m-table J-ajax-table"]/tbody/tr')
           i = 0
-          while i < 6:
+          while i < 10:
                 name = trs[i].getchildren()[1].getchildren()[0].text
                 names.append(name)
                 i = i + 1
