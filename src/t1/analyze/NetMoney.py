@@ -23,9 +23,10 @@ class NetMoney(object):
       def getNetMoneyRatio(self):
           try:
              response = requests.get(self.__URL,headers=self.__header, verify=False)
+            #  print(self.parse(response.text))
              return self.parse(response.text)
-          except:
-                print('call top 300 net money failed')
+          except Exception as e:
+                print('call top 300 net money failed' + e)
                 return None     
 
 

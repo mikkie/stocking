@@ -24,24 +24,26 @@ class Concept(object):
       def getCurrentTopHYandConcept(self):
           try:
               response = requests.get(self.__hyURL,headers=self.__header, verify=False)
-              hyNames = self.parse(response.text)
+              hyNames = self.parse(response.text,10)
               response = requests.get(self.__gnURL,headers=self.__header, verify=False)
-              gnNames = self.parse(response.text)
+              gnNames = self.parse(response.text,20)
+            #   print({'hy' : hyNames,'gn' : gnNames})
               return {'hy' : hyNames,'gn' : gnNames}
-          except:
-              print('call top 6 concept failed')
+          except Exception as e:
+              print('call top 6 concept failed' + e)
               return None
 
                   
 
 
-      def parse(self,html):
+      def parse(self,html,maxNum):
           names = []
           page = etree.HTML(html)
           trs = page.xpath('//table[@class="m-table J-ajax-table"]/tbody/tr')
           i = 0
-          while i < 10:
+          while i < maxNum:
                 name = trs[i].getchildren()[1].getchildren()[0].text
+                p = float(trs[i].getchildren()[3].text.replace('%',''))
                 names.append(name)
                 i = i + 1
           return names
