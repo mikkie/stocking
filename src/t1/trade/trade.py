@@ -7,11 +7,11 @@ class Trade(object):
 
       def __init__(self):
           self.__user = easytrader.use('ths')
-          self.__user.connect(r'客户端xiadan.exe路径')
+          self.__user.connect(r'C:/xyzqdlxd/xiadan.exe')
 
 
       def buy(self,code,amout,price):
           self.__user.buy(code, price=price, amount=amout)
 
 trade = Trade()
-trade.buy('',500,)          
+trade.buy('601965',8.3,500)          
