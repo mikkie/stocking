@@ -44,7 +44,8 @@ class Concept(object):
           while i < maxNum:
                 name = trs[i].getchildren()[1].getchildren()[0].text
                 p = float(trs[i].getchildren()[3].text.replace('%',''))
-                names.append(name)
+                if p > 0.0:
+                   names.append(name)
                 i = i + 1
           return names
 
