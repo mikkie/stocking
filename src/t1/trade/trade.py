@@ -14,4 +14,4 @@ class Trade(object):
           self.__user.buy(code, price=price, amount=amout)
 
 trade = Trade()
-trade.buy('601965',8.3,500)          
+print(trade.buy('300479',100,18.73))          
