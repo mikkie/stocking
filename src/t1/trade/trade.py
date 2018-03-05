@@ -7,7 +7,7 @@ class Trade(object):
 
       def __init__(self):
           self.__user = easytrader.use('ths')
-          self.__user.connect(r'C:/xyzqdlxd/xiadan.exe')
+          self.__user.connect(r'C:/Users/benjaminl/AppData/Roaming/VOS/AppName.16346')
 
 
       def buy(self,code,amout,price):

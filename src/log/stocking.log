@@ -1,0 +1,15 @@
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-05 11:54:11 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\http\client.py", line 446, in read
+    s = self._safe_read(self.length)
+  File "D:\Python35\lib\http\client.py", line 592, in _safe_read
+    chunk = self.fp.read(min(amt, MAXAMOUNT))
+  File "D:\Python35\lib\socket.py", line 575, in readinto
+    return self._sock.recv_into(b)
+socket.timeout: timed out
