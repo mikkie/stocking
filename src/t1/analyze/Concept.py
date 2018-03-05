@@ -24,9 +24,9 @@ class Concept(object):
       def getCurrentTopHYandConcept(self):
           try:
               response = requests.get(self.__hyURL,headers=self.__header, verify=False)
-              hyNames = self.parse(response.text,10)
+              hyNames = self.parse(response.text,15)
               response = requests.get(self.__gnURL,headers=self.__header, verify=False)
-              gnNames = self.parse(response.text,20)
+              gnNames = self.parse(response.text,30)
             #   print({'hy' : hyNames,'gn' : gnNames})
               return {'hy' : hyNames,'gn' : gnNames}
           except Exception as e:

@@ -15,8 +15,9 @@ class MAFilter(object):
                  return ts.get_hist_data(kw['kw']['code'])
              data['df_h'] = Utils.queryData('h_data_' + data['df_3m'].iloc[0]['code'],'code',data['engine'], cb, forceUpdate=config.get_updateToday(),code=data['df_3m'].iloc[0]['code']) 
           df_last_3h = data['df_h'][0:3]
+          count = 0
           for index,row in df_last_3h.iterrows():   
-              if row['close'] < row['ma5']:
-                 return False
-          return True      
+              if row['close'] >= row['ma5']:
+                 count = count + 1
+          return count >= 2      
               
