@@ -17,7 +17,7 @@ class MAFilter(object):
           df_last_3h = data['df_h'][0:3]
           count = 0
           for index,row in df_last_3h.iterrows():   
-              if row['close'] >= row['ma5']:
+              if row['close'] < row['ma5']:
                  count = count + 1
           return count >= 2      
               

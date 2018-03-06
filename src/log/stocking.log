@@ -1,4 +1,4 @@
-Job "getData (trigger: interval[0:00:02], next run at: 2018-03-05 11:54:11 CST)" raised an exception
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:08:29 CST)" raised an exception
 Traceback (most recent call last):
   File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
     retval = job.func(*job.args, **job.kwargs)
@@ -13,3 +13,356 @@ Traceback (most recent call last):
   File "D:\Python35\lib\socket.py", line 575, in readinto
     return self._sock.recv_into(b)
 socket.timeout: timed out
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:54:11 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\urllib3\connection.py", line 141, in _new_conn
+    (self.host, self.port), self.timeout, **extra_kw)
+  File "D:\Python35\lib\site-packages\urllib3\util\connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "D:\Python35\lib\socket.py", line 732, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 11004] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\urllib3\connectionpool.py", line 601, in urlopen
+    chunked=chunked)
+  File "D:\Python35\lib\site-packages\urllib3\connectionpool.py", line 357, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\site-packages\urllib3\connection.py", line 166, in connect
+    conn = self._new_conn()
+  File "D:\Python35\lib\site-packages\urllib3\connection.py", line 150, in _new_conn
+    self, "Failed to establish a new connection: %s" % e)
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x0000000007A46160>: Failed to establish a new connection: [Errno 11004] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\requests\adapters.py", line 440, in send
+    timeout=timeout
+  File "D:\Python35\lib\site-packages\urllib3\connectionpool.py", line 639, in urlopen
+    _stacktrace=sys.exc_info()[2])
+  File "D:\Python35\lib\site-packages\urllib3\util\retry.py", line 388, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='data.10jqka.com.cn', port=80): Max retries exceeded with url: /funds/hyzjl/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000000007A46160>: Failed to establish a new connection: [Errno 11004] getaddrinfo failed',))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "..\t1\analyze\Concept.py", line 26, in getCurrentTopHYandConcept
+    response = requests.get(self.__hyURL,headers=self.__header, verify=False)
+  File "D:\Python35\lib\site-packages\requests\api.py", line 72, in get
+    return request('get', url, params=params, **kwargs)
+  File "D:\Python35\lib\site-packages\requests\api.py", line 58, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\Python35\lib\site-packages\requests\sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\Python35\lib\site-packages\requests\sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\Python35\lib\site-packages\requests\adapters.py", line 508, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='data.10jqka.com.cn', port=80): Max retries exceeded with url: /funds/hyzjl/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000000007A46160>: Failed to establish a new connection: [Errno 11004] getaddrinfo failed',))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 134, in getData
+    hygn = concept.getCurrentTopHYandConcept()
+  File "..\t1\analyze\Concept.py", line 33, in getCurrentTopHYandConcept
+    print('call top 6 concept failed' + e)
+TypeError: Can't convert 'ConnectionError' object to str implicitly
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:54:23 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error timed out>
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:54:33 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 471, in open
+    response = meth(req, response)
+  File "D:\Python35\lib\urllib\request.py", line 581, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "D:\Python35\lib\urllib\request.py", line 503, in error
+    result = self._call_chain(*args)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 686, in http_error_302
+    return self.parent.open(new, timeout=req.timeout)
+  File "D:\Python35\lib\urllib\request.py", line 471, in open
+    response = meth(req, response)
+  File "D:\Python35\lib\urllib\request.py", line 581, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "D:\Python35\lib\urllib\request.py", line 509, in error
+    return self._call_chain(*args)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 589, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 401: Authorization Required
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:54:35 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 471, in open
+    response = meth(req, response)
+  File "D:\Python35\lib\urllib\request.py", line 581, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "D:\Python35\lib\urllib\request.py", line 503, in error
+    result = self._call_chain(*args)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 686, in http_error_302
+    return self.parent.open(new, timeout=req.timeout)
+  File "D:\Python35\lib\urllib\request.py", line 471, in open
+    response = meth(req, response)
+  File "D:\Python35\lib\urllib\request.py", line 581, in http_response
+    'http', request, response, code, msg, hdrs)
+  File "D:\Python35\lib\urllib\request.py", line 509, in error
+    return self._call_chain(*args)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 589, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 401: Authorization Required
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:55:03 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions>
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:55:05 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions>
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:55:07 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions>
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-06 11:55:09 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+OSError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 141, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions>

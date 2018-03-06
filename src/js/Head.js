@@ -52,3 +52,18 @@ var inter = setInterval(function(){
        clearInterval(inter);  
     } 
 },3000);
+
+//10 percent
+
+var codes = [];
+var start = function(){
+    trArray = document.getElementsByClassName('m-table J-ajax-table')[1].children[1].children;
+    for(var i = 0; i < trArray.length; i++){
+       tr = trArray[i];
+       td = tr.children[1];
+       code = td.firstChild.innerHTML;
+       codes.push(code);
+    }
+};
+start();
+console.log(codes);
