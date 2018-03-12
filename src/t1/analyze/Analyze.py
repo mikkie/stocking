@@ -233,6 +233,8 @@ class Analyze(object):
               if stock.get_r_val(key) == -10:
                  val = open_p + (10 - open_p) * r_line[key]
                  stock.set_r_val(key,val)
+          targetCCP = (1 - self.__config.get_t1()['x_speed']['a']) * self.getOpenPercent(stock) + 10 * self.__config.get_t1()['x_speed']['a']       
+          stock.setTargetCCP(targetCCP)         
 
 
       def updateStock(self,stock,conf):
@@ -282,6 +284,10 @@ class Analyze(object):
                         stock.set_speed('v' + str(i),p / deltaS) 
                         # print('speed %s = %f' % ('v' + str(i),p / deltaS))
                         break  
+
+
+
+                    
 
       def convertToFloat(self,str):
           if str == '':
@@ -373,23 +379,46 @@ class Analyze(object):
                  return t1[key] 
 
       def isStockMatch(self,stock,conf,hygn,netMoney):
-          if not self.isTimeMatch(stock,conf):
-             return False
-          if not self.isHygnMatch(stock,hygn):
-             return False  
-          if not self.isReachMinR(stock):
-             return False
+        #   if not self.isTimeMatch(stock,conf):
+        #      return False
+        #   if not self.isHygnMatch(stock,hygn):
+        #      return False  
+        #   if not self.isReachMinR(stock):
+        #      return False
         #   if not self.isNetMatch(stock,conf):
         #      return False      
-          if stock.get_minR() != 'R5':
-             if not self.isSpeedMatch(stock,conf):
-                return False
+        #   if stock.get_minR() != 'R5':
+        #      if not self.isSpeedMatch(stock,conf):
+        #         return False
         #   if not self.isPriceVolumeMapMatch(stock):
         #      return False  
-          if not self.netMoneyRatioMatch(stock,netMoney):
-             return False  
+        #   if not self.netMoneyRatioMatch(stock,netMoney):
+        #      return False  
+          if not self.isXSpeedMatch(stock):
+             return False 
           return self.isLastTwoMatch(stock)
 
+
+
+      def isXSpeedMatch(self,stock):
+          targetCCP = stock.getTargetCCP()
+          now_line = stock.get_Lastline() 
+          ccp = self.getCurrentPercent(stock)
+          ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
+          if ccp >= targetCCP:
+             len = stock.len() 
+             i = len - 2
+             while i >=0:
+                   line = stock.get_data().iloc[i] 
+                   price = float(line['price'])    
+                   pcp = self.getPercent(price,stock) 
+                   if ccp - pcp > (10 - pcp) * self.__config.get_t1()['x_speed']['b']:
+                      pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
+                      if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
+                          return True
+                   i = i - 1      
+          return False                  
+                   
 
       def netMoneyRatioMatch(self,stock,netMoney):
           return stock.get_code() in netMoney
@@ -414,10 +443,6 @@ class Analyze(object):
                         return True 
           return False                     
               
-
-
-
-
 
       def isPriceVolumeMapMatch(self,stock):
           pvMap = stock.getPriceVolumeMap()

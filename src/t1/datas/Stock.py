@@ -51,10 +51,18 @@ class Stock(object):
               'last_time' : None,
               'pvMap' : []
           }
+          self.__targetCCP = 0
           if isinstance(data, pd.Series):
              self.__data = pd.DataFrame([data])
           elif isinstance(data, pd.DataFrame):
                self.__data = data
+
+
+      def setTargetCCP(self,ccp):
+          self.__targetCCP = ccp
+
+      def getTargetCCP(self):
+          return self.__targetCCP           
 
 
       def getPriceVolumeMap(self):

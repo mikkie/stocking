@@ -110,6 +110,11 @@ class Config(object):
                   'big_money' : {
                       'net' : 250000
                   }
+              },
+              'x_speed' : {
+                  'a' : 0.6,
+                  'b' : 0.6,
+                  'c' : 0.667
               }
           }
 
