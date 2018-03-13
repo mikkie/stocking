@@ -409,9 +409,12 @@ class Analyze(object):
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
+                   print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b']: 
+                      print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
                       if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
+                          print('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
                           return True
                 i = i - 1      
           return False                  
