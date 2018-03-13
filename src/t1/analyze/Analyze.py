@@ -36,7 +36,7 @@ class Analyze(object):
           return data                  
               
  
-      def calcMain(self,dh,hygn,netMoney):
+      def calcMain(self,zs,dh,hygn,netMoney):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -46,7 +46,7 @@ class Analyze(object):
                  if code in dh.get_buyed():
                     continue 
               try:  
-                 if self.calc(data[code],dh,hygn,netMoney):
+                 if self.calc(zs,data[code],dh,hygn,netMoney):
                     result.append(data[code])
               except Exception as e:
                      last_line = data[code].get_Lastline()
@@ -161,7 +161,7 @@ class Analyze(object):
           
 
               
-      def calc(self,stock,dh,hygn,netMoney):
+      def calc(self,zs,stock,dh,hygn,netMoney):
           if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
@@ -171,7 +171,7 @@ class Analyze(object):
              return False 
           self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(stock,conf,hygn,netMoney)   
+          return self.isStockMatch(zs,stock,conf,hygn,netMoney)   
 
 
     #   def isJHJJMatch(self,stock,dh):
@@ -375,9 +375,11 @@ class Analyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,stock,conf,hygn,netMoney):
+      def isStockMatch(self,zs,stock,conf,hygn,netMoney):
+          if not self.isZSMatch(zs,stock):
+             return False   
           if not self.isTimeMatch(stock,conf):
-             return False
+                 return False
         #   if not self.isHygnMatch(stock,hygn):
         #      return False  
           if not self.isReachMinR(stock):
@@ -394,6 +396,18 @@ class Analyze(object):
           if not self.isXSpeedMatch(stock):
              return False 
           return self.isLastTwoMatch(stock)
+
+
+      def isZSMatch(self,zs,stock):
+          code = stock.get_code()
+          i = 0
+          if code.startswith('3'):
+             i = 5 
+          line = zs.iloc[i] 
+          pre_close = line.get('pre_close') 
+          price = line.get('price')
+          p = (float(price) - float(pre_close)) / float(pre_close) * 100 
+          return p > 0 
 
 
 

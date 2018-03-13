@@ -28,6 +28,7 @@ concept = Concept()
 netMoney = NetMoney()
 hygn = concept.getCurrentTopHYandConcept()
 net = netMoney.getNetMoneyRatio()
+zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
 
 for code in codes:
     try:
@@ -43,7 +44,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(dh,hygn,net)
+       codes = analyze.calcMain(zs,dh,hygn,net)
        if len(codes) > 0:
           for code in codes: 
               dh.add_buyed(code,False)

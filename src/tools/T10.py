@@ -34,6 +34,7 @@ def run(queue):
             dh = None
             data = queue.get(True)
             while data is not None and data['df'] is not None and len(data['df']) > 0:
+                  zs = data['zs']
                   df = data['df']
                   hygn = data['hygn']
                   netMoney = data['netMoney']
@@ -42,7 +43,7 @@ def run(queue):
                      codeList = df['code'].tolist()
                      dh = DataHolder(codeList) 
                   dh.addData(df)
-                  res = analyze.calcMain(dh,hygn,netMoney)
+                  res = analyze.calcMain(zs,dh,hygn,netMoney)
                   if len(res) > 0:
                      for code in res: 
                          dh.add_buyed(code,True)
@@ -139,7 +140,8 @@ if __name__ == '__main__':
              interDataHolder['netMoney'] = net
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           queueMaps[key].put({'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
+           zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+           queueMaps[key].put({'zs' : zs,'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
         #    for debug     
         #    d = df[df['code'] == '300063']
         #    if d is not None and len(d) > 0:

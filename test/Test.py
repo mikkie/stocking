@@ -6,8 +6,5 @@ import tushare as ts
 import threading
 import time
 
-df = ts.get_realtime_quotes(['601901'])
-one = df.iloc[0]
-a = int(round(time.time() * 1000))
-df2 = pd.DataFrame([one]) 
-print('time1 = %d' % (int(round(time.time() * 1000)) - a)) 
+df = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+print(df)
