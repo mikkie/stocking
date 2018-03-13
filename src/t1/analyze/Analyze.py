@@ -376,24 +376,24 @@ class Analyze(object):
                  return t1[key] 
 
       def isStockMatch(self,zs,stock,conf,hygn,netMoney):
-          if not self.isZSMatch(zs,stock):
+          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
              return False   
-          if not self.isTimeMatch(stock,conf):
-                 return False
-        #   if not self.isHygnMatch(stock,hygn):
-        #      return False  
-          if not self.isReachMinR(stock):
+          if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
              return False
-        #   if not self.isNetMatch(stock,conf):
-        #      return False      
-        #   if stock.get_minR() != 'R5':
-        #      if not self.isSpeedMatch(stock,conf):
-        #         return False
-        #   if not self.isPriceVolumeMapMatch(stock):
-        #      return False  
-        #   if not self.netMoneyRatioMatch(stock,netMoney):
-        #      return False  
-          if not self.isXSpeedMatch(stock):
+          if 'hygn' in self.__config.get_t1()['strategy'] and not self.isHygnMatch(stock,hygn):
+             return False  
+          if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
+             return False
+          if 'net' in self.__config.get_t1()['strategy'] and not self.isNetMatch(stock,conf):
+             return False      
+          if 'speed' in self.__config.get_t1()['strategy'] and stock.get_minR() != 'R5':
+             if not self.isSpeedMatch(stock,conf):
+                return False
+          if 'pvmap' in self.__config.get_t1()['strategy'] and not self.isPriceVolumeMapMatch(stock):
+             return False  
+          if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
+             return False  
+          if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(stock):
              return False 
           return self.isLastTwoMatch(stock)
 
@@ -423,11 +423,11 @@ class Analyze(object):
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
-                   print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b']: 
-                      print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
                       if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
+                          print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
+                          print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                           print('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
                           return True
                 i = i - 1      
