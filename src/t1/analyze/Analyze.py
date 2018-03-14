@@ -24,6 +24,8 @@ class Analyze(object):
 
 
       def initHYGN(self,thshy,thsgn):
+          if thshy is None or thsgn is None:
+             return 
           data = {}
           for index,row in thshy.iterrows():
               if row['code'] not in data:
