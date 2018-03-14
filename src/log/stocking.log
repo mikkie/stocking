@@ -1,0 +1,88 @@
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-14 10:37:44 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 143, in getData
+    zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error timed out>
+Job "getData (trigger: interval[0:00:02], next run at: 2018-03-14 10:37:56 CST)" raised an exception
+Traceback (most recent call last):
+  File "D:\Python35\lib\urllib\request.py", line 1240, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers)
+  File "D:\Python35\lib\http\client.py", line 1083, in request
+    self._send_request(method, url, body, headers)
+  File "D:\Python35\lib\http\client.py", line 1128, in _send_request
+    self.endheaders(body)
+  File "D:\Python35\lib\http\client.py", line 1079, in endheaders
+    self._send_output(message_body)
+  File "D:\Python35\lib\http\client.py", line 911, in _send_output
+    self.send(msg)
+  File "D:\Python35\lib\http\client.py", line 854, in send
+    self.connect()
+  File "D:\Python35\lib\http\client.py", line 826, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "D:\Python35\lib\socket.py", line 711, in create_connection
+    raise err
+  File "D:\Python35\lib\socket.py", line 702, in create_connection
+    sock.connect(sa)
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Python35\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "D:\aqua\stock\stocking\src\tools\T10.py", line 142, in getData
+    df = ts.get_realtime_quotes(codeSplitMaps[key])
+  File "D:\Python35\lib\site-packages\tushare\stock\trading.py", line 375, in get_realtime_quotes
+    text = urlopen(request,timeout=10).read()
+  File "D:\Python35\lib\urllib\request.py", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File "D:\Python35\lib\urllib\request.py", line 465, in open
+    response = self._open(req, data)
+  File "D:\Python35\lib\urllib\request.py", line 483, in _open
+    '_open', req)
+  File "D:\Python35\lib\urllib\request.py", line 443, in _call_chain
+    result = func(*args)
+  File "D:\Python35\lib\urllib\request.py", line 1268, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "D:\Python35\lib\urllib\request.py", line 1242, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error timed out>
