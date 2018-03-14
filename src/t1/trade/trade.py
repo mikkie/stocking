@@ -16,6 +16,3 @@ class Trade(object):
           except Exception as e:
                  print('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
           
-
-trade = Trade()
-print(trade.buy('002208',100,13.00))          
