@@ -7,11 +7,12 @@ class Trade(object):
 
       def __init__(self):
           self.__user = easytrader.use('ths')
-          self.__user.connect(r'C:/同花顺软件/同花顺/xiadan.exe')
+          self.__user.connect(r'C:/xyzqdlxd/xiadan.exe')
 
 
       def buy(self,code,amout,price):
-          self.__user.buy(code, price=price, amount=amout)
-
-trade = Trade()
-print(trade.buy('300479',100,18.75))          
+          try:
+              self.__user.buy(code, price=price, amount=amout)
+          except Exception as e:
+                 print('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
+          
