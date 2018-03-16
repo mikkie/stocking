@@ -433,7 +433,13 @@ class Analyze(object):
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b']: 
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
-                      if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
+                      p_change = ccp - pcp
+                      ratio_c = self.__config.get_t1()['x_speed']['c']['m']
+                      if p_change <= 2:
+                         ratio_c = self.__config.get_t1()['x_speed']['c']['s']
+                      elif p_change > 5:
+                           ratio_c = self.__config.get_t1()['x_speed']['c']['b']     
+                      if (ct - pt).seconds / 60 < (ccp - pcp) * ratio_c:
                           print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                           print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                           print('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
