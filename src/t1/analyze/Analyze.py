@@ -87,9 +87,10 @@ class Analyze(object):
 
       def outputRes(self,df_final):
           trade = self.__config.get_t1()['trade']
+          price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           if self.__config.get_t1()['trade']:
-             self.__trade.buy(df_final['code'],trade['volume'],float(df_final['price']) + trade['addPrice'])
-          info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), str('%.2f' % (float(df_final['price']) + trade['addPrice'])), df_final['code'], df_final['name'], str(trade['volume']))
+             self.__trade.buy(df_final['code'],trade['volume'],float(price))
+          info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
           MyLog.info(info)
           print(info)
 
