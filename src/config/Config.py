@@ -114,9 +114,10 @@ class Config(object):
               'x_speed' : {
                   'a' : 0.7,
                   'b' : 0.75,
-                  'c' : 0.6
+                  'c' : 0.667
               },
-              'strategy' : ['time','minR','xspeed']
+              'strategy' : ['time','minR','xspeed'],
+              'trade' : False
           }
 
       def get_ignore(self):
