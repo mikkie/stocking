@@ -114,7 +114,7 @@ class Config(object):
               },
               'x_speed' : {
                   'a' : 0.7,
-                  'b' : 0.75,
+                  'b' : {'s' : 0.65, 'm' : 0.7, 'b' : 0.75},
                   'c' : {'s' : 0.6, 'm' : 1, 'b' : 1.5}
               },
               'strategy' : ['time','minR','xspeed']

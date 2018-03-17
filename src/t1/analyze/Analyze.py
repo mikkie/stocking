@@ -431,7 +431,12 @@ class Analyze(object):
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
-                   if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b']: 
+                   ratio_b = self.__config.get_t1()['x_speed']['b']['m']
+                   if ocp <= 2:
+                      ratio_b = self.__config.get_t1()['x_speed']['b']['s'] 
+                   if ocp > 5:
+                      ratio_b = self.__config.get_t1()['x_speed']['b']['b']    
+                   if ccp - pcp >= (ccp - ocp) * ratio_b: 
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
                       p_change = ccp - pcp
                       ratio_c = self.__config.get_t1()['x_speed']['c']['m']
