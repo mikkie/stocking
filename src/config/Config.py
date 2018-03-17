@@ -55,7 +55,8 @@ class Config(object):
               },
               'trade' : {
                  'addPrice' : 0.02,
-                 'volume' : 500
+                 'volume' : 100,
+                 'enable' : False
               },
               'topsis' : {
                   'net' : 0.3,
@@ -116,8 +117,7 @@ class Config(object):
                   'b' : 0.75,
                   'c' : {'s' : 0.6, 'm' : 1, 'b' : 1.5}
               },
-              'strategy' : ['time','minR','xspeed'],
-              'trade' : False
+              'strategy' : ['time','minR','xspeed']
           }
 
       def get_ignore(self):

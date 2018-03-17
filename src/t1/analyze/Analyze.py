@@ -18,7 +18,7 @@ class Analyze(object):
     
       def __init__(self,thshy,thsgn):
           self.__config = Config()
-          if self.__config.get_t1()['trade']:
+          if self.__config.get_t1()['trade']['enable']:
              self.__trade = Trade()
           self.__engine = create_engine(self.__config.get_DBurl())
           self.__hygnData = self.initHYGN(thshy,thsgn)
@@ -88,7 +88,7 @@ class Analyze(object):
       def outputRes(self,df_final):
           trade = self.__config.get_t1()['trade']
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
-          if self.__config.get_t1()['trade']:
+          if self.__config.get_t1()['trade']['enable']:
              self.__trade.buy(df_final['code'],trade['volume'],float(price))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
           MyLog.info(info)
