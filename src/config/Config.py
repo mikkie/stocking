@@ -56,7 +56,7 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'volume' : 100,
-                 'enable' : False
+                 'enable' : True
               },
               'topsis' : {
                   'net' : 0.3,
