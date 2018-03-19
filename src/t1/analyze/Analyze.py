@@ -18,6 +18,7 @@ class Analyze(object):
     
       def __init__(self,thshy,thsgn):
           self.__config = Config()
+          self.__buyedCount = 0
           if self.__config.get_t1()['trade']['enable']:
              self.__trade = Trade()
           self.__engine = create_engine(self.__config.get_DBurl())
@@ -87,9 +88,12 @@ class Analyze(object):
 
       def outputRes(self,df_final):
           trade = self.__config.get_t1()['trade']
+          if self.__buyedCount >= trade['max_buyed']:
+             return 
+          self.__buyedCount = self.__buyedCount + 1
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
-          if self.__config.get_t1()['trade']['enable']:
+          if trade['enable']:
              info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
           MyLog.info(info)
           print(info)

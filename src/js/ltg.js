@@ -18,7 +18,11 @@ var start = function(){
     }
 };
 var inter = setInterval(function(){
-    start();
+    try{
+        start();
+    }
+    catch(e){
+    }
     pages = document.getElementById('m-page').children;
     find = false;
     for(var i = 0; i< pages.length; i++){
@@ -29,7 +33,27 @@ var inter = setInterval(function(){
         } 
     }
     if(!find){
-       clearInterval(inter);  	
-       console.log(res);	
-    } 
+        clearInterval(inter);
+        console.log(cont);  
+        if(res.length <= 100){
+          console.log(res);
+        }
+        else{
+          var step = 100;
+          var begin = 0;
+          var end = begin + step;
+          if(end > res.length){
+             end = res.length;
+          }
+          while(begin < res.length){
+             var temp = res.slice(begin,end);
+             console.log(temp);  
+             begin = end;
+             end = begin + step; 
+             if(end > res.length){
+                end = res.length;
+             }
+          }   
+        }
+     } 
 },3000);
