@@ -1,7 +1,7 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-cont = ['医疗改革','医药电商']
+cont = ['智能音箱','宁德时代概念','无人零售']
 res = []
 f = open("../../data/gndata.txt",encoding="utf-8")              
 contName = f.readline().strip()               
@@ -11,4 +11,11 @@ while contName:
          res.append(line)
       contName = f.readline().strip() 
 f.close()
-print(','.join(res))
+result = ','.join(res)
+f = open("../extend/ltg.py",encoding="utf-8")
+origin = f.read()
+f.close()
+f = open("../extend/ltgres.py", 'w')
+origin = origin.replace('code_content',result)
+f.write(origin)
+f.close()
