@@ -2,9 +2,9 @@
 import jqdata
 
 res = []
-df_all = get_all_securities(types=['stock'], date='2018-03-19')
+df_all = get_all_securities(types=['stock'], date='2018-03-20')
 for index,row in df_all.iterrows():
-    df_stock = get_price(index, end_date='2018-03-19', frequency='daily', fields=['close'], skip_paused=True, fq='pre', count=3)
+    df_stock = get_price(index, end_date='2018-03-20', frequency='daily', fields=['close'], skip_paused=True, fq='pre', count=3)
     count = 0
     pre_close = None
     for index_s,row_s in df_stock.iterrows():

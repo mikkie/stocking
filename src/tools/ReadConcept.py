@@ -1,7 +1,7 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-cont = ['智能音箱','宁德时代概念','无人零售']
+cont = ['独角兽概念']
 res = []
 f = open("../../data/gndata.txt",encoding="utf-8")              
 contName = f.readline().strip()               
