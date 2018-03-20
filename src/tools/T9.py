@@ -15,7 +15,7 @@ from t1.analyze.Analyze import Analyze
 from t1.analyze.Concept import Concept
 from t1.analyze.NetMoney import NetMoney
 
-codes = ['000151']
+codes = ['600113','002570','600371','000416','603058']
 src_datas = {}
 datas = {}
 setting = Config()
