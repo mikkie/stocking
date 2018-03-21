@@ -19,15 +19,15 @@ class MockTrade(object):
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36'
           }
 
-          def mockTrade(code,price,amount):
-              postData = {
-                 'type' : 'cmd_wt_mairu',
-                 'mkcode' : 2,
-                 'gdzh' : 'A474614369',
-                 'stockcode' : code,
-                 'price' : price,
-                 'amount' : amount
-              }
-              return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=header)
+      def mockTrade(self,code,price,amount):
+          postData = {
+              'type' : 'cmd_wt_mairu',
+              'mkcode' : 2,
+              'gdzh' : 'A474614369',
+              'stockcode' : code,
+              'price' : price,
+              'amount' : amount
+          }
+          return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=header)
 
 
