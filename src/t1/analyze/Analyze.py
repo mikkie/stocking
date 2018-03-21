@@ -12,6 +12,7 @@ sys.path.append('../..')
 from config.Config import Config 
 from utils.Utils import Utils
 from t1.trade.trade import Trade
+from t1.trade.MockTrade import MockTrade
 import threading
 
 class Analyze(object):
@@ -21,6 +22,8 @@ class Analyze(object):
           self.__buyedCount = 0
           if self.__config.get_t1()['trade']['enable']:
              self.__trade = Trade()
+          if self.__config.get_t1()['trade']['enableMock']:
+             self.__mockTrade = MockTrade()    
           self.__engine = create_engine(self.__config.get_DBurl())
           self.__hygnData = self.initHYGN(thshy,thsgn)
 
@@ -97,6 +100,8 @@ class Analyze(object):
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
           if trade['enable']:
              info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
+          if trade['enableMock']:
+             self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
           MyLog.info(info)
           print(info)
 

@@ -57,6 +57,7 @@ class Config(object):
                  'addPrice' : 0.02,
                  'volume' : 100,
                  'enable' : False,
+                 'enableMock' : True,
                  'max_buyed' : 2,
                  'balance' : 3000
               },
