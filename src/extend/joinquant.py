@@ -1,4 +1,4 @@
-# 导入函数库
+# 还未启动的
 import jqdata
 import numpy as np
 import talib as ta
@@ -6,7 +6,12 @@ import talib as ta
 res = []
 df_all = get_all_securities(types=['stock'], date='2018-03-20')
 for index,row in df_all.iterrows():
-    df_stock = get_price(index, end_date='2018-03-20', frequency='daily', fields=['close'], skip_paused=True, fq='pre', count=30)
+    df_stock = get_price(index, end_date='2018-03-20', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
+    high_row = df_stock.loc[df_stock['high'].idxmax()]
+    high = high_row.get('high')
+    low_row = df_stock.loc[df_stock['low'].idxmin()]
+    low = low_row.get('low')
+    lastClose = df_stock.iloc[-1].get('close')
     close = df_stock['close'].values
     df_stock['ma5'] = ta.SMA(close,timeperiod=5)
     df_stock['ma10'] = ta.SMA(close,timeperiod=10)
@@ -31,6 +36,8 @@ for index,row in df_all.iterrows():
               count_ma5 = count_ma5 + 1      
         pre_close = row_s['close']
     if count_close < 10 or count_ma5 < 10:
+       flag = False 
+    if (lastClose - low) / (high - low) > 0.4:
        flag = False 
     if flag:
        index = index.replace('.XSHE','').replace('.XSHG','') 
