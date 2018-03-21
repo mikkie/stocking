@@ -33,5 +33,6 @@ for index,row in df_all.iterrows():
     if count_close < 10 or count_ma5 < 10:
        flag = False 
     if flag:
+       index = index.replace('.XSHE','').replace('.XSHG','') 
        res.append(index)
 print(res)
