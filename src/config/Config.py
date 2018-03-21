@@ -57,7 +57,7 @@ class Config(object):
                  'addPrice' : 0.02,
                  'volume' : 100,
                  'enable' : False,
-                 'max_buyed' : 1,
+                 'max_buyed' : 2,
                  'balance' : 3000
               },
               'topsis' : {

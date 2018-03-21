@@ -1,0 +1,16 @@
+save [300663] data error 
+
+`live_300663`
+
+save [603477] data error 
+
+(_mysql_exceptions.OperationalError) (1051, "Unknown table 'stocking.live_603477'") [SQL: '\nDROP TABLE live_603477']
+
+ 
+
+(_mysql_exceptions.OperationalError) (1051, "Unknown table 'stocking.live_002046'") [SQL: '\nDROP TABLE live_002046']
+
+save [000032] data error 
+
+(_mysql_exceptions.OperationalError) (1051, "Unknown table 'stocking.live_000032'") [SQL: '\nDROP TABLE live_000032']
+
