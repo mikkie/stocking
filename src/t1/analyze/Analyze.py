@@ -90,6 +90,8 @@ class Analyze(object):
           trade = self.__config.get_t1()['trade']
           if self.__buyedCount >= trade['max_buyed']:
              return 
+          if (float(df_final['price']) + trade['addPrice']) * trade['volume'] > trade['balance']:
+             return    
           self.__buyedCount = self.__buyedCount + 1
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
