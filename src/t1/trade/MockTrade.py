@@ -28,6 +28,6 @@ class MockTrade(object):
               'price' : price,
               'amount' : amount
           }
-          return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=header)
+          return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
 
 

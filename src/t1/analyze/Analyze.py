@@ -101,7 +101,7 @@ class Analyze(object):
           if trade['enable']:
              info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
           if trade['enableMock']:
-             self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
+             info = info + str(self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume']))
           MyLog.info(info)
           print(info)
 
