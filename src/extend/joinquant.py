@@ -15,7 +15,7 @@ for index,row in df_all.iterrows():
     close = df_stock['close'].values
     df_stock['ma5'] = ta.SMA(close,timeperiod=5)
     df_stock['ma10'] = ta.SMA(close,timeperiod=10)
-    df_stock = df_stock[-16:]
+    df_stock = df_stock[-15:]
     pre_close = None
     flag = True
     count_close = 0
