@@ -48,10 +48,10 @@ class MockTrade(object):
                  print('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
                  return ''  
 
-# trade = MockTrade()
-# res = trade.relogin()
-# print(res)
-# res = trade.mockTrade('300231',10.00,100)
-# print(res)
+trade = MockTrade()
+res = trade.relogin()
+print(res)
+res = trade.mockTrade('300231',10.00,100)
+print(res)
 
 
