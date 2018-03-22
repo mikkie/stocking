@@ -20,6 +20,14 @@ class MockTrade(object):
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
+      def relogin(self):
+          try:   
+             response = requests.get('http://mncg.10jqka.com.cn/cgiwt/login/doths/?type=auto&uname=48039195&password=',headers=self.__header)
+             return response.text 
+          except Exception as e:
+                 print('模拟登录失败 e = %s' % e)
+                 return ''    
+
       def mockTrade(self,code,price,amount):
           self.__header['Cookie'] = self.__header['Cookie'].replace('timestamp',str(time.time()))
           postData = {
@@ -34,13 +42,16 @@ class MockTrade(object):
              postData['mkcode'] = 2
              postData['gdzh'] = 'A474614369'
           try:   
-             return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
+             response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
+             return response.text
           except Exception as e:
                  print('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
                  return ''  
 
-# trade = MockTrade()
-# res= trade.mockTrade('300231',10.00,100)
-# print(res)
+trade = MockTrade()
+res = trade.relogin()
+print(res)
+res = trade.mockTrade('300231',10.00,100)
+print(res)
 
 

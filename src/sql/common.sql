@@ -1,1 +1,1 @@
-delete from today_all where changepercent >= 9.3 and name like 'ST%' or name like '*ST%' or open = 0 or code in (select code from xsg) or trade > 30 or nmc > 1000000;
+delete from today_all where changepercent >= 9.93 and name like 'ST%' or name like '*ST%' or open = 0 or code in (select code from xsg) or trade > 30 or nmc > 1000000;

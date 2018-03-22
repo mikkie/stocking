@@ -12,6 +12,7 @@ from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
 from t1.analyze.Concept import Concept
 from t1.analyze.NetMoney import NetMoney
+from t1.trade.MockTrade import MockTrade
 from t1.MyLog import MyLog
 from utils.Utils import Utils
 from sqlalchemy import create_engine
@@ -21,6 +22,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
 setting = Config()
+mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
 thshy = pd.read_sql_table('thshy', con=engine)
 thsgn = pd.read_sql_table('concept', con=engine)
@@ -95,7 +97,7 @@ if __name__ == '__main__':
       'hygn' : concept.getCurrentTopHYandConcept(),
       'netMoney' : netMoney.getNetMoneyRatio()
    }
-
+   mockTrade.relogin() 
    for code in setting.get_ignore():
        if code in codeLists:
           codeLists.remove(code)  
@@ -129,6 +131,9 @@ if __name__ == '__main__':
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
        now = dt.datetime.now()
+       if (now - interDataHolder['currentTime']).seconds > 120:
+          interDataHolder['currentTime'] = now 
+          mockTrade.relogin() 
        if (now - interDataHolder['currentTime']).seconds > 30:
           interDataHolder['currentTime'] = now
           hygn = concept.getCurrentTopHYandConcept()
