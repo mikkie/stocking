@@ -9,25 +9,38 @@ class MockTrade(object):
           self.__header = {
               'Accept':'application/json, text/javascript, */*; q=0.01',
               'Accept-Encoding':'gzip, deflate',
-              'Accept-Language':'zh-CN,zh;q=0.8',
+              'Accept-Language':'en-US,en;q=0.9',
               'Connection':'keep-alive',
               'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjEyNjYyNTA6OjoxNTA2MDQ4OTYwOjYwNDgwMDowOjEwMzEwYzQzYjg3NzE1NjMyZmQ2ZDEwZWZhZmEwNzZiZjpkZWZhdWx0XzI6MQ%3D%3D; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=b0370b40bcc8c0b4f1884c85eb82e1a8; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1521105165,1521633255; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1521633255; v=AoRBWcHygsVZvDYJCfg3AA9EVQlynagHasE8S54lEM8SyS49xq14l7rRDNrt; PHPSESSID=o3dcoqhq0udg20m679n7nk6140; isSaveAccount=0',
-              'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36'
+              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; spversion=20130314; historystock=603778%7C*%7C000909%7C*%7C600728%7C*%7C002208%7C*%7C000727; __utma=156575163.844587348.1519633850.1521507252.1521594217.28; __utmz=156575163.1521594217.28.28.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; v=ApchY-3BgV_iWgXTBVNq8333JgDl3Gk-RbXv6OnEthLMTbl28az7jlWAfMP6; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1521266179,1521424286,1521507263,1521678286; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjE2NzgzOTU6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MWY2YTk1NjY1ZTBjZmYyMzEzYTUzMDNlMTFmYTg5OTIxOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=fd95dee8a2790ede69b7034ca25ee271; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1521678396; PHPSESSID=689o6o54cntio5i7uk2bik7db4; isSaveAccount=0',
+              'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
       def mockTrade(self,code,price,amount):
           postData = {
               'type' : 'cmd_wt_mairu',
-              'mkcode' : 2,
-              'gdzh' : 'A474614369',
+              'mkcode' : 1,
+              'gdzh' : '0098894246',
               'stockcode' : code,
               'price' : price,
               'amount' : amount
           }
-          return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
+          if code.startswith('6'):
+             postData['mkcode'] = 2
+             postData['gdzh'] = 'A474614369'
+          try:   
+             return requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
+          except Exception as e:
+                 print('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
+                 return ''  
+
+# trade = MockTrade()
+# res= trade.mockTrade('603286',26.17,100)
+# res= trade.mockTrade('000032',10.75,100)
+# res= trade.mockTrade('300022',5.07,100)
+# print(res)
 
 
