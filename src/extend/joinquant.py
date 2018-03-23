@@ -42,10 +42,8 @@ for index,row in df_all.iterrows():
        flag = False 
     if (lastClose - low) / (high - low) > 0.4:
        flag = False 
-    if count_high_5 > 3:
+    if count_high_5 > 3 or count_10 > 2:
        flag = False
-    if count_10 > 2:
-       flag = False        
     if flag:
        index = index.replace('.XSHE','').replace('.XSHG','') 
        res.append(index)
