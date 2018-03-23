@@ -20,13 +20,16 @@ for index,row in df_all.iterrows():
     flag = True
     count_close = 0
     count_ma5 = 0
+    count_high_5 = 0
+    count_10 = 0
     for index_s,row_s in df_stock.iterrows():
         if pre_close is None:
            pre_close = row_s['close']
            continue
         if (row_s['close'] - pre_close) / pre_close * 100 > 5 or (row_s['close'] - pre_close) / pre_close * 100 < -5:
-           flag = False 
-           break
+           count_high_5 = count_high_5 + 1
+        if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
+           count_10 = count_10 + 1
         ma5 = row_s['ma5']
         ma10 = row_s['ma10']
         if not np.isnan(ma5) and not np.isnan(ma10):
@@ -39,6 +42,10 @@ for index,row in df_all.iterrows():
        flag = False 
     if (lastClose - low) / (high - low) > 0.4:
        flag = False 
+    if count_high_5 > 3:
+       flag = False
+    if count_10 > 2:
+       flag = False        
     if flag:
        index = index.replace('.XSHE','').replace('.XSHG','') 
        res.append(index)

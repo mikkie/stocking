@@ -16,7 +16,7 @@ class MockTrade(object):
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; spversion=20130314; historystock=603778%7C*%7C000909%7C*%7C600728%7C*%7C002208%7C*%7C000727; __utma=156575163.844587348.1519633850.1521507252.1521594217.28; __utmz=156575163.1521594217.28.28.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; v=ApchY-3BgV_iWgXTBVNq8333JgDl3Gk-RbXv6OnEthLMTbl28az7jlWAfMP6; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1521266179,1521424286,1521507263,1521678286; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjE2NzgzOTU6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MWY2YTk1NjY1ZTBjZmYyMzEzYTUzMDNlMTFmYTg5OTIxOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=fd95dee8a2790ede69b7034ca25ee271; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp; PHPSESSID=689o6o54cntio5i7uk2bik7db4; isSaveAccount=0',
+              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; spversion=20130314; historystock=603778%7C*%7C000909%7C*%7C600728%7C*%7C002208%7C*%7C000727; __utma=156575163.844587348.1519633850.1521507252.1521594217.28; __utmz=156575163.1521594217.28.28.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; v=ApchY-3BgV_iWgXTBVNq8333JgDl3Gk-RbXv6OnEthLMTbl28az7jlWAfMP6; isSaveAccount=0; PHPSESSID=qgsv6dknsce6l04sgadmush812; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1521678286,1521764143,1521766036,1521766051; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjE3NjYwNzM6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTRlZmZlMjdlZWY0NzBkNzU3NGE2NmRmOWI5ODI3OTdhOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=20c7c80976af105d0afbf3dbfb338400; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
@@ -48,10 +48,10 @@ class MockTrade(object):
                  print('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
                  return ''  
 
-trade = MockTrade()
-res = trade.relogin()
-print(res)
-res = trade.mockTrade('300231',10.00,100)
-print(res)
+# trade = MockTrade()
+# res = trade.relogin()
+# print(res)
+# res = trade.mockTrade('300231',10.00,100)
+# print(res)
 
 
