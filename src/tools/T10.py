@@ -131,11 +131,9 @@ if __name__ == '__main__':
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
        now = dt.datetime.now()
-       if (now - interDataHolder['currentTime']).seconds > 120:
-          interDataHolder['currentTime'] = now 
-          mockTrade.relogin() 
-       if (now - interDataHolder['currentTime']).seconds > 30:
+       if (now - interDataHolder['currentTime']).seconds > 60:
           interDataHolder['currentTime'] = now
+          mockTrade.relogin() 
           hygn = concept.getCurrentTopHYandConcept()
           if hygn is not None:
              interDataHolder['hygn'] = hygn 
