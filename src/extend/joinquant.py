@@ -48,3 +48,5 @@ for index,row in df_all.iterrows():
        index = index.replace('.XSHE','').replace('.XSHG','') 
        res.append(index)
 print(res)
+
+
