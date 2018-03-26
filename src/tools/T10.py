@@ -24,11 +24,11 @@ import datetime as dt
 setting = Config()
 mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
-thshy = pd.read_sql_table('thshy', con=engine)
-thsgn = pd.read_sql_table('concept', con=engine)
-analyze = Analyze(thshy,thsgn)
-concept = Concept()
-netMoney = NetMoney()
+# thshy = pd.read_sql_table('thshy', con=engine)
+# thsgn = pd.read_sql_table('concept', con=engine)
+analyze = Analyze(None,None)
+# concept = Concept()
+# netMoney = NetMoney()
 
 def run(queue):
         print('child process %s is running' % os.getpid())
@@ -38,8 +38,8 @@ def run(queue):
             while data is not None and data['df'] is not None and len(data['df']) > 0:
                   zs = data['zs']
                   df = data['df']
-                  hygn = data['hygn']
-                  netMoney = data['netMoney']
+                  hygn = None
+                  netMoney = None
                   s = int(round(time.time() * 1000))
                   if dh is None:
                      codeList = df['code'].tolist()
@@ -94,8 +94,8 @@ if __name__ == '__main__':
    queueMaps = {}
    interDataHolder = {
       'currentTime' : dt.datetime.now(),
-      'hygn' : concept.getCurrentTopHYandConcept(),
-      'netMoney' : netMoney.getNetMoneyRatio()
+      'hygn' : None,
+      'netMoney' : None
    }
    mockTrade.relogin() 
    for code in setting.get_ignore():
@@ -134,12 +134,12 @@ if __name__ == '__main__':
        if (now - interDataHolder['currentTime']).seconds > 60:
           interDataHolder['currentTime'] = now
           mockTrade.relogin() 
-          hygn = concept.getCurrentTopHYandConcept()
-          if hygn is not None:
-             interDataHolder['hygn'] = hygn 
-          net = netMoney.getNetMoneyRatio()
-          if netMoney is not None:
-             interDataHolder['netMoney'] = net
+        #   hygn = concept.getCurrentTopHYandConcept()
+        #   if hygn is not None:
+            #  interDataHolder['hygn'] = hygn 
+        #   net = netMoney.getNetMoneyRatio()
+        #   if netMoney is not None:
+            #  interDataHolder['netMoney'] = net
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
            zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
