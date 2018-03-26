@@ -32,7 +32,7 @@ for index,row in df_all.iterrows():
         pre_close = row_s['close']
     if count_close < 10 or count_ma5 < 10:
        flag = False
-    if count_10 < 2:
+    if count_10 < 2 or count_10 > 3:
        flag = False
     if flag == False:
        continue    
