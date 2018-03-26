@@ -90,8 +90,6 @@ class Analyze(object):
 
 
       def outputRes(self,df_final):
-          now = dt.datetime.now()
-          last_time = dt.datetime.strptime(df_final['date'] + ' ' + df_final['time'], '%Y-%m-%d %H:%M:%S')
           trade = self.__config.get_t1()['trade']
           if self.__buyedCount >= trade['max_buyed']:
              return 
@@ -100,11 +98,10 @@ class Analyze(object):
           self.__buyedCount = self.__buyedCount + 1
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
-          if (now - last_time).seconds < 4:
-             if trade['enable']:
-                info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
-             if trade['enableMock']:
-                info = info + str(self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume']))
+          if trade['enable']:
+             info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
+          if trade['enableMock']:
+             info = info + str(self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume']))
           MyLog.info(info)
           print(info)
 
