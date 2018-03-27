@@ -190,7 +190,7 @@ class Analyze(object):
              return False 
           self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(zs,stock,conf,hygn,netMoney)   
+          return self.isStockMatch(zs,stock,conf,hygn,netMoney,dh)   
 
 
     #   def isJHJJMatch(self,stock,dh):
@@ -394,7 +394,7 @@ class Analyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,zs,stock,conf,hygn,netMoney):
+      def isStockMatch(self,zs,stock,conf,hygn,netMoney,dh):
           if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
              return False   
           if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
@@ -412,7 +412,7 @@ class Analyze(object):
              return False  
           if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
              return False  
-          if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(stock):
+          if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
              return False 
           return self.isLastTwoMatch(stock)
 
@@ -430,10 +430,13 @@ class Analyze(object):
 
 
 
-      def isXSpeedMatch(self,stock):
+      def isXSpeedMatch(self,dh,stock):
           now_line = stock.get_Lastline() 
           ccp = self.getCurrentPercent(stock)
           ocp = self.getOpenPercent(stock)
+          if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
+             dh.add_buyed(stock.get_code(),False) 
+             return False 
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
@@ -441,6 +444,9 @@ class Analyze(object):
                 line = stock.get_data().iloc[i] 
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
+                if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
+                   dh.add_buyed(stock.get_code(),False) 
+                   return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    ratio_b = self.__config.get_t1()['x_speed']['b']['m']
                    if ocp <= 2:
