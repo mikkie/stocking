@@ -22,7 +22,7 @@ for codes in code_wrapper:
                res.append({'code' : code, 'p_change' : p_change})  
           
     for index,obj in enumerate(res):
-        if index < 5:
+        if index < 10:
            code = obj['code']
            code = code.replace('.XSHE','').replace('.XSHG','')
            if code not in res_codes:
