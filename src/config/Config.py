@@ -59,7 +59,7 @@ class Config(object):
                  'enable' : False,
                  'enableMock' : True,
                  'max_buyed' : 2,
-                 'balance' : 3000
+                 'balance' : 200000
               },
               'topsis' : {
                   'net' : 0.3,

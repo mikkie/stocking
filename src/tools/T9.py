@@ -14,8 +14,9 @@ from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
 from t1.analyze.Concept import Concept
 from t1.analyze.NetMoney import NetMoney
+from t1.trade.MockTrade import MockTrade
 
-codes = ['300696']
+codes = ['300356']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -25,6 +26,8 @@ dh = DataHolder(codes)
 # thsgn = pd.read_sql_table('concept', con=engine)
 # analyze = Analyze(thshy,thsgn)
 analyze = Analyze(None,None)
+mockTrade = MockTrade()
+mockTrade.relogin()
 # concept = Concept()
 # netMoney = NetMoney()
 # hygn = concept.getCurrentTopHYandConcept()
