@@ -58,7 +58,7 @@ class Config(object):
                  'volume' : 100,
                  'enable' : False,
                  'enableMock' : True,
-                 'max_buyed' : 2,
+                 'max_buyed' : 3,
                  'balance' : 200000
               },
               'topsis' : {
