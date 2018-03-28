@@ -22,7 +22,7 @@ class MockTrade(object):
 
       def relogin(self):
           try:   
-             response = requests.get('http://mncg.10jqka.com.cn/cgiwt/login/doths/?type=auto&uname=48039195&password=',headers=self.__header)
+             response = requests.get('http://mncg.10jqka.com.cn/cgiwt/login/doths/?type=auto&uname=49403315&password=',headers=self.__header)
              return response.text 
           except Exception as e:
                  print('模拟登录失败 e = %s' % e)
@@ -33,14 +33,14 @@ class MockTrade(object):
           postData = {
               'type' : 'cmd_wt_mairu',
               'mkcode' : 1,
-              'gdzh' : '0098894246',
+              'gdzh' : '00100258366',
               'stockcode' : code,
               'price' : price,
               'amount' : amount
           }
           if code.startswith('6'):
              postData['mkcode'] = 2
-             postData['gdzh'] = 'A474614369'
+             postData['gdzh'] = 'A475978489'
           try:   
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
              return response.text

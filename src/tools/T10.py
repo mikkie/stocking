@@ -62,27 +62,16 @@ if __name__ == '__main__':
    def init(forceUpdate):
        def cb(**kw):
            return ts.get_today_all()
-       df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
-    #    df_todayAll = df_todayAll[df_todayAll.apply(analyze.isOpenMatch2, axis=1)]
-    #    return df_todayAll['code'].tolist()
+       srcCodeLists = ['603712', '603386', '603336', '603286', '603099', '600853', '600689', '600685', '600653', '600634', '600570', '600456', '600386', '600360', '600335', '600303', '600215', '600131', '300726', '300719', '300713', '300711', '300707', '300698', '300696', '300688', '300687', '300684', '300682', '300672', '300667', '300645', '300634', '300631', '300624', '300606', '300598', '300593', '300579', '300576', '300560', '300555', '300552', '300546', '300507', '300494', '300487', '300469', '300462', '300427', '300424', '300404', '300390', '300384', '300383', '300356', '300345', '300339', '300322', '300265', '300253', '300252', '300249', '300205', '300156', '300150', '300123', '300107', '300093', '300078', '300036', '300034', '002898', '002881', '002864', '002806', '002654', '002642', '002621', '002569', '002510', '002461', '002417', '002405', '002368', '002365', '002361', '002351', '002346', '002339', '002323', '002208', '002164', '002017', '002012', '000997', '000925', '000851', '000820', '000301', '000066']
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        while strTime < '09:30:01':
              time.sleep(0.1)
              strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       step = setting.get_t1()['split_size']
-       start = 0
        codeList = []
-       length = len(df_todayAll)
-       while start < length:
-             end = start + step
-             if end >= length:
-                end = length 
-             df_temp = df_todayAll.iloc[start:end]
-             df = ts.get_realtime_quotes(df_temp['code'].tolist())
-             df = df[df.apply(analyze.isOpenMatch, axis=1)]
-             for code in df['code'].tolist():
-                 codeList.append(code)
-             start = end
+       df = ts.get_realtime_quotes(srcCodeLists)
+       df = df[df.apply(analyze.isOpenMatch, axis=1)]
+       for code in df['code'].tolist():
+           codeList.append(code)
        return codeList
 
    pool = mp.Pool(setting.get_t1()['process_num'])
