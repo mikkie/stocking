@@ -4,9 +4,9 @@ import numpy as np
 import talib as ta
 
 res = []
-df_all = get_all_securities(types=['stock'], date='2018-03-26')
+df_all = get_all_securities(types=['stock'], date='2018-03-28')
 for index,row in df_all.iterrows():
-    df_stock = get_price(index, end_date='2018-03-26', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
+    df_stock = get_price(index, end_date='2018-03-28', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
     high_row = df_stock.loc[df_stock['high'].idxmax()]
     high = high_row.get('high')
     low_row = df_stock.loc[df_stock['low'].idxmin()]
@@ -41,7 +41,7 @@ for index,row in df_all.iterrows():
        flag = False 
     if flag:
        res.append(index)
-xsg = get_locked_shares(stock_list=res, start_date='2018-03-26', forward_count=60)
+xsg = get_locked_shares(stock_list=res, start_date='2018-03-28', forward_count=60)
 xsg_codes = []
 for index,row in xsg.iterrows():
     xsg_codes.append(row['code'])

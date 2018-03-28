@@ -5,7 +5,7 @@ code_wrapper = [code_content]
 for codes in code_wrapper:
     res = []
     for code in codes:
-        df_stock = get_price(code, end_date='2018-03-26', frequency='daily', fields=['close'], skip_paused=True, fq='pre', count=11)
+        df_stock = get_price(code, end_date='2018-03-28', frequency='daily', fields=['close'], skip_paused=True, fq='pre', count=11)
         last = df_stock.iloc[-1]
         first = df_stock.iloc[0]
         p_change = (last['close'] - first['close']) / first['close'] * 100  
