@@ -55,7 +55,7 @@ class Config(object):
               },
               'trade' : {
                  'addPrice' : 0.02,
-                 'volume' : 500,
+                 'volume' : 100,
                  'enable' : False,
                  'enableMock' : True,
                  'max_buyed' : 2,

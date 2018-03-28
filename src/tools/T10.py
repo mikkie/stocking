@@ -10,8 +10,8 @@ sys.path.append('..')
 from config.Config import Config
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
-from t1.analyze.Concept import Concept
-from t1.analyze.NetMoney import NetMoney
+# from t1.analyze.Concept import Concept
+# from t1.analyze.NetMoney import NetMoney
 from t1.trade.MockTrade import MockTrade
 from t1.MyLog import MyLog
 from utils.Utils import Utils
