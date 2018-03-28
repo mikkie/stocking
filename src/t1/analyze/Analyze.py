@@ -401,8 +401,6 @@ class Analyze(object):
              return False
           if 'hygn' in self.__config.get_t1()['strategy'] and not self.isHygnMatch(stock,hygn):
              return False  
-          if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
-             return False
           if 'net' in self.__config.get_t1()['strategy'] and not self.isNetMatch(stock,conf):
              return False      
           if 'speed' in self.__config.get_t1()['strategy'] and stock.get_minR() != 'R5':
@@ -413,7 +411,9 @@ class Analyze(object):
           if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
              return False  
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
-             return False 
+             return False
+          if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
+             return False   
           return self.isLastTwoMatch(stock)
 
 

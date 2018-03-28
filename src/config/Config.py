@@ -57,7 +57,7 @@ class Config(object):
                  'addPrice' : 0.02,
                  'volume' : 100,
                  'enable' : False,
-                 'enableMock' : True,
+                 'enableMock' : False,
                  'max_buyed' : 3,
                  'balance' : 200000
               },
@@ -117,9 +117,9 @@ class Config(object):
               },
               'x_speed' : {
                   'a' : 0.7,
-                  'b' : {'s' : 0.65, 'm' : 0.7, 'b' : 0.75},
-                  'c' : {'s' : 0.6, 'm' : 0.8, 'b' : 1},
-                  'lowerThanBefore' : 1.5
+                  'b' : {'s' : 0.75, 'm' : 0.75, 'b' : 0.75},
+                  'c' : {'s' : 0.6, 'm' : 0.6, 'b' : 0.6},
+                  'lowerThanBefore' : 1.3
               },
               'strategy' : ['time','minR','xspeed']
           }
