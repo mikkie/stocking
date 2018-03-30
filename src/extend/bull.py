@@ -4,9 +4,9 @@ import numpy as np
 import talib as ta
 
 res = []
-df_all = get_all_securities(types=['stock'], date='2018-03-29')
+df_all = get_all_securities(types=['stock'], date='2018-03-30')
 for index,row in df_all.iterrows():
-    df_stock = get_price(index, end_date='2018-03-29', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
+    df_stock = get_price(index, end_date='2018-03-30', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
     high_row = df_stock.loc[df_stock['high'].idxmax()]
     high = high_row.get('high')
     low_row = df_stock.loc[df_stock['low'].idxmin()]
