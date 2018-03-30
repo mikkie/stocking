@@ -3,45 +3,8 @@ import jqdata
 import numpy as np
 import talib as ta
 
-res = []
-df_all = get_all_securities(types=['stock'], date='2018-03-28')
-for index,row in df_all.iterrows():
-    df_stock = get_price(index, end_date='2018-03-28', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
-    high_row = df_stock.loc[df_stock['high'].idxmax()]
-    high = high_row.get('high')
-    low_row = df_stock.loc[df_stock['low'].idxmin()]
-    low = low_row.get('low')
-    lastClose = df_stock.iloc[-1].get('close')
-    close = df_stock['close'].values
-    df_stock['ma5'] = ta.SMA(close,timeperiod=5)
-    df_stock['ma10'] = ta.SMA(close,timeperiod=10)
-    df_stock = df_stock[-15:]
-    pre_close = None
-    flag = True
-    count_close = 0
-    count_ma5 = 0
-    for index_s,row_s in df_stock.iterrows():
-        if pre_close is None:
-           pre_close = row_s['close']
-           continue
-        if (row_s['close'] - pre_close) / pre_close * 100 > 5 or (row_s['close'] - pre_close) / pre_close * 100 < -5:
-           flag = False 
-           break
-        ma5 = row_s['ma5']
-        ma10 = row_s['ma10']
-        if not np.isnan(ma5) and not np.isnan(ma10):
-           if row_s['close'] > ma5:
-              count_close = count_close + 1
-           if ma5 > ma10:
-              count_ma5 = count_ma5 + 1      
-        pre_close = row_s['close']
-    if count_close < 10 or count_ma5 < 10:
-       flag = False 
-    if (lastClose - low) / (high - low) > 0.4:
-       flag = False 
-    if flag:
-       res.append(index)
-xsg = get_locked_shares(stock_list=res, start_date='2018-03-28', forward_count=60)
+res = ['000032', '000066', '000519', '000532', '000565', '000636', '000673', '000695', '000806', '000909', '000925', '000935', '000948', '000971', '000977', '000979', '000985', '000993', '002017', '002046', '002088', '002184', '002246', '002264', '002265', '002268', '002339', '002351', '002361', '002371', '002409', '002476', '002510', '002566', '002568', '002581', '002587', '002651', '002666', '002738', '002771', '002777', '002782', '002786', '002822', '002824', '002830', '002847', '002858', '002866', '002907', '002910', '002919', '002921', '300020', '300034', '300051', '300073', '300093', '300140', '300231', '300240', '300253', '300265', '300274', '300300', '300322', '300331', '300339', '300349', '300356', '300398', '300461', '300469', '300474', '300477', '300479', '300485', '300494', '300507', '300509', '300519', '300523', '300556', '300560', '300562', '300576', '300579', '300581', '300609', '300629', '300631', '300642', '300647', '300655', '300661', '300672', '300680', '300682', '300685', '300686', '300687', '300696', '300702', '300705', '300711', '300716', '300717', '300719', '300731', '300733', '300738', '300740', '600095', '600099', '600113', '600119', '600131', '600135', '600139', '600184', '600187', '600192', '600213', '600268', '600272', '600303', '600311', '600343', '600371', '600386', '600405', '600422', '600435', '600462', '600523', '600571', '600594', '600635', '600716', '600721', '600800', '600833', '600838', '600865', '600962', '600975', '600981', '601069', '601086', '601116', '603060', '603069', '603126', '603336', '603386', '603533', '603676', '603690', '603738', '603778', '603970', '603986']
+xsg = get_locked_shares(stock_list=res, start_date='2018-03-29', forward_count=60)
 xsg_codes = []
 for index,row in xsg.iterrows():
     xsg_codes.append(row['code'])
