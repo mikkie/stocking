@@ -35,8 +35,8 @@ for index,row in df_all.iterrows():
            if ma5 > ma10:
               count_ma5 = count_ma5 + 1      
         pre_close = row_s['close']
-    if count_close < 8 or count_ma5 < 8:
-       flag = False
+    # if count_close < 8 or count_ma5 < 8:
+    #    flag = False
     if count_10 < 1 or count_10 > 4:
        flag = False
     # if (lastClose - low) / (high - low) > 0.7:
@@ -49,7 +49,7 @@ for index,row in df_all.iterrows():
         if pre_close is None:
            pre_close = row_s['close']
            continue
-        if (row_s['close'] - pre_close) / pre_close * 100 >= 3:
+        if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
            flag = False
            break
         pre_close = row_s['close']
