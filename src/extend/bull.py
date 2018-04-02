@@ -4,9 +4,9 @@ import numpy as np
 import talib as ta
 
 res = []
-df_all = get_all_securities(types=['stock'], date='2018-03-30')
+df_all = get_all_securities(types=['stock'], date='2018-04-02')
 for index,row in df_all.iterrows():
-    df_stock = get_price(index, end_date='2018-03-30', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
+    df_stock = get_price(index, end_date='2018-04-02', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
     high_row = df_stock.loc[df_stock['high'].idxmax()]
     high = high_row.get('high')
     low_row = df_stock.loc[df_stock['low'].idxmin()]
@@ -49,7 +49,7 @@ for index,row in df_all.iterrows():
         if pre_close is None:
            pre_close = row_s['close']
            continue
-        if (row_s['close'] - pre_close) / pre_close * 100 >= 5:
+        if (row_s['close'] - pre_close) / pre_close * 100 >= 7:
            flag = False
            break
         pre_close = row_s['close']
