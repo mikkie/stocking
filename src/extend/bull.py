@@ -49,7 +49,7 @@ for index,row in df_all.iterrows():
         if pre_close is None:
            pre_close = row_s['close']
            continue
-        if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
+        if (row_s['close'] - pre_close) / pre_close * 100 >= 5:
            flag = False
            break
         pre_close = row_s['close']
