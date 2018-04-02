@@ -16,7 +16,7 @@ from t1.analyze.Concept import Concept
 from t1.analyze.NetMoney import NetMoney
 from t1.trade.MockTrade import MockTrade
 
-codes = ['002507','002903','300404','603969']
+codes = ['300655','300490']
 src_datas = {}
 datas = {}
 setting = Config()
