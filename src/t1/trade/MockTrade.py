@@ -16,7 +16,7 @@ class MockTrade(object):
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'v=AoRBWcHygsVZvDYJCfg3AA9EVQlynagHasE8S54lEM8SyS49xq14l7rRDNrt; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; PHPSESSID=h1fjcpenlu7erll0bed9dtmqe2; user=MDptb180MzE1MTk2NzQ6Ok5vbmU6NTAwOjQ0MTUxOTY3NDo3LDExMTExMTExMTExLDQwOzQ0LDExLDQwOzYsMSw0MDs1LDEsNDA6MjQ6Ojo0MzE1MTk2NzQ6MTUyMjM2NDY1Nzo6OjE1MTUwNjU0MDA6ODY0MDA6MDoxN2EyMGYxNGRkMTNjMzFhMTEyNTBlM2E4ZWZkMmY1N2M6ZGVmYXVsdF8yOjE%3D; userid=431519674; u_name=mo_431519674; escapename=mo_431519674; ticket=4d43a88e10d666c75cefda3533663cdc; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1522191570,1522194475,1522279653,1522364811; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp; isSaveAccount=0',
+              'Cookie':'historystock=002076; spversion=20130314; v=Au4rHwcgOBiZ9Ux8JgV93hGWP0-077LKxLBmzRi2WvGs-4T7gH8C-ZRDttjr; user=MDptb180MzE1MTk2NzQ6Ok5vbmU6NTAwOjQ0MTUxOTY3NDo3LDExMTExMTExMTExLDQwOzQ0LDExLDQwOzYsMSw0MDs1LDEsNDA6MjQ6Ojo0MzE1MTk2NzQ6MTUyMjcwOTg2Mjo6OjE1MTUwNjU0MDA6ODY0MDA6MDoxZWUxNDJhMDI1NzU2MGZlNzEzOThhYTQ4Y2IwZDlhMWM6ZGVmYXVsdF8yOjE%3D; userid=431519674; u_name=mo_431519674; escapename=mo_431519674; ticket=10315524db445cbb849c63224061a8aa; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1522364811,1522453671,1522622743,1522709835; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp; PHPSESSID=3p8qkjatdc60qe36oumelran34; isSaveAccount=0',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
