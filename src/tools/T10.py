@@ -92,6 +92,9 @@ if __name__ == '__main__':
           codeLists.remove(code)  
    length = len(codeLists)
    print('calc stocks size %d' % length) 
+   if length == 0:
+      print('no available stocks to calc')
+      sys.exit()
    step = setting.get_t1()['split_size']
    x = length // setting.get_t1()['process_num']
    y = length % setting.get_t1()['process_num']
