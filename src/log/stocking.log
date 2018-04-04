@@ -1,0 +1,8 @@
+save [002012] data error 
+
+`live_002012`
+
+ 
+
+(_mysql_exceptions.OperationalError) (1051, "Unknown table 'stocking.live_300722'") [SQL: '\nDROP TABLE live_300722']
+
