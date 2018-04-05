@@ -66,7 +66,7 @@ class SellAnalyze(object):
 
       def calc(self,stock,dh):
           if stock.get_ls() is None:
-             self.initLS()
+             self.initLS(stock,dh)
           if stock.get_ls() is None:
              return False
           if self.getCurrentPercent(stock) < stock.get_ls():
@@ -83,4 +83,10 @@ class SellAnalyze(object):
       def sell(self,stock):
           last_line = stock.get_Lastline()
           price = float(str('%.2f' % (float(last_line['price']) - self.__config.get_t1()['trade']['minusPrice'])))
-          return self.__mockTrade.sell(stock.get_code(),price)                    
+          info = '[%s] 在 %s 以 %s 卖出 [%s]%s 全部股票' % (Utils.getCurrentTime(),str(last_line['date']) + ' ' + str(last_line['time']), price, last_line['code'], last_line['name'])
+          if self.__config.get_t1()['trade']['enable']:
+             return self.__trade.sell(stock.get_code(),price)
+          elif self.__config.get_t1()['trade']['enableMock']:
+             return self.__mockTrade.sell(stock.get_code(),price) 
+          else:
+             return True   
