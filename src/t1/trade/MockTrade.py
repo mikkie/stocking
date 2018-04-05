@@ -99,7 +99,7 @@ class MockTrade(object):
           stockList = j['result']['list']
           if len(stockList) > 0:
              for stock in stockList:
-                 if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单':
+                 if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '卖出':
                     isSelled = False 
                     ct = dt.datetime.strptime(stock['d_2139'] + ' ' + stock['d_2140'], '%Y%m%d %H:%M:%S')
                     if (dt.datetime.now() - ct).seconds > 30: 
