@@ -93,26 +93,30 @@ class MockTrade(object):
 
 
       def sell(self,code,price):
-          isSelled = True
-          jsonData = self.queryDeligated(code)
-          j = json.loads(jsonData)
-          stockList = j['result']['list']
-          if len(stockList) > 0:
-             for stock in stockList:
-                 if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '卖出':
-                    isSelled = False 
-                    ct = dt.datetime.strptime(stock['d_2139'] + ' ' + stock['d_2140'], '%Y%m%d %H:%M:%S')
-                    if (dt.datetime.now() - ct).seconds > 30: 
-                       self.cancelDeligated(stock['d_2135'],stock['d_2139'])
-          jsonData = self.getHoldStocks()   
-          j = json.loads(jsonData)
-          stockList = j['result']['list']
-          if len(stockList) > 0:
-             for stock in stockList:
-                 if stock['d_2102'] == code and int(stock['d_2121']) > 0:
-                    isSelled = False 
-                    self.mockTrade(code,price,int(stock['d_2121']),tradeType='cmd_wt_maichu') 
-          return isSelled
+          try:
+             isSelled = True
+             jsonData = self.queryDeligated(code)
+             j = json.loads(jsonData)
+             stockList = j['result']['list']
+             if len(stockList) > 0:
+                for stock in stockList:
+                    if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '卖出':
+                        isSelled = False 
+                        ct = dt.datetime.strptime(stock['d_2139'] + ' ' + stock['d_2140'], '%Y%m%d %H:%M:%S')
+                        if (dt.datetime.now() - ct).seconds > 30: 
+                           self.cancelDeligated(stock['d_2135'],stock['d_2139'])
+             jsonData = self.getHoldStocks()   
+             j = json.loads(jsonData)
+             stockList = j['result']['list']
+             if len(stockList) > 0:
+                for stock in stockList:
+                    if stock['d_2102'] == code and int(stock['d_2121']) > 0:
+                       isSelled = False 
+                       self.mockTrade(code,price,int(stock['d_2121']),tradeType='cmd_wt_maichu') 
+             return isSelled
+          except Exception as e:
+                 print('sell [%s] error' % code)
+                 return False  
                      
                          
 
@@ -120,8 +124,8 @@ trade = MockTrade()
 res = trade.relogin()
 # print(trade.sell('002012',7.68))
 # print(trade.sell('300191',23.20))
-# print(trade.sell('300722',46.99))
-# print(trade.sell('603080',37.04))
+print(trade.sell('300722',46.99))
+print(trade.sell('603080',37.04))
 # res = trade.mockTrade('300231',10.00,100)
 # print(res)
 
