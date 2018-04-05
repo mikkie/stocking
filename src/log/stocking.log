@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 error 
 Data (trigger: interval[0:00:02], next run at: 2018-03-30 10:47:37 CST)" raised an exception
 Traceback (most recent call last):
@@ -424,3 +425,13 @@ Traceback (most recent call last):
   File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\socket.py", line 586, in readinto
     return self._sock.recv_into(b)
 socket.timeout: timed out
+=======
+save [002012] data error 
+
+`live_002012`
+
+ 
+
+(_mysql_exceptions.OperationalError) (1051, "Unknown table 'stocking.live_300722'") [SQL: '\nDROP TABLE live_300722']
+
+>>>>>>> d6a01d16d4f8facd05cfd1a2b65f90ab09af9e53

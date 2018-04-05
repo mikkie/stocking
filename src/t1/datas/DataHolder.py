@@ -20,6 +20,7 @@ class DataHolder(object):
       def __init__(self,codes):  
           self.__data = {}
           self.__buyed = []
+          self.__selled = []
           self.__setting = Config()
           self.__tpe = ThreadPoolExecutor(5)
           self.__engine = create_engine(self.__setting.get_DBurl()) 
@@ -45,6 +46,14 @@ class DataHolder(object):
 
       def get_buyed(self):
           return self.__buyed
+
+      def get_selled(self):
+          return self.__selled 
+
+      def add_selled(self,code,save=False):
+          self.__buyed.append(code)
+          if save:
+             self.__tpe.submit(self.saveData,self.__data[code].get_data())   
 
       def add_buyed(self,code,save=False):
           self.__buyed.append(code)

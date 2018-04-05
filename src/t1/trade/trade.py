@@ -2,6 +2,7 @@
 __author__ = 'aqua'
 
 import easytrader
+import json
 
 class Trade(object):
 
@@ -16,4 +17,11 @@ class Trade(object):
           except Exception as e:
                  print('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
                  return ''
+
+
+      def sell(self,code,price):
+          isSelled = True
+          jsonData = self.__user.today_entrusts
+          j = json.loads(jsonData)
+                 
           
