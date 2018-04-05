@@ -55,6 +55,7 @@ class Config(object):
               },
               'trade' : {
                  'addPrice' : 0.02,
+                 'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
                  'enableMock' : True,
@@ -121,7 +122,12 @@ class Config(object):
                   'c' : {'s' : 0.6, 'm' : 0.6, 'b' : 0.6},
                   'lowerThanBefore' : 1.3
               },
-              'strategy' : ['time','minR','xspeed']
+              'strategy' : ['time','minR','xspeed'],
+              'seller' : {
+                  'margin' : 1.5,
+                  'min_threshold' : -8,
+                  'cancelTime' : 30
+              } 
           }
 
       def get_ignore(self):

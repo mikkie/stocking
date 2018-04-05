@@ -12,6 +12,7 @@ class Stock(object):
       def __init__(self, code, data):
           self.__code = code
           self.__minR = None
+          self.__ls = None
           self.__rBreakTimes = {
               'R1' : {
                  'val' : -10,
@@ -88,6 +89,12 @@ class Stock(object):
                  
       def set_minR(self,minR):
           self.__minR = minR
+
+      def set_ls(self,ls):
+          self.__ls = ls
+
+      def get_ls(self):
+          return self.__ls        
 
       def get_minR(self):
           return self.__minR               
