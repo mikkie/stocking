@@ -1,0 +1,1 @@
+delete from today_all where name like 'ST%' or name like '*ST%' or open = 0 or code in (select code from xsg) or trade > 50 or nmc > 1000000;
