@@ -51,7 +51,7 @@ class DataHolder(object):
           return self.__selled 
 
       def add_selled(self,code,save=False):
-          self.__buyed.append(code)
+          self.__selled.append(code)
           if save:
              self.__tpe.submit(self.saveData,self.__data[code].get_data())   
 

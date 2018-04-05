@@ -67,16 +67,19 @@ class SellAnalyze(object):
       def calc(self,stock,dh):
           if stock.get_ls() is None:
              self.initLS(stock,dh)
-          if stock.get_ls() is None:
-             return False
+             if stock.get_ls() is None:
+                return False
           if self.getCurrentPercent(stock) < stock.get_ls():
-             if self.sell(stock):
-                dh.add_selled(stock.get_code()) 
+             stock.add_sellSignal()
+             if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
+                return self.sell(stock)
           else:
+               stock.reset_sellSignal()
                ccp = self.getCurrentPercent(stock)
                tls = ccp - self.__config.get_t1()['seller']['margin']
                if tls > stock.get_ls():
-                  stock.set_ls(tls)   
+                  stock.set_ls(tls) 
+               return False     
 
 
 
@@ -84,9 +87,9 @@ class SellAnalyze(object):
           last_line = stock.get_Lastline()
           price = float(str('%.2f' % (float(last_line['price']) - self.__config.get_t1()['trade']['minusPrice'])))
           info = '[%s] 在 %s 以 %s 卖出 [%s]%s 全部股票' % (Utils.getCurrentTime(),str(last_line['date']) + ' ' + str(last_line['time']), price, last_line['code'], last_line['name'])
+          print(info)
           if self.__config.get_t1()['trade']['enable']:
              return self.__trade.sell(stock.get_code(),price)
           elif self.__config.get_t1()['trade']['enableMock']:
-             return self.__mockTrade.sell(stock.get_code(),price) 
-          else:
-             return True   
+               return self.__mockTrade.sell(stock.get_code(),price) 
+          return True   

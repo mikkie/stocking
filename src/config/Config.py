@@ -58,7 +58,7 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
-                 'enableMock' : True,
+                 'enableMock' : False,
                  'max_buyed' : 3,
                  'balance' : 200000
               },
@@ -124,9 +124,10 @@ class Config(object):
               },
               'strategy' : ['time','minR','xspeed'],
               'seller' : {
-                  'margin' : 1.5,
+                  'margin' : 1,
                   'min_threshold' : -8,
-                  'cancelTime' : 30
+                  'cancelTime' : 30,
+                  'maxSellSignal' : 5
               } 
           }
 

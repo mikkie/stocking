@@ -13,6 +13,7 @@ class Stock(object):
           self.__code = code
           self.__minR = None
           self.__ls = None
+          self.__sellSignal = 0
           self.__rBreakTimes = {
               'R1' : {
                  'val' : -10,
@@ -94,7 +95,16 @@ class Stock(object):
           self.__ls = ls
 
       def get_ls(self):
-          return self.__ls        
+          return self.__ls
+
+      def get_sellSignal(self):
+          return self.__sellSignal
+
+      def add_sellSignal(self):
+          self.__sellSignal = self.__sellSignal + 1
+
+      def reset_sellSignal(self):
+          self.__sellSignal = 0                
 
       def get_minR(self):
           return self.__minR               
