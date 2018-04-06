@@ -132,7 +132,7 @@ if __name__ == '__main__':
            df = ts.get_realtime_quotes(codeSplitMaps[key])
         #    zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
            zs = None
-           queueMaps[key].put({'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
+           queueMaps[key].put({'zs' : zs, 'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
 
    sched.start()
 
