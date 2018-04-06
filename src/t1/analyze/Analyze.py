@@ -97,6 +97,8 @@ class Analyze(object):
              return    
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
+          print(info)
+          MyLog.info(info)
           if trade['enable']:
              res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
              if 'entrust_no' in res:
@@ -105,8 +107,6 @@ class Analyze(object):
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
              if res == 0:
                 self.__buyedCount = self.__buyedCount + 1
-          print(info)
-          MyLog.info(info)
 
 
       def goTopsis(self,result):
