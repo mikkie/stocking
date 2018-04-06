@@ -95,15 +95,17 @@ class Analyze(object):
              return 
           if (float(df_final['price']) + trade['addPrice']) * trade['volume'] > trade['balance']:
              return    
-          self.__buyedCount = self.__buyedCount + 1
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
-          if trade['enable']:
-             info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
-          if trade['enableMock']:
-             info = info + str(self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume']))
           MyLog.info(info)
-          print(info)
+          if trade['enable']:
+             res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
+             if 'entrust_no' in res:
+                self.__buyedCount = self.__buyedCount + 1
+          if trade['enableMock']:
+             res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
+             if res == 0:
+                self.__buyedCount = self.__buyedCount + 1
 
 
       def goTopsis(self,result):
@@ -298,7 +300,7 @@ class Analyze(object):
                      if deltaS <= i and deltaS >= i - 6:
                         p = (float(last_line.get('price')) - float(row['price'])) / float(row['pre_close']) * 100 
                         stock.set_speed('v' + str(i),p / deltaS) 
-                        # print('speed %s = %f' % ('v' + str(i),p / deltaS))
+                        # MyLog.info('speed %s = %f' % ('v' + str(i),p / deltaS))
                         break  
 
 
@@ -352,18 +354,18 @@ class Analyze(object):
           volume = last_volume - last_sec_volume
           big_amount = self.__config.get_t1()['big_money']['amount']
           big_volume = self.__config.get_t1()['big_money']['volume']
-        #   print('price=%s,amount=%s' % (lastLine['price'],amount))
+        #   MyLog.info('price=%s,amount=%s' % (lastLine['price'],amount))
         #   if amount >= big_amount or volume >= big_volume:
           type = self.theLastIsSellOrBuy(stock)
           if type == 'drive_buy': 
              stock.addBigMoneyIn(last_amount - last_sec_amount)
-            #  print('in = %f' % stock.getBigMoneyIn())
+            #  MyLog.info('in = %f' % stock.getBigMoneyIn())
              stock.addNetBuy(last_amount - last_sec_amount)
-            #  print('net = %f' % stock.get_net())
+            #  MyLog.info('net = %f' % stock.get_net())
           elif type == 'drive_sell':  
                stock.addBigMoneyOut(last_amount - last_sec_amount)
                stock.addNetBuy(last_sec_amount - last_amount)  
-            #    print('net = %f' % stock.get_net())
+            #    MyLog.info('net = %f' % stock.get_net())
           
              
       def updateBreakRtimes(self,stock,conf):
@@ -462,9 +464,9 @@ class Analyze(object):
                       elif p_change > 5:
                            ratio_c = self.__config.get_t1()['x_speed']['c']['b']     
                       if (ct - pt).seconds / 60 < (ccp - pcp) * ratio_c:
-                          print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
-                          print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
-                          print('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
+                        #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
+                        #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
+                        #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
                           return True
                 i = i - 1      
           return False                  
@@ -539,7 +541,6 @@ class Analyze(object):
              last_line = stock.get_Lastline() 
              info = '[%s] *** [%s] match speed at %s %s,v30=%s,v120=%s,v300=%s ***' % (Utils.getCurrentTime(),stock.get_code(),last_line['date'],last_line['time'],str(v30),str(v120),str(v300))
              MyLog.info(info)
-             print(info)
           return flag    
 
 
@@ -550,7 +551,6 @@ class Analyze(object):
              last_line = stock.get_Lastline() 
              info = '[%s] *** [%s] match big_money at %s %s,net=%s,in=%s,p=%s ***' % (Utils.getCurrentTime(),stock.get_code(),last_line['date'],last_line['time'],str(stock.get_net()),str(stock.getBigMoneyIn()),str(p * 100))
              MyLog.info(info) 
-             print(info)
           return flag     
 
       def isNetMatch(self,stock,conf):

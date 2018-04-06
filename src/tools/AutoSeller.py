@@ -27,7 +27,7 @@ analyze = SellAnalyze()
 
 
 def run(queue):
-    print('child process %s is running' % os.getpid())
+    MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
         data = queue.get(True)
@@ -45,7 +45,7 @@ def run(queue):
         MyLog.error('error %s' % str(e))
 
 if __name__ == '__main__':
-   print('main process %s.' % os.getpid())
+   MyLog.info('main process %s.' % os.getpid())
    mockTrade.relogin()
    pool = mp.Pool(1)
    manager = mp.Manager()

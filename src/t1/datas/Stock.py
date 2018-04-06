@@ -13,6 +13,7 @@ class Stock(object):
           self.__code = code
           self.__minR = None
           self.__ls = None
+          self.__sellSignal = 0
           self.__rBreakTimes = {
               'R1' : {
                  'val' : -10,
@@ -94,7 +95,16 @@ class Stock(object):
           self.__ls = ls
 
       def get_ls(self):
-          return self.__ls        
+          return self.__ls
+
+      def get_sellSignal(self):
+          return self.__sellSignal
+
+      def add_sellSignal(self):
+          self.__sellSignal = self.__sellSignal + 1
+
+      def reset_sellSignal(self):
+          self.__sellSignal = 0                
 
       def get_minR(self):
           return self.__minR               
@@ -165,6 +175,6 @@ class Stock(object):
              last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
                 self.__data = self.__data.append(row) 
-                row_date = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
-                if row['time'] >= '09:30:00' and (row_date - last_date).seconds > 3:
-                   MyLog.warn('%s get data is more than 3s,now = %s %s,last = %s %s' % (row['code'],row['date'],row['time'],lastLine['date'],lastLine['time'])) 
+                # row_date = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
+                # if row['time'] >= '09:30:00' and (row_date - last_date).seconds > 3:
+                #    MyLog.warn('%s get data is more than 3s,now = %s %s,last = %s %s' % (row['code'],row['date'],row['time'],lastLine['date'],lastLine['time'])) 
