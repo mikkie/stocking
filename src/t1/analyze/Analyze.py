@@ -95,13 +95,19 @@ class Analyze(object):
              return 
           if (float(df_final['price']) + trade['addPrice']) * trade['volume'] > trade['balance']:
              return    
-          self.__buyedCount = self.__buyedCount + 1
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
+          print(info)
           if trade['enable']:
-             info = info + str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
+             res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
+             if 'entrust_no' in res:
+                print('trade [%] success' % df_final['code']) 
+                self.__buyedCount = self.__buyedCount + 1 
           if trade['enableMock']:
-             info = info + str(self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume']))
+             res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
+             if res == 0:
+                print('trade [%] success' % df_final['code']) 
+                self.__buyedCount = self.__buyedCount + 1 
           MyLog.info(info)
           print(info)
 
@@ -462,9 +468,9 @@ class Analyze(object):
                       elif p_change > 5:
                            ratio_c = self.__config.get_t1()['x_speed']['c']['b']     
                       if (ct - pt).seconds / 60 < (ccp - pcp) * ratio_c:
-                          print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
-                          print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
-                          print('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
+                        #   print('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
+                        #   print('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
+                        #   print('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
                           return True
                 i = i - 1      
           return False                  

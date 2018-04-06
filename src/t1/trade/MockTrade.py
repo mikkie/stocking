@@ -45,7 +45,8 @@ class MockTrade(object):
              postData['gdzh'] = 'A474614369'
           try:   
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
-             return response.text
+             j = json.loads(response.text)
+             return j['errorcode']
           except Exception as e:
                  print('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
                  return ''  
