@@ -45,6 +45,7 @@ class MockTrade(object):
              postData['gdzh'] = 'A474614369'
           try:   
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
+             print(response.text)
              j = json.loads(response.text)
              return j['errorcode']
           except Exception as e:
@@ -121,8 +122,8 @@ class MockTrade(object):
                      
                          
 
-trade = MockTrade()
-res = trade.relogin()
+# trade = MockTrade()
+# res = trade.relogin()
 # print(trade.sell('002012',7.68))
 # print(trade.sell('300191',23.20))
 # print(trade.sell('300722',46.99))

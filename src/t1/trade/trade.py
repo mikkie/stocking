@@ -14,7 +14,9 @@ class Trade(object):
 
       def buy(self,code,amout,price):
           try:
-              return self.__user.buy(code, price=price, amount=amout)
+              res = self.__user.buy(code, price=price, amount=amout)
+              print(res)
+              return res
           except Exception as e:
                  print('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
                  return ''
