@@ -48,7 +48,7 @@ def run(i):
         if i < len(src_datas[code]):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
-       dh.addData(df)
+       dh.addSellData(df)
        analyze.calcMain(dh)
 
 for i in range(5200):

@@ -19,7 +19,7 @@ import os
 from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
-codeList = []
+codeList = ['002012','300191','300722','603080']
 setting = Config()
 mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
@@ -37,7 +37,7 @@ def run(queue):
             if dh is None:
                codeList = df['code'].tolist()
                dh = DataHolder(codeList) 
-            dh.addData(df)
+            dh.addSellData(df)
             analyze.calcMain(dh)
             MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
             data = queue.get(True)   
