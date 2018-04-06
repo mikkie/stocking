@@ -4,6 +4,7 @@ __author__ = 'aqua'
 import easytrader
 import json
 import datetime as dt
+from ..MyLog import MyLog
 
 class Trade(object):
 
@@ -15,10 +16,10 @@ class Trade(object):
       def buy(self,code,amout,price):
           try:
               res = self.__user.buy(code, price=price, amount=amout)
-              print(res)
+              MyLog.info(res)
               return res
           except Exception as e:
-                 print('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
+                 MyLog.info('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
                  return ''
 
 
@@ -41,7 +42,7 @@ class Trade(object):
                        self.__user.sell(code, price=price, amount=int(stock['股份可用']))   
              return isSelled
           except Exception as e:
-                 print('sell [%s] error' % code)
+                 MyLog.info('sell [%s] error' % code)
                  return False  
 
 

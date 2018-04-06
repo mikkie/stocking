@@ -84,7 +84,7 @@ class DataHolder(object):
               line = data.iloc[0]
               code = line['code']
               data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
-              print('[%s] reach 10 save data' % code)
+              MyLog.info('[%s] reach 10 save data' % code)
           except Exception as e:
                  MyLog.error('[%s %s] save [%s] data error \n' % (line['date'],line['time'],code))
                  MyLog.error(str(e) +  '\n')

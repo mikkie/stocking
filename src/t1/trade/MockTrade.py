@@ -5,6 +5,7 @@ import requests
 import time
 import json
 import datetime as dt
+from ..MyLog import MyLog
 
 class MockTrade(object):
     
@@ -27,7 +28,7 @@ class MockTrade(object):
              response = requests.get('http://mncg.10jqka.com.cn/cgiwt/login/doths/?type=auto&uname=48039195&password=',headers=self.__header)
              return response.text 
           except Exception as e:
-                 print('模拟登录失败 e = %s' % e)
+                 MyLog.info('模拟登录失败 e = %s' % e)
                  return ''    
 
       def mockTrade(self,code,price,amount,tradeType='cmd_wt_mairu'):
@@ -45,11 +46,11 @@ class MockTrade(object):
              postData['gdzh'] = 'A474614369'
           try:   
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/tradestock/',data=postData,headers=self.__header)
-             print(response.text)
+             MyLog.info(response.text)
              j = json.loads(response.text)
              return j['errorcode']
           except Exception as e:
-                 print('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
+                 MyLog.info('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
                  return ''  
 
 
@@ -59,7 +60,7 @@ class MockTrade(object):
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/qryChicang',headers=self.__header)
              return response.text
           except Exception as e:
-                 print('can not get hold stock')
+                 MyLog.info('can not get hold stock')
                  return ''
 
 
@@ -76,7 +77,7 @@ class MockTrade(object):
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/qryDelegated',data=postData,headers=self.__header)
              return response.text
           except Exception as e:
-                 print('can not get hold stock')
+                 MyLog.info('can not get hold stock')
                  return '' 
 
 
@@ -90,7 +91,7 @@ class MockTrade(object):
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/cancelDelegated/',data=postData,headers=self.__header)
              return response.text
           except Exception as e:
-                 print('can not get hold stock')
+                 MyLog.info('can not get hold stock')
                  return '' 
 
 
@@ -117,18 +118,18 @@ class MockTrade(object):
                        self.mockTrade(code,price,int(stock['d_2121']),tradeType='cmd_wt_maichu') 
              return isSelled
           except Exception as e:
-                 print('sell [%s] error' % code)
+                 MyLog.info('sell [%s] error' % code)
                  return False  
                      
                          
 
 # trade = MockTrade()
 # res = trade.relogin()
-# print(trade.sell('002012',7.68))
-# print(trade.sell('300191',23.20))
-# print(trade.sell('300722',46.99))
-# print(trade.sell('603080',37.04))
+# MyLog.info(trade.sell('002012',7.68))
+# MyLog.info(trade.sell('300191',23.20))
+# MyLog.info(trade.sell('300722',46.99))
+# MyLog.info(trade.sell('603080',37.04))
 # res = trade.mockTrade('300231',10.00,100)
-# print(res)
+# MyLog.info(res)
 
 

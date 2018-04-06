@@ -31,7 +31,7 @@ analyze = Analyze(None,None)
 # netMoney = NetMoney()
 
 def run(queue):
-        print('child process %s is running' % os.getpid())
+        MyLog.info('child process %s is running' % os.getpid())
         try:
             dh = None
             data = queue.get(True)
@@ -57,7 +57,7 @@ def run(queue):
 
 
 if __name__ == '__main__':
-   print('main process %s.' % os.getpid()) 
+   MyLog.info('main process %s.' % os.getpid()) 
 
    def init(forceUpdate):
        def cb(**kw):
@@ -89,7 +89,7 @@ if __name__ == '__main__':
    manager = mp.Manager()
 
    codeLists = init(False)
-   print('calc stocks %s' % codeLists)
+   MyLog.info('calc stocks %s' % codeLists)
    codeSplitMaps = {} 
    queueMaps = {}
    interDataHolder = {
@@ -102,9 +102,9 @@ if __name__ == '__main__':
        if code in codeLists:
           codeLists.remove(code)  
    length = len(codeLists)
-   print('calc stocks size %d' % length) 
+   MyLog.info('calc stocks size %d' % length) 
    if length == 0:
-      print('no available stocks to calc')
+      MyLog.info('no available stocks to calc')
       sys.exit()
    step = setting.get_t1()['split_size']
    x = length // setting.get_t1()['process_num']
@@ -150,8 +150,8 @@ if __name__ == '__main__':
         #    for debug     
         #    d = df[df['code'] == '300063']
         #    if d is not None and len(d) > 0:
-        #       print('key=' + str(key))
-        #       print('300063')
+        #       MyLog.info('key=' + str(key))
+        #       MyLog.info('300063')
 
    sched.start()
 

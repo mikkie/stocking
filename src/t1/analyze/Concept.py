@@ -27,10 +27,10 @@ class Concept(object):
               hyNames = self.parse(response.text,15)
               response = requests.get(self.__gnURL,headers=self.__header, verify=False)
               gnNames = self.parse(response.text,30)
-            #   print({'hy' : hyNames,'gn' : gnNames})
+            #   MyLog.info({'hy' : hyNames,'gn' : gnNames})
               return {'hy' : hyNames,'gn' : gnNames}
           except Exception as e:
-              print('call top 6 concept failed' + e)
+              MyLog.info('call top 6 concept failed' + e)
               return None
 
                   
