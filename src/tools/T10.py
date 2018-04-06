@@ -1,6 +1,5 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
-#从tushare实时获取数据
 import tushare as ts
 import threading
 import time
@@ -10,8 +9,6 @@ sys.path.append('..')
 from config.Config import Config
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.Analyze import Analyze
-# from t1.analyze.Concept import Concept
-# from t1.analyze.NetMoney import NetMoney
 from t1.trade.MockTrade import MockTrade
 from t1.MyLog import MyLog
 from utils.Utils import Utils
@@ -24,11 +21,7 @@ import datetime as dt
 setting = Config()
 mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
-# thshy = pd.read_sql_table('thshy', con=engine)
-# thsgn = pd.read_sql_table('concept', con=engine)
 analyze = Analyze(None,None)
-# concept = Concept()
-# netMoney = NetMoney()
 
 def run(queue):
         MyLog.info('child process %s is running' % os.getpid())
@@ -63,8 +56,6 @@ if __name__ == '__main__':
        def cb(**kw):
            return ts.get_today_all()
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
-    #    df_todayAll = df_todayAll[df_todayAll.apply(analyze.isOpenMatch2, axis=1)]
-    #    return df_todayAll['code'].tolist()
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        while strTime < '09:30:01':
              time.sleep(0.1)
@@ -137,21 +128,10 @@ if __name__ == '__main__':
        if (now - interDataHolder['currentTime']).seconds > 60:
           interDataHolder['currentTime'] = now
           mockTrade.relogin() 
-        #   hygn = concept.getCurrentTopHYandConcept()
-        #   if hygn is not None:
-            #  interDataHolder['hygn'] = hygn 
-        #   net = netMoney.getNetMoneyRatio()
-        #   if netMoney is not None:
-            #  interDataHolder['netMoney'] = net
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
            zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
            queueMaps[key].put({'zs' : zs,'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
-        #    for debug     
-        #    d = df[df['code'] == '300063']
-        #    if d is not None and len(d) > 0:
-        #       MyLog.info('key=' + str(key))
-        #       MyLog.info('300063')
 
    sched.start()
 
