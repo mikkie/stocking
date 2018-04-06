@@ -101,14 +101,14 @@ class Analyze(object):
           if trade['enable']:
              res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
              if 'entrust_no' in res:
-                print('trade [%] success' % df_final['code']) 
+                print('trade [%s] success' % df_final['code']) 
                 self.__buyedCount = self.__buyedCount + 1
              else:
                 print(res)     
           if trade['enableMock']:
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
              if res == 0:
-                print('trade [%] success' % df_final['code']) 
+                print('trade [%s] success' % df_final['code']) 
                 self.__buyedCount = self.__buyedCount + 1
              else:
                 print(res)     
