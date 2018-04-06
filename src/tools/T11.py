@@ -55,4 +55,4 @@ for i in range(5200):
     run(i)
 
 
-raw_input('please enter to exit')       
+input('please enter to exit')       
