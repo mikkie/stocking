@@ -46,6 +46,10 @@ def run(queue):
 
 if __name__ == '__main__':
    MyLog.info('main process %s.' % os.getpid())
+   strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+   while strTime < '09:30:01':
+         time.sleep(0.1)
+         strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
    mockTrade.relogin()
    pool = mp.Pool(1)
    manager = mp.Manager()
