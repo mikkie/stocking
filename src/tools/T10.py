@@ -122,7 +122,7 @@ if __name__ == '__main__':
 
    sched = BlockingScheduler()
 
-   @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
+   @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():
        now = dt.datetime.now()
        if (now - interDataHolder['currentTime']).seconds > 60:
