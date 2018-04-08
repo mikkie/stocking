@@ -74,6 +74,7 @@ class DataHolder(object):
                self.__data[code] = Stock(code,row)
           if float(row['pre_close']) != 0 and (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.9:
              if not (code in self.get_buyed()): 
+                MyLog.info('[%s] reach 10' % code) 
                 self.add_buyed(code,True)
 
 
@@ -99,7 +100,7 @@ class DataHolder(object):
               line = data.iloc[0]
               code = line['code']
               data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
-              MyLog.info('[%s] reach 10 save data' % code)
+              MyLog.info('[%s] save data' % code)
           except Exception as e:
                  MyLog.error('[%s %s] save [%s] data error \n' % (line['date'],line['time'],code))
                  MyLog.error(str(e) +  '\n')

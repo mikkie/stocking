@@ -58,7 +58,7 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
-                 'enableMock' : True, 
+                 'enableMock' : False, 
                  'max_buyed' : 2,
                  'balance' : 200000
               },
