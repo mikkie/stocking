@@ -24,28 +24,28 @@ engine = create_engine(setting.get_DBurl())
 analyze = Analyze(None,None)
 
 def run(queue):
-        MyLog.info('child process %s is running' % os.getpid())
-        try:
-            dh = None
-            data = queue.get(True)
-            while data is not None and data['df'] is not None and len(data['df']) > 0:
-                  zs = data['zs']
-                  df = data['df']
-                  hygn = None
-                  netMoney = None
-                  s = int(round(time.time() * 1000))
-                  if dh is None:
-                     codeList = df['code'].tolist()
-                     dh = DataHolder(codeList) 
-                  dh.addData(df)
-                  res = analyze.calcMain(zs,dh,hygn,netMoney)
-                  if len(res) > 0:
-                     for code in res: 
-                         dh.add_buyed(code,True)
-                  MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
-                  data = queue.get(True)   
-        except Exception as e:
-               MyLog.error('error %s' % str(e))
+    MyLog.info('child process %s is running' % os.getpid())
+    try:
+        dh = None
+        data = queue.get(True)
+        while data is not None and data['df'] is not None and len(data['df']) > 0:
+              zs = data['zs']
+              df = data['df']
+              hygn = None
+              netMoney = None
+              s = int(round(time.time() * 1000))
+              if dh is None:
+                 codeList = df['code'].tolist()
+                 dh = DataHolder(codeList) 
+              dh.addData(df)
+              res = analyze.calcMain(zs,dh,hygn,netMoney)
+              if len(res) > 0:
+                 for code in res: 
+                     dh.add_buyed(code,True)
+              MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
+              data = queue.get(True)   
+    except Exception as e:
+            MyLog.error('error %s' % str(e))
 
 
 
