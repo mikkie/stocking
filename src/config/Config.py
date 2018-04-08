@@ -124,7 +124,11 @@ class Config(object):
               },
               'strategy' : ['time','minR','xspeed'],
               'seller' : {
-                  'margin' : 1,
+                  'margin' : {
+                      'lt-2' : 1.2,
+                      '-2_3' : 0.8,
+                      'gt3' : 0.5
+                  },
                   'min_threshold' : -8,
                   'cancelTime' : 30,
                   'maxSellSignal' : 5
