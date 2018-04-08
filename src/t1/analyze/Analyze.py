@@ -257,7 +257,7 @@ class Analyze(object):
 
       def updateStock(self,stock,conf):
           self.updateBreakRtimes(stock,conf)
-          self.updateSpeed(stock)
+        #   self.updateSpeed(stock)
         #   self.updatePriceVolumeMap(stock)
         #   try:
         #      self.updateBigMoney(stock,conf)
