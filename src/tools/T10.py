@@ -88,7 +88,8 @@ if __name__ == '__main__':
       'hygn' : None,
       'netMoney' : None
    }
-   mockTrade.relogin() 
+   if setting.get_t1()['trade']['enableMock']:
+      mockTrade.relogin() 
    for code in setting.get_ignore():
        if code in codeLists:
           codeLists.remove(code)  
@@ -124,10 +125,11 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():
-       now = dt.datetime.now()
-       if (now - interDataHolder['currentTime']).seconds > 60:
-          interDataHolder['currentTime'] = now
-          mockTrade.relogin() 
+       if setting.get_t1()['trade']['enableMock']:
+          now = dt.datetime.now()
+          if (now - interDataHolder['currentTime']).seconds > 60:
+             interDataHolder['currentTime'] = now
+             mockTrade.relogin() 
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
         #    zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
