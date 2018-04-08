@@ -60,12 +60,7 @@ class SellAnalyze(object):
 
       def initLS(self,stock,dh):
           ccp = self.getCurrentPercent(stock)
-          margin = self.__config.get_t1()['seller']['margin']['-2_3']
-          if ccp > 3:
-             margin = self.__config.get_t1()['seller']['margin']['gt3']
-          elif ccp < -2:
-               margin = self.__config.get_t1()['seller']['margin']['lt-2']  
-          ls = ccp - margin
+          ls = ccp - self.__config.get_t1()['seller']['margin']
           if ls > self.__config.get_t1()['seller']['min_threshold']:
              stock.set_ls(ls)
 
