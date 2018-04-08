@@ -20,6 +20,7 @@ class Analyze(object):
       def __init__(self,thshy,thsgn):
           self.__config = Config()
           self.__buyedCount = 0
+          self.__balance = self.__config.get_t1()['trade']['balance']
           if self.__config.get_t1()['trade']['enable']:
              self.__trade = Trade()
           if self.__config.get_t1()['trade']['enableMock']:
@@ -93,7 +94,8 @@ class Analyze(object):
           trade = self.__config.get_t1()['trade']
           if self.__buyedCount >= trade['max_buyed']:
              return 
-          if (float(df_final['price']) + trade['addPrice']) * trade['volume'] > trade['balance']:
+          buyMoney = (float(df_final['price']) + trade['addPrice']) * trade['volume']  
+          if buyMoney > self.__balance:
              return    
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
@@ -102,10 +104,12 @@ class Analyze(object):
              res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
              if 'entrust_no' in res:
                 self.__buyedCount = self.__buyedCount + 1
+                self.__balance = self.__balance - buyMoney
           if trade['enableMock']:
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
              if res == 0:
                 self.__buyedCount = self.__buyedCount + 1
+                self.__balance = self.__balance - buyMoney
 
 
       def goTopsis(self,result):
