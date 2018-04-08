@@ -56,11 +56,11 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 300,
+                 'volume' : 100,
                  'enable' : False,
                  'enableMock' : False, 
                  'max_buyed' : 2,
-                 'balance' : 200000
+                 'balance' : 3000
               },
               'topsis' : {
                   'net' : 0.3,
