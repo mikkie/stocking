@@ -50,7 +50,8 @@ if __name__ == '__main__':
    while strTime < '09:30:01':
          time.sleep(0.1)
          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-   mockTrade.relogin()
+   if setting.get_t1()['trade']['enableMock']:      
+      mockTrade.relogin()
    pool = mp.Pool(1)
    manager = mp.Manager()
    queue = manager.Queue()
@@ -62,10 +63,11 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
-       now = dt.datetime.now()
-       if (now - interDataHolder['currentTime']).seconds > 60:
-          interDataHolder['currentTime'] = now
-          mockTrade.relogin()
+       if setting.get_t1()['trade']['enableMock']:
+          now = dt.datetime.now()
+          if (now - interDataHolder['currentTime']).seconds > 60:
+             interDataHolder['currentTime'] = now
+             mockTrade.relogin()
        df = ts.get_realtime_quotes(codeList)
        queue.put({'df' : df})
 
