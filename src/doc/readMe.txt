@@ -26,3 +26,4 @@ main.py init 300 c 节能
 3.filter by twodayten.py (keep yesterday 10%)
 4.filter by xsg.py
 5.filter by yesterday buy
+6.filter by code not start with 3
