@@ -446,7 +446,6 @@ class Analyze(object):
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
-          buySignal = 0
           while i >= 0:
                 line = stock.get_data().iloc[i] 
                 price = float(line['price'])    
@@ -472,10 +471,12 @@ class Analyze(object):
                         #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                         #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                         #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
-                          buySignal = buySignal + 1
-                          if buySignal >= self.__config.get_t1()['trade']['maxBuySignal']:
+                          stock.add_buySignal()
+                          if stock.get_buySignal() >= self.__config.get_t1()['trade']['maxBuySignal']:
                              return True
+                          return False  
                 i = i - 1 
+          stock.reset_buySignal()      
           return False                  
                    
 
