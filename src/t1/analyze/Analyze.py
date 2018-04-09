@@ -401,21 +401,21 @@ class Analyze(object):
                  return t1[key] 
 
       def isStockMatch(self,zs,stock,conf,hygn,netMoney,dh):
-          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
-             return False   
+        #   if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
+        #      return False   
           if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
              return False
-          if 'hygn' in self.__config.get_t1()['strategy'] and not self.isHygnMatch(stock,hygn):
-             return False  
-          if 'net' in self.__config.get_t1()['strategy'] and not self.isNetMatch(stock,conf):
-             return False      
-          if 'speed' in self.__config.get_t1()['strategy'] and stock.get_minR() != 'R5':
-             if not self.isSpeedMatch(stock,conf):
-                return False
-          if 'pvmap' in self.__config.get_t1()['strategy'] and not self.isPriceVolumeMapMatch(stock):
-             return False  
-          if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
-             return False  
+        #   if 'hygn' in self.__config.get_t1()['strategy'] and not self.isHygnMatch(stock,hygn):
+        #      return False  
+        #   if 'net' in self.__config.get_t1()['strategy'] and not self.isNetMatch(stock,conf):
+        #      return False      
+        #   if 'speed' in self.__config.get_t1()['strategy'] and stock.get_minR() != 'R5':
+        #      if not self.isSpeedMatch(stock,conf):
+        #         return False
+        #   if 'pvmap' in self.__config.get_t1()['strategy'] and not self.isPriceVolumeMapMatch(stock):
+        #      return False  
+        #   if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
+        #      return False  
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
              return False
           if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
@@ -446,6 +446,7 @@ class Analyze(object):
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
+          buySignal = 0
           while i >= 0:
                 line = stock.get_data().iloc[i] 
                 price = float(line['price'])    
@@ -471,8 +472,10 @@ class Analyze(object):
                         #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                         #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                         #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
-                          return True
-                i = i - 1      
+                          buySignal = buySignal + 1
+                          if buySignal >= self.__config.get_t1()['trade']['maxBuySignal']:
+                             return True
+                i = i - 1 
           return False                  
                    
 
