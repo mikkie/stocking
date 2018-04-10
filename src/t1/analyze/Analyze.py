@@ -463,7 +463,7 @@ class Analyze(object):
                       ratio_b = self.__config.get_t1()['x_speed']['b']['s'] 
                    if ocp > 5:
                       ratio_b = self.__config.get_t1()['x_speed']['b']['b']    
-                   if ccp - pcp >= (ccp - ocp) * ratio_b: 
+                   if ccp - pcp >= (ccp - ocp) * ratio_b and pcp > ocp:
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
                       p_change = ccp - pcp
                       ratio_c = self.__config.get_t1()['x_speed']['c']['m']
