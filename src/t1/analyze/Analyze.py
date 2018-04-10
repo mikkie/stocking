@@ -482,11 +482,11 @@ class Analyze(object):
                 i = i - 1 
           stock.reset_buySignal()   
         #   perform the calc time test  
-          now = dt.datetime.now()
-          if stock.get_time() is not None:
-             deltaSeconds = (now - stock.get_time()).seconds
-             print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
-          stock.set_time(now)
+        #   now = dt.datetime.now()
+        #   if stock.get_time() is not None:
+        #      deltaSeconds = (now - stock.get_time()).seconds
+        #      print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
+        #   stock.set_time(now)
           return False                  
                    
 
