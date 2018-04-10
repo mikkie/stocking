@@ -441,8 +441,10 @@ class Analyze(object):
           ccp = self.getCurrentPercent(stock)
           ocp = self.getOpenPercent(stock)
           if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-             dh.add_buyed(stock.get_code(),False) 
-             return False 
+             stock.add_lowerThanBeforeTimes()
+             if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+                dh.add_buyed(stock.get_code(),False) 
+                return False 
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
@@ -451,8 +453,10 @@ class Analyze(object):
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
                 if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-                   dh.add_buyed(stock.get_code(),False) 
-                   return False  
+                   stock.add_lowerThanBeforeTimes() 
+                   if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+                      dh.add_buyed(stock.get_code(),False) 
+                      return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    ratio_b = self.__config.get_t1()['x_speed']['b']['m']
                    if ocp <= 2:
@@ -476,7 +480,13 @@ class Analyze(object):
                              return True
                           return False  
                 i = i - 1 
-          stock.reset_buySignal()      
+          stock.reset_buySignal()   
+        #   perform the calc time test  
+          now = dt.datetime.now()
+          if stock.get_time() is not None:
+             deltaSeconds = (now - stock.get_time()).seconds
+             print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
+          stock.set_time(now)
           return False                  
                    
 

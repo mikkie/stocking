@@ -56,11 +56,11 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 100,
+                 'volume' : 300,
                  'enable' : False,
                  'enableMock' : False, 
-                 'max_buyed' : 2,
-                 'balance' : 3000,
+                 'max_buyed' : 3,
+                 'balance' : 200000,
                  'maxBuySignal' : 2
               },
               'topsis' : {
@@ -121,7 +121,8 @@ class Config(object):
                   'a' : 0.7,
                   'b' : {'s' : 0.75, 'm' : 0.75, 'b' : 0.75},
                   'c' : {'s' : 0.6, 'm' : 0.6, 'b' : 0.6},
-                  'lowerThanBefore' : 1.3
+                  'lowerThanBefore' : 1.3,
+                  'lowerThanBeforeTimes' : 3
               },
               'strategy' : ['time','minR','xspeed'],
               'seller' : {

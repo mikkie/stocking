@@ -15,6 +15,8 @@ class Stock(object):
           self.__ls = None
           self.__sellSignal = 0
           self.__buySignal = 0
+          self.__time = None
+          self.__lowerThanBeforeTimes = 0
           self.__rBreakTimes = {
               'R1' : {
                  'val' : -10,
@@ -60,6 +62,18 @@ class Stock(object):
           elif isinstance(data, pd.DataFrame):
                self.__data = data
 
+
+      def get_lowerThanBeforeTimes(self):
+          return self.__lowerThanBeforeTimes
+
+      def add_lowerThanBeforeTimes(self):
+          self.__lowerThanBeforeTimes = self.__lowerThanBeforeTimes + 1
+
+      def set_time(self,time):
+          self.__time = time
+
+      def get_time(self):
+          return self.__time         
 
       def setTargetCCP(self,ccp):
           self.__targetCCP = ccp
