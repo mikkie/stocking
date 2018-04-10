@@ -60,7 +60,7 @@ class Config(object):
                  'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 200000,
+                 'balance' : 3000,
                  'maxBuySignal' : 2
               },
               'topsis' : {
