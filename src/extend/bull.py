@@ -8,7 +8,7 @@ df_all = get_all_securities(types=['stock'], date='2018-04-10')
 for index,row in df_all.iterrows():
     try:
         df_stock = get_price(index, end_date='2018-04-10', frequency='daily', fields=['close','high','low'], skip_paused=True, fq='pre', count=90)
-        if len(df_stock) < 15:
+        if len(df_stock) < 20:
            continue        
         high_row = df_stock.loc[df_stock['high'].idxmax()]
         high = high_row.get('high')
@@ -18,7 +18,7 @@ for index,row in df_all.iterrows():
         close = df_stock['close'].values
         df_stock['ma5'] = ta.SMA(close,timeperiod=5)
         df_stock['ma10'] = ta.SMA(close,timeperiod=10)
-        df_stock = df_stock[-15:]
+        df_stock = df_stock[-20:]
         pre_close = None
         flag = True
         count_close = 0
