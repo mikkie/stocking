@@ -122,7 +122,7 @@ class Config(object):
                   'b' : {'s' : 0.75, 'm' : 0.75, 'b' : 0.75},
                   'c' : {'s' : 0.6, 'm' : 0.6, 'b' : 0.6},
                   'lowerThanBefore' : 1.3,
-                  'lowerThanBeforeTimes' : 3
+                  'lowerThanBeforeTimes' : 5
               },
               'strategy' : ['time','minR','xspeed'],
               'seller' : {
