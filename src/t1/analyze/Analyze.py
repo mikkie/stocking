@@ -46,7 +46,7 @@ class Analyze(object):
           return data                  
               
  
-      def calcMain(self,zs,dh,hygn,netMoney):
+      def calcMain(self,zs,dh,hygn,netMoney,timestamp):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -66,9 +66,10 @@ class Analyze(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     self.outputRes(last_line)
-                     codes.append(stock.get_code())
-                     self.saveData(stock)
+                     res = self.outputRes(last_line,timestamp)
+                     if res is not None:
+                        codes.append(stock.get_code())
+                        self.saveData(stock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
@@ -90,26 +91,35 @@ class Analyze(object):
           t.start()  
 
 
-      def outputRes(self,df_final):
+      def outputRes(self,df_final,timestamp):
           trade = self.__config.get_t1()['trade']
           if self.__buyedCount >= trade['max_buyed']:
-             return 
+             return None
           buyMoney = (float(df_final['price']) + trade['addPrice']) * trade['volume']  
           if buyMoney > self.__balance:
-             return    
+             return None   
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
           MyLog.info(info)
+          now = dt.datetime.now()
+          deltaSeconds = (now - timestamp).seconds
+          if deltaSeconds > trade['timestampLimit']:
+             return None
           if trade['enable']:
              res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
              if 'entrust_no' in res:
                 self.__buyedCount = self.__buyedCount + 1
                 self.__balance = self.__balance - buyMoney
+                return df_final['code']
+             return None  
           if trade['enableMock']:
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
              if res == 0:
                 self.__buyedCount = self.__buyedCount + 1
                 self.__balance = self.__balance - buyMoney
+                return df_final['code']
+             return None  
+          return df_final['code']  
 
 
       def goTopsis(self,result):
@@ -485,7 +495,8 @@ class Analyze(object):
         #   now = dt.datetime.now()
         #   if stock.get_time() is not None:
         #      deltaSeconds = (now - stock.get_time()).seconds
-        #      print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
+        #      if deltaSeconds > 3:
+        #         print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
         #   stock.set_time(now)
           return False                  
                    

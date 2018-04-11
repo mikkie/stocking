@@ -29,6 +29,7 @@ def run(queue):
         dh = None
         data = queue.get(True)
         while data is not None and data['df'] is not None and len(data['df']) > 0:
+              timestamp = data['timestamp']
               zs = data['zs']
               df = data['df']
               hygn = None
@@ -38,7 +39,7 @@ def run(queue):
                  codeList = df['code'].tolist()
                  dh = DataHolder(codeList) 
               dh.addData(df)
-              res = analyze.calcMain(zs,dh,hygn,netMoney)
+              res = analyze.calcMain(zs,dh,hygn,netMoney,timestamp)
               if len(res) > 0:
                  for code in res: 
                      dh.add_buyed(code,True)
@@ -125,8 +126,8 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():
+       now = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
-          now = dt.datetime.now()
           if (now - interDataHolder['currentTime']).seconds > 60:
              interDataHolder['currentTime'] = now
              mockTrade.relogin() 
@@ -134,7 +135,7 @@ if __name__ == '__main__':
            df = ts.get_realtime_quotes(codeSplitMaps[key])
         #    zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
            zs = None
-           queueMaps[key].put({'zs' : zs, 'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
+           queueMaps[key].put({'timestamp' : now,'zs' : zs, 'df' : df,'hygn' : interDataHolder['hygn'],'netMoney' : interDataHolder['netMoney']})
 
    sched.start()
 
