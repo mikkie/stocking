@@ -4,6 +4,7 @@ __author__ = 'aqua'
 import tushare as ts
 import threading
 import time
+import datetime as dt
 import pandas as pd
 from sqlalchemy import create_engine
 import sys
@@ -48,7 +49,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(zs,dh,None,None)
+       codes = analyze.calcMain(zs,dh,None,None,dt.datetime.now())
        if len(codes) > 0:
           for code in codes: 
               dh.add_buyed(code,False)
