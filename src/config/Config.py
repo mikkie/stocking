@@ -56,11 +56,11 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 100,
-                 'enable' : True,
+                 'volume' : 300,
+                 'enable' : False,
                  'enableMock' : False, 
-                 'max_buyed' : 2,
-                 'balance' : 3000,
+                 'max_buyed' : 3,
+                 'balance' : 200000,
                  'maxBuySignal' : 2,
                  'timestampLimit' : 7
               },

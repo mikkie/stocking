@@ -104,6 +104,7 @@ class Analyze(object):
           now = dt.datetime.now()
           deltaSeconds = (now - timestamp).seconds
           if deltaSeconds > trade['timestampLimit']:
+             MyLog.info('[%s] 行情超时 %s秒 放弃买入' % (df_final['code'],deltaSeconds)) 
              return None
           if trade['enable']:
              res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
@@ -450,11 +451,11 @@ class Analyze(object):
           now_line = stock.get_Lastline() 
           ccp = self.getCurrentPercent(stock)
           ocp = self.getOpenPercent(stock)
-          if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-             stock.add_lowerThanBeforeTimes()
-             if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
-                dh.add_buyed(stock.get_code(),False) 
-                return False 
+        #   if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
+        #      stock.add_lowerThanBeforeTimes()
+        #      if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+        #         dh.add_buyed(stock.get_code(),False) 
+        #         return False 
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
@@ -462,11 +463,11 @@ class Analyze(object):
                 line = stock.get_data().iloc[i] 
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
-                if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-                   stock.add_lowerThanBeforeTimes() 
-                   if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
-                      dh.add_buyed(stock.get_code(),False) 
-                      return False  
+                # if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
+                #    stock.add_lowerThanBeforeTimes() 
+                #    if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+                #       dh.add_buyed(stock.get_code(),False) 
+                #       return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    ratio_b = self.__config.get_t1()['x_speed']['b']['m']
                    if ocp <= 2:
