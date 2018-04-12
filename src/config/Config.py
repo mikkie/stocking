@@ -120,8 +120,8 @@ class Config(object):
               },
               'x_speed' : {
                   'a' : 0.7,
-                  'b' : {'s' : 0.75, 'm' : 0.75, 'b' : 0.75},
-                  'c' : {'s' : 0.6, 'm' : 0.6, 'b' : 0.6},
+                  'b' : 0.75,
+                  'c' : 0.6,
                   'lowerThanBefore' : 1.5,
                   'lowerThanBeforeTimes' : 5
               },

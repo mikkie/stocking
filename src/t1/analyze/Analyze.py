@@ -469,20 +469,9 @@ class Analyze(object):
                 #       dh.add_buyed(stock.get_code(),False) 
                 #       return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
-                   ratio_b = self.__config.get_t1()['x_speed']['b']['m']
-                   if ocp <= 2:
-                      ratio_b = self.__config.get_t1()['x_speed']['b']['s'] 
-                   if ocp > 5:
-                      ratio_b = self.__config.get_t1()['x_speed']['b']['b']    
-                   if ccp - pcp >= (ccp - ocp) * ratio_b and pcp > ocp:
+                   if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b'] and pcp > ocp:
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
-                      p_change = ccp - pcp
-                      ratio_c = self.__config.get_t1()['x_speed']['c']['m']
-                      if p_change <= 2:
-                         ratio_c = self.__config.get_t1()['x_speed']['c']['s']
-                      elif p_change > 5:
-                           ratio_c = self.__config.get_t1()['x_speed']['c']['b']     
-                      if (ct - pt).seconds / 60 < (ccp - pcp) * ratio_c:
+                      if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
                         #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                         #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                         #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
