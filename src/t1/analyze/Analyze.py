@@ -601,7 +601,7 @@ class Analyze(object):
               
 
       def getOpenPercent(self,stock):
-          ocp = stock.get_cache()['ocp']
+          ocp = stock.get_cache('ocp')
           if ocp is not None:
              return ocp 
           lastLine = stock.get_Lastline()
