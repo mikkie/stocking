@@ -17,6 +17,9 @@ class Stock(object):
           self.__buySignal = 0
           self.__time = None
           self.__lowerThanBeforeTimes = 0
+          self.__cache = {
+              'ocp' : None
+          }
           self.__rBreakTimes = {
               'R1' : {
                  'val' : -10,
@@ -62,6 +65,12 @@ class Stock(object):
           elif isinstance(data, pd.DataFrame):
                self.__data = data
 
+
+      def get_cache(self,key):
+          return self.__cache[key]
+
+      def set_cache(self,key,val):
+          self.__cache[key] = val  
 
       def get_lowerThanBeforeTimes(self):
           return self.__lowerThanBeforeTimes

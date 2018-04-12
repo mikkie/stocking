@@ -601,9 +601,14 @@ class Analyze(object):
               
 
       def getOpenPercent(self,stock):
+          ocp = stock.get_cache()['ocp']
+          if ocp is not None:
+             return ocp 
           lastLine = stock.get_Lastline()
           open = lastLine.get('open')
-          return self.getPercent(open,stock)  
+          ocp = self.getPercent(open,stock)
+          stock.set_cache('ocp',ocp)
+          return ocp  
 
 
       def isReachMinR(self,stock):
