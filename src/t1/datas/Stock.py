@@ -207,7 +207,13 @@ class Stock(object):
              lastTime = lastLine.get('time') 
              last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
-                self.__data = self.__data.append(row) 
+                self.__data = self.__data.append(row)
+            #  now = dt.datetime.now()
+            #  if self.get_time() is not None:
+            #     deltaSeconds = (now - self.get_time()).seconds
+            #     if deltaSeconds > 3:
+            #        print('[%s] calc more than %s s' % (self.get_code(),deltaSeconds)) 
+            #  self.set_time(now) 
                 # row_date = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
                 # if row['time'] >= '09:30:00' and (row_date - last_date).seconds > 3:
                 #    MyLog.warn('%s get data is more than 3s,now = %s %s,last = %s %s' % (row['code'],row['date'],row['time'],lastLine['date'],lastLine['time'])) 
