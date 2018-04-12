@@ -459,6 +459,8 @@ class Analyze(object):
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
+          if i > self.__config.get_t1()['x_speed']['maxStickNum']:
+             i = self.__config.get_t1()['x_speed']['maxStickNum'] 
           while i >= 0:
                 line = stock.get_data().iloc[i] 
                 price = float(line['price'])    
@@ -475,8 +477,11 @@ class Analyze(object):
                         #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                         #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                         #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
+                          last_second_line = stock.get_LastSecondline()
+                          deltaVolume = float(now_line['volume']) - float(last_second_line['volume'])
+                          deltaAmount = float(now_line['amount']) - float(last_second_line['amount'])
                           stock.add_buySignal()
-                          if stock.get_buySignal() >= self.__config.get_t1()['trade']['maxBuySignal']:
+                          if stock.get_buySignal() >= self.__config.get_t1()['trade']['maxBuySignal'] or deltaVolume >= self.__config.get_t1()['x_speed']['minimumVolume'] or deltaAmount >= self.__config.get_t1()['x_speed']['minimumAmount']:
                              return True
                           return False  
                 i = i - 1 

@@ -123,7 +123,10 @@ class Config(object):
                   'b' : 0.75,
                   'c' : 0.6,
                   'lowerThanBefore' : 1.5,
-                  'lowerThanBeforeTimes' : 5
+                  'lowerThanBeforeTimes' : 5,
+                  'minimumVolume' : 5000,
+                  'minimumAmount' : 50000,
+                  'maxStickNum' : 250
               },
               'strategy' : ['time','minR','xspeed'],
               'seller' : {
