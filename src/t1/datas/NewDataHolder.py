@@ -30,10 +30,9 @@ class NewDataHolder(object):
       def get_buyed(self):
           return self.__buyed
 
-      def add_buyed(self,code,save=False):
+      def add_buyed(self,code):
           self.__buyed.append(code)
-          if save:
-             self.__tpe.submit(self.saveData,self.__data[code].get_data())  
+          self.__tpe.submit(self.saveData,self.__data[code].get_data())  
 
       def get_selled(self):
           return self.__selled 
@@ -46,8 +45,10 @@ class NewDataHolder(object):
       def get_ignore(self):
           return self.__ignore       
 
-      def add_ignore(self,code):
-          self.__ignore.append(code)       
+      def add_ignore(self,code,save=False):
+          self.__ignore.append(code)
+          if save:
+             self.__tpe.submit(self.saveData,self.__data[code].get_data())       
 
 
       def get_data(self):
@@ -65,7 +66,10 @@ class NewDataHolder(object):
           if float(row['pre_close']) != 0 and (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.9:
              if not (code in self.get_buyed()): 
                 MyLog.info('[%s] reach 10' % code) 
-                self.add_buyed(code,True)
+                save = False
+                if float(row['price']) != float(row['open']):
+                   save = True
+                self.add_ignore(code,save=save)
 
 
       def addSellDataHandler(self,row):

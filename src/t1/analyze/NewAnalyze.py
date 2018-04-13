@@ -57,27 +57,10 @@ class NewAnalyze(object):
                      res = self.outputRes(last_line,timestamp)
                      if res is not None:
                         codes.append(stock.get_code())
-                        self.saveData(stock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
           return codes   
-
-
-      def save(self,data):
-          try: 
-              code = data[0]['code']
-              df = pd.DataFrame(data)
-              df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
-          except Exception as e:
-                 MyLog.error('save [%s] data error \n' % code)
-                 MyLog.error(str(e) +  '\n')
-
-
-      def saveData(self,stock):
-          data = stock.get_data()
-          t = threading.Thread(target=self.save, args=(data,)) 
-          t.start()  
 
 
       def outputRes(self,df_final,timestamp):
@@ -212,7 +195,7 @@ class NewAnalyze(object):
           if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
              stock.add_lowerThanBeforeTimes()
              if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
-                dh.add_buyed(stock.get_code(),False) 
+                dh.add_ignore(stock.get_code()) 
                 return False 
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           pcpArray = self.generatePCPArray(stock)
@@ -226,7 +209,7 @@ class NewAnalyze(object):
                 if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
                    stock.add_lowerThanBeforeTimes() 
                    if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
-                      dh.add_buyed(stock.get_code(),False) 
+                      dh.add_ignore(stock.get_code()) 
                       return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b'] and pcp > ocp:
