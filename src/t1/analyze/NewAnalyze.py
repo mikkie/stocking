@@ -30,9 +30,9 @@ class NewAnalyze(object):
 
 
       def printPerformace(self,timestamp):
-          deltaSeconds = (dt.datetime.now - timestamp).seconds 
+          deltaSeconds = (dt.datetime.now() - timestamp).seconds 
           if deltaSeconds > 3: 
-             print(deltaSeconds)    
+             print('calc more than %s seconds' % deltaSeconds)    
 
       def calcMain(self,dh,timestamp):
           data = dh.get_data()

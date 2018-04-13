@@ -41,7 +41,7 @@ def run(i):
        codes = analyze.calcMain(dh,dt.datetime.now())
        if len(codes) > 0:
           for code in codes: 
-              dh.add_buyed(code)
+              dh.add_ignore(code)
 
 for i in range(5200):
     run(i)

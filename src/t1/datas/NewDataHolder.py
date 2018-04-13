@@ -90,7 +90,7 @@ class NewDataHolder(object):
 
       def saveData(self,data):
           try: 
-              line = data.iloc[0]
+              line = data[0]
               code = line['code']
               df = pd.DataFrame(data)
               df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
