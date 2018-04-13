@@ -2,5 +2,5 @@
 __author__ = 'aqua'
 
 import math
-print(round(1.4))
-print(round(1.7))
+print(math.ceil(1.4))
+print(math.floor(1.7))

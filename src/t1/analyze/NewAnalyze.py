@@ -60,8 +60,9 @@ class NewAnalyze(object):
 
       def save(self,data):
           try: 
-              code = data.iloc[0]['code']
-              data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
+              code = data[0]['code']
+              df = pd.DataFrame(data)
+              df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
           except Exception as e:
                  MyLog.error('save [%s] data error \n' % code)
                  MyLog.error(str(e) +  '\n')
@@ -250,11 +251,15 @@ class NewAnalyze(object):
       def generatePCPArray(self,stock):
           pcpArray = []
           len = stock.len()
+          start = 0
           step = 1
           if len > 30:
-             step = round(stock.len() / 30)
+             if len > 250:
+                start = -250 
+                len = 250  
+             step = math.ceil(len / 30)
           data = stock.get_data()
-          for val in data[::step]:
+          for val in data[start::step]:
               pcpArray.append(val)
           return pcpArray    
                                     
@@ -264,9 +269,9 @@ class NewAnalyze(object):
           data = stock.get_data()
           if stock.len() < 3:
              return False 
-          price = float(data.iloc[-1].get('price'))
-          price2 = float(data.iloc[-2].get('price'))
-          price3 = float(data.iloc[-2].get('price')) 
+          price = float(data[-1]['price'])
+          price2 = float(data[-2]['price'])
+          price3 = float(data[-2]['price']) 
           return price - price2 > 0 and price2 - price3 >= 0
           
 
