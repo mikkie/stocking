@@ -104,7 +104,8 @@ class NewAnalyze(object):
           if conf is None:
              dh.add_ignore(stock.get_code()) 
              return False 
-          self.initStockData(stock,open_p,conf)
+          if not stock.is_inited():  
+             self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
           return self.isStockMatch(stock,conf,dh)   
 
@@ -135,6 +136,7 @@ class NewAnalyze(object):
               if stock.get_r_val(key) == -10:
                  val = open_p + (10 - open_p) * r_line[key]
                  stock.set_r_val(key,val)
+          stock.set_inited()       
 
       def updateStock(self,stock,conf):
           self.updateBreakRtimes(stock,conf)

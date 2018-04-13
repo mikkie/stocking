@@ -13,6 +13,7 @@ class NewStock(object):
           self.__code = code
           self.__minR = None
           self.__ls = None
+          self.__inited = False
           self.__sellSignal = 0
           self.__buySignal = 0
           self.__time = None
@@ -44,6 +45,11 @@ class NewStock(object):
           }
           self.__data = [data.to_dict()]
 
+      def is_inited(self):
+          return self.__inited
+
+      def set_inited(self):
+          self.__inited = True  
 
       def get_cache(self,key):
           return self.__cache[key]

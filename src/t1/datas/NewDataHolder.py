@@ -57,19 +57,18 @@ class NewDataHolder(object):
 
       def addDataHandler(self,row):
           code = row['code']
-          if code in self.get_buyed():
+          if code in self.get_buyed() or code in self.get_ignore():
              return 
           if code in self.__data and self.__data[code].len() > 0:
              self.__data[code].add_Line(row)
           else:
                self.__data[code] = NewStock(code,row)
           if float(row['pre_close']) != 0 and (float(row['price']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= 9.9:
-             if not (code in self.get_buyed()): 
-                MyLog.info('[%s] reach 10' % code) 
-                save = False
-                if float(row['price']) != float(row['open']):
-                   save = True
-                self.add_ignore(code,save=save)
+             MyLog.info('[%s] reach 10' % code) 
+             save = False
+             if float(row['price']) != float(row['open']):
+                save = True
+             self.add_ignore(code,save=save)
 
 
       def addSellDataHandler(self,row):
