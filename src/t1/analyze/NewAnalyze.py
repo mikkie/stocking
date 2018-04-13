@@ -28,7 +28,12 @@ class NewAnalyze(object):
           self.__engine = create_engine(self.__config.get_DBurl())
 
 
- 
+
+      def printPerformace(self,timestamp):
+          deltaSeconds = (dt.datetime.now - timestamp).seconds 
+          if deltaSeconds > 3: 
+             print(deltaSeconds)    
+
       def calcMain(self,dh,timestamp):
           data = dh.get_data()
           finalCode = ''
@@ -40,6 +45,7 @@ class NewAnalyze(object):
               try:  
                  if self.calc(data[code],dh):
                     result.append(data[code])
+                #  self.printPerformace(timestamp)  
               except Exception as e:
                      last_line = data[code].get_Lastline()
                      MyLog.error(last_line['time'] + ' :calc ' + code + ' error')
@@ -226,9 +232,9 @@ class NewAnalyze(object):
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b'] and pcp > ocp:
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
                       if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
-                        #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
-                        #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
-                        #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
+                          MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
+                          MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
+                          MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
                           last_second_line = stock.get_LastSecondline()
                           deltaVolume = float(now_line['volume']) - float(last_second_line['volume'])
                           deltaAmount = float(now_line['amount']) - float(last_second_line['amount'])
@@ -238,13 +244,6 @@ class NewAnalyze(object):
                           return False  
                 i = i + 1 
           stock.reset_buySignal()   
-        #   perform the calc time test  
-        #   now = dt.datetime.now()
-        #   if stock.get_time() is not None:
-        #      deltaSeconds = (now - stock.get_time()).seconds
-        #      if deltaSeconds > 3:
-        #         print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
-        #   stock.set_time(now)
           return False  
 
 
