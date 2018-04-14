@@ -26,7 +26,6 @@ for index,row in df_all.iterrows():
         count_close = 0
         count_ma5 = 0
         count_10 = 0
-        count_green = 0
         for index_s,row_s in df_stock.iterrows():
             if pre_close is None:
                pre_close = row_s['close']
@@ -58,11 +57,7 @@ for index,row in df_all.iterrows():
             if (row_s['close'] - pre_close) / pre_close * 100 >= 7:
                flag = False
                break
-            if row_s['close'] < row_s['open']:
-               count_green = count_green + 1 
             pre_close = row_s['close']
-        if count_green >= 3:
-           flag = False     
         if flag:
            index = index.replace('.XSHE','').replace('.XSHG','') 
            res.append(index)

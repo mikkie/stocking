@@ -473,7 +473,7 @@ class Analyze(object):
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b'] and pcp > ocp:
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
-                      if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
+                      if (ct - pt).seconds / 60 <= (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
                         #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                         #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                         #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
