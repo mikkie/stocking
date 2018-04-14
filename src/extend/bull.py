@@ -48,7 +48,7 @@ for index,row in df_all.iterrows():
         #    flag = False   
         if flag == False:
            continue    
-        df_stock = df_stock[-4:]
+        df_stock = df_stock[-3:]
         pre_close = None
         for index_s,row_s in df_stock.iterrows():
             if pre_close is None:
