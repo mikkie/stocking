@@ -14,30 +14,30 @@ for index,row in df_all.iterrows():
         countContinue10 = 0    
         pre_close = None
         flag = False
-        # for index_s,row_s in df_stock.iterrows():
-        #     if pre_close is None:
-        #        pre_close = row_s['close']
-        #        continue
-        #     if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
-        #        countContinue10 = countContinue10 + 1
-        #        if countContinue10 >= 2:
-        #           flag = True
-        #           break 
-        #     else:
-        #         countContinue10 = 0    
-        #     pre_close = row_s['close']
-        if not flag:
+        for index_s,row_s in df_stock.iterrows():
+            if pre_close is None:
+               pre_close = row_s['close']
+               continue
+            if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
+               countContinue10 = countContinue10 + 1
+               if countContinue10 >= 2:
+                  flag = True
+                  break 
+            else:
+                countContinue10 = 0    
+            pre_close = row_s['close']
+        if flag:
            flag = False 
            count_green = 0 
            pre_close = None    
-           df_stock = df_stock[-8:]
+           df_stock = df_stock[-5:]
            for index_s,row_s in df_stock.iterrows():
                if pre_close is None:
                    pre_close = row_s['close']
                    continue   
                if row_s['close'] < pre_close and row_s['close'] < row_s['open']:
                   count_green = count_green + 1
-           if count_green >= 7:
+           if count_green >= 4:
               flag = True        
         if flag:
            index = index.replace('.XSHE','').replace('.XSHG','') 
