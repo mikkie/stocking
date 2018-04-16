@@ -37,7 +37,7 @@ def run(queue):
               res = analyze.calcMain(dh,timestamp)
               if len(res) > 0:
                  for code in res: 
-                     dh.add_buyed(code,True)
+                     dh.add_buyed(code)
               data = queue.get(True)   
     except Exception as e:
             MyLog.error('error %s' % str(e))
