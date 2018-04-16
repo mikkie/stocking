@@ -119,7 +119,7 @@ class Config(object):
                   }
               },
               'x_speed' : {
-                  'a' : 0.75,
+                  'a' : 0.8,
                   'b' : 0.75,
                   'c' : 0.6,
                   'lowerThanBefore' : 1.5,
