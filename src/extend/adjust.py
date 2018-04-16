@@ -23,21 +23,21 @@ for index,row in df_all.iterrows():
                if countContinue10 >= 2:
                   flag = True
                   break 
-            else:
-                countContinue10 = 0    
+            # else:
+            #     countContinue10 = 0    
             pre_close = row_s['close']
         if flag:
            flag = False 
            count_green = 0 
            pre_close = None    
-           df_stock = df_stock[-5:]
+           df_stock = df_stock[-4:]
            for index_s,row_s in df_stock.iterrows():
                if pre_close is None:
                    pre_close = row_s['close']
                    continue   
                if row_s['close'] < pre_close and row_s['close'] < row_s['open']:
                   count_green = count_green + 1
-           if count_green >= 4:
+           if count_green >= 3:
               flag = True        
         if flag:
            index = index.replace('.XSHE','').replace('.XSHG','') 

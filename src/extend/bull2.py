@@ -4,12 +4,12 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-04-15'
+startDate = '2018-04-16'
 res = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
-        df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','low'], skip_paused=True, fq='pre', count=20)
+        df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','low'], skip_paused=True, fq='pre', count=60)
         if len(df_stock) < 10:
            continue    
         countContinue10 = 0    
