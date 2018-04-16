@@ -221,10 +221,8 @@ class NewAnalyze(object):
                           MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                           MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
                           last_second_line = stock.get_LastSecondline()
-                          deltaVolume = float(now_line['volume']) - float(last_second_line['volume'])
-                          deltaAmount = float(now_line['amount']) - float(last_second_line['amount'])
                           stock.add_buySignal()
-                          if stock.get_buySignal() >= self.__config.get_t1()['trade']['maxBuySignal'] or deltaVolume >= self.__config.get_t1()['x_speed']['minimumVolume'] or deltaAmount >= self.__config.get_t1()['x_speed']['minimumAmount']:
+                          if stock.get_buySignal() >= self.__config.get_t1()['trade']['maxBuySignal']:
                              return True
                           return False  
                 i = i + 1 
