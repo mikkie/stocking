@@ -120,8 +120,8 @@ if __name__ == '__main__':
    def getData():
        timestamp = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
-          if (now - interDataHolder['currentTime']).seconds > 60:
-             interDataHolder['currentTime'] = now
+          if (timestamp - interDataHolder['currentTime']).seconds > 60:
+             interDataHolder['currentTime'] = timestamp
              mockTrade.relogin() 
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])

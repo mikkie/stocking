@@ -56,9 +56,9 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 300,
+                 'volume' : 500,
                  'enable' : False,
-                 'enableMock' : False, 
+                 'enableMock' : True, 
                  'max_buyed' : 3,
                  'balance' : 200000,
                  'maxBuySignal' : 2,
