@@ -185,9 +185,17 @@ class NewAnalyze(object):
              return False
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
              return False
+          if 'sellWindow' in self.__config.get_t1()['strategy'] and not self.isSellWindowMatch(stock):
+             return False 
           if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
              return False   
           return self.isLastTwoMatch(stock)
+
+
+      def isSellWindowMatch(self,stock):
+          now_line = stock.get_Lastline()
+          limit_v = self.__config.get_t1()['sellWindow']['volume']
+          return self.convertToFloat(now_line['a1_v']) < limit_v and self.convertToFloat(now_line['a2_v']) < limit_v and self.convertToFloat(now_line['a3_v']) < limit_v and self.convertToFloat(now_line['a4_v']) < limit_v and self.convertToFloat(now_line['a5_v']) < limit_v  
 
 
       def isXSpeedMatch(self,dh,stock):

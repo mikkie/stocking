@@ -56,12 +56,12 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 500,
+                 'volume' : 300,
                  'enable' : False,
-                 'enableMock' : False, 
+                 'enableMock' : True, 
                  'max_buyed' : 3,
                  'balance' : 200000,
-                 'maxBuySignal' : 2,
+                 'maxBuySignal' : 3,
                  'timestampLimit' : 7
               },
               'topsis' : {
@@ -118,6 +118,9 @@ class Config(object):
                       'net' : 250000
                   }
               },
+              'sellWindow' : {
+                  'volume' : 500
+              },
               'x_speed' : {
                   'a' : 0.8,
                   'b' : 0.75,
@@ -128,7 +131,7 @@ class Config(object):
                   'minimumAmount' : 50000,
                   'maxStickNum' : 250
               },
-              'strategy' : ['time','minR','xspeed'],
+              'strategy' : ['time','minR','xspeed','sellWindow'],
               'seller' : {
                   'margin' : 1,
                   'min_threshold' : -8,
