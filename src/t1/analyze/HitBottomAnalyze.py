@@ -34,7 +34,7 @@ class HitBottomAnalyze(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,dh,timestamp):
+      def calcMain(self,dh,timestamp,buyCount):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -54,7 +54,7 @@ class HitBottomAnalyze(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     res = self.outputRes(last_line,timestamp)
+                     res = self.outputRes(last_line,timestamp,buyCount)
                      if res is not None:
                         codes.append(stock.get_code())
                  except Exception as e:
@@ -63,9 +63,9 @@ class HitBottomAnalyze(object):
           return codes   
 
 
-      def outputRes(self,df_final,timestamp):
+      def outputRes(self,df_final,timestamp,buyCount):
           trade = self.__config.get_t1()['trade']
-          if self.__buyedCount >= trade['max_buyed']:
+          if buyCount <= 0:
              return None
           buyMoney = (float(df_final['price']) + trade['addPrice']) * trade['volume']  
           if buyMoney > self.__balance:

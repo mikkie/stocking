@@ -23,7 +23,7 @@ mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
 analyze = HitBottomAnalyze()
 
-def run(queue):
+def run(queue,queueout):
     MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
@@ -31,16 +31,18 @@ def run(queue):
         while data is not None and data['df'] is not None and len(data['df']) > 0:
               timestamp = data['timestamp']
               df = data['df']
+              buyCount = data['buyCount']
               if dh is None:
                  dh = HitBottomDataHolder() 
               dh.addData(df)
-              res = analyze.calcMain(dh,timestamp)
+              res = analyze.calcMain(dh,timestamp,buyCount)
               if len(res) > 0:
                  for code in res: 
                      dh.add_buyed(code)
+                     queueout.put({'buyed' : 1})
               data = queue.get(True)   
     except Exception as e:
-            MyLog.error('error %s' % str(e))
+           MyLog.error('error %s' % str(e))
 
 
 
@@ -62,7 +64,6 @@ if __name__ == '__main__':
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
-
    codeLists = init(False)
    MyLog.info('calc stocks %s' % codeLists)
    codeSplitMaps = {} 
@@ -90,6 +91,7 @@ if __name__ == '__main__':
    if length % step == 0: 
       less = 0
    num_splits = length // step + less
+   queueout = manager.Queue()
    for i in range(num_splits):
        end = begin + step
        if end > length:
@@ -98,7 +100,7 @@ if __name__ == '__main__':
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
        queueMaps[i] = queue
-       pool.apply_async(run, (queue,))
+       pool.apply_async(run, (queue,queueout))
        begin = end
        if begin >= length:
           break
@@ -107,6 +109,9 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():
+       if setting.get_t1()['trade']['max_buyed'] > 0 and not queueout.empty():
+          queueout.get(True) 
+          setting.get_t1()['trade']['max_buyed'] = setting.get_t1()['trade']['max_buyed'] - 1 
        timestamp = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
@@ -114,7 +119,7 @@ if __name__ == '__main__':
              mockTrade.relogin() 
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           queueMaps[key].put({'timestamp' : timestamp,'df' : df})
+           queueMaps[key].put({'timestamp' : timestamp,'df' : df, 'buyCount' : setting.get_t1()['trade']['max_buyed']})
 
    sched.start()
    pool.close()
