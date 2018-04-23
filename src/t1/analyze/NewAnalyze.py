@@ -234,7 +234,7 @@ class NewAnalyze(object):
                              return True
                           return False  
                 i = i + 1 
-          stock.reset_buySignal()   
+        #   stock.reset_buySignal()   
           return False  
 
 
