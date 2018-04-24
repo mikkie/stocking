@@ -72,9 +72,10 @@ class Config(object):
                   'r_break' : 0.2
               },
               'big_money' : {
-                  'amount' : 500000,
-                  'volume' : 100000,
-                  'threshold' : 0.3
+                  'amount' : 300000,
+                  'volume' : 60000,
+                  'threshold' : 0.6,
+                  'count' : 16
               },
               'speed' : {
                   'v30_ratio' : 0.8,
