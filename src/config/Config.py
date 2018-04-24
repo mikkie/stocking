@@ -58,10 +58,10 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
-                 'enableMock' : False, 
+                 'enableMock' : True, 
                  'max_buyed' : 3,
                  'balance' : 200000,
-                 'maxBuySignal' : 3,
+                 'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
               'topsis' : {

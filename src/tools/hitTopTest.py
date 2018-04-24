@@ -16,7 +16,7 @@ from t1.analyze.NewAnalyze import NewAnalyze
 from t1.analyze.Concept import Concept
 from t1.analyze.NetMoney import NetMoney
 
-codes = ['300597']
+codes = ['002877']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -38,7 +38,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(dh,dt.datetime.now(),0)
+       codes = analyze.calcMain(dh,dt.datetime.now(),3)
        if len(codes) > 0:
           for code in codes: 
               dh.add_ignore(code)

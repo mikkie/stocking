@@ -262,7 +262,7 @@ class NewAnalyze(object):
           price = float(data[-1]['price'])
           price2 = float(data[-2]['price'])
           price3 = float(data[-2]['price']) 
-          return price - price2 > 0 and price2 - price3 >= 0
+          return price - price2 >= 0 and price2 - price3 >= 0
           
 
 
