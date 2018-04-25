@@ -72,7 +72,7 @@ class Config(object):
                   'r_break' : 0.2
               },
               'big_money' : {
-                  'amount' : 300000,
+                  'amount' : 400000,
                   'volume' : 60000,
                   'count' : 15
               },
@@ -124,7 +124,7 @@ class Config(object):
               'x_speed' : {
                   'a' : 0.8,
                   'b' : 0.75,
-                  'c' : 0.6,
+                  'c' : [0.6,1.0,1.2],
                   'lowerThanBefore' : 1.5,
                   'lowerThanBeforeTimes' : 5,
                   'minimumVolume' : 5000,

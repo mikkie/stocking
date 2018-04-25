@@ -211,11 +211,11 @@ class NewAnalyze(object):
           now_line = stock.get_Lastline() 
           ccp = self.getCurrentPercent(stock)
           ocp = self.getOpenPercent(stock)
-          if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-             stock.add_lowerThanBeforeTimes()
-             if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
-                dh.add_ignore(stock.get_code()) 
-                return False 
+        #   if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
+        #      stock.add_lowerThanBeforeTimes()
+        #      if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+        #         dh.add_ignore(stock.get_code()) 
+        #         return False 
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           pcpArray = self.generatePCPArray(stock)
           i = 0
@@ -225,15 +225,20 @@ class NewAnalyze(object):
                    break 
                 price = float(line['price'])    
                 pcp = (float(pcpArray[i]['price']) - float(pcpArray[i]['pre_close'])) / float(pcpArray[i]['pre_close']) * 100 
-                if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-                   stock.add_lowerThanBeforeTimes() 
-                   if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
-                      dh.add_ignore(stock.get_code()) 
-                      return False  
+                # if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
+                #    stock.add_lowerThanBeforeTimes() 
+                #    if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+                #       dh.add_ignore(stock.get_code()) 
+                #       return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
                    if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b'] and pcp > ocp:
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
-                      if (ct - pt).seconds / 60 < (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
+                      c = self.__config.get_t1()['x_speed']['c'][0]
+                      if ocp >= 2 and ocp < 5:
+                         c = self.__config.get_t1()['x_speed']['c'][1]
+                      elif ocp >= -1 and ocp < 2:
+                           c = self.__config.get_t1()['x_speed']['c'][2]   
+                      if (ct - pt).seconds / 60 < (ccp - pcp) * c:
                           MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                           MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                           MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
@@ -307,7 +312,7 @@ class NewAnalyze(object):
       def isReachMinR(self,stock):
           now_p = self.getCurrentPercent(stock)
           minR = stock.get_minR()
-          return now_p > stock.get_r_val(minR)
+          return now_p > stock.get_r_val(minR) or now_p >= 9.0
 
               
 

@@ -13,10 +13,10 @@ from config.Config import Config
 from t1.MyLog import MyLog
 from t1.datas.NewDataHolder import NewDataHolder
 from t1.analyze.NewAnalyze import NewAnalyze
-from t1.analyze.Concept import Concept
-from t1.analyze.NetMoney import NetMoney
+# from t1.analyze.Concept import Concept
+# from t1.analyze.NetMoney import NetMoney
 
-codes = ['002021','603200','002877','300119']
+codes = ['300555','603912','603322','300563','300046','603042','002897','000682','002417','603528']
 src_datas = {}
 datas = {}
 setting = Config()
