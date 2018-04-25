@@ -198,14 +198,9 @@ class NewAnalyze(object):
           if size > self.__config.get_t1()['big_money']['count']:
              size = self.__config.get_t1()['big_money']['count'] 
           data = data[size * -1:]
-          count = 0
-          lastAmount = None
-          for row in data: 
-              nowAmount = self.convertToFloat(row['amount'])   
-              if lastAmount is not None and (nowAmount - lastAmount >= self.__config.get_t1()['big_money']['amount']):
-                 count = count + 1
-              lastAmount = nowAmount
-          if (count / size < self.__config.get_t1()['big_money']['threshold']):
+          nowAmount = self.convertToFloat(data[-1]['amount'])
+          lastAmount = self.convertToFloat(data[0]['amount'])
+          if (nowAmount - lastAmount) / size < self.__config.get_t1()['big_money']['amount']:
              return False         
           now_line = stock.get_Lastline()
           limit_v = self.__config.get_t1()['sellWindow']['volume']
