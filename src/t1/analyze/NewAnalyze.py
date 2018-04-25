@@ -197,9 +197,9 @@ class NewAnalyze(object):
           size = len(data)
           if size > self.__config.get_t1()['big_money']['count']:
              size = self.__config.get_t1()['big_money']['count'] 
-          data = data[size * -1:]
-          nowAmount = self.convertToFloat(data[-1]['amount'])
-          lastAmount = self.convertToFloat(data[0]['amount'])
+          temp = data[size * -1:]
+          nowAmount = self.convertToFloat(temp[-1]['amount'])
+          lastAmount = self.convertToFloat(temp[0]['amount'])
           if (nowAmount - lastAmount) / size < self.__config.get_t1()['big_money']['amount']:
              return False         
           now_line = stock.get_Lastline()
