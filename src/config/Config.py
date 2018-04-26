@@ -58,7 +58,7 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
-                 'enableMock' : True, 
+                 'enableMock' : False, 
                  'max_buyed' : 3,
                  'balance' : 200000,
                  'maxBuySignal' : 1,
@@ -119,7 +119,7 @@ class Config(object):
                   }
               },
               'sellWindow' : {
-                  'volume' : 1000
+                  'threshold' : 0.1
               },
               'x_speed' : {
                   'a' : 0.8,

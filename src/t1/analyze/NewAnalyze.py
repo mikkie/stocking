@@ -203,9 +203,11 @@ class NewAnalyze(object):
           if (nowAmount - lastAmount) / size < self.__config.get_t1()['big_money']['amount']:
              return False         
           now_line = stock.get_Lastline()
-          limit_v = self.__config.get_t1()['sellWindow']['volume']
-          return self.convertToFloat(now_line['a1_v']) < limit_v and self.convertToFloat(now_line['a2_v']) < limit_v and self.convertToFloat(now_line['a3_v']) < limit_v and self.convertToFloat(now_line['a4_v']) < limit_v and self.convertToFloat(now_line['a5_v']) < limit_v  
-
+          totalAmountInSell = 0.0;
+          for i in range(1,6):
+              temp = self.convertToFloat(now_line['a'+ str(i) +'_p']) * self.convertToFloat(now_line['a' + str(i) + '_v']) * 100
+              totalAmountInSell = totalAmountInSell + temp
+          return totalAmountInSell / (nowAmount - lastAmount) <= self.__config.get_t1()['sellWindow']['threshold']
 
       def isXSpeedMatch(self,dh,stock):
           now_line = stock.get_Lastline() 
