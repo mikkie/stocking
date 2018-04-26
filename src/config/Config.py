@@ -119,7 +119,7 @@ class Config(object):
                   }
               },
               'sellWindow' : {
-                  'threshold' : 0.1
+                  'threshold' : 0.2
               },
               'x_speed' : {
                   'a' : 0.8,
