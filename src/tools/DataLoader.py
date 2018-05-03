@@ -16,9 +16,9 @@ def cb(**kw):
     return ts.get_today_all()
 Utils.queryData('today_all','code',engine, cb, forceUpdate=True)
 
-def cb1(**kw):
-    return ts.xsg_data()
-Utils.queryData('xsg','code',engine, cb1, forceUpdate=True)
+# def cb1(**kw):
+#     return ts.xsg_data()
+# Utils.queryData('xsg','code',engine, cb1, forceUpdate=True)
 
 # def cb2(**kw):
 #     return ts.fund_holdings(2017, 4)

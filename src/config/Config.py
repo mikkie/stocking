@@ -133,7 +133,7 @@ class Config(object):
               },
               'strategy' : ['time','minR','xspeed','sellWindow'],
               'seller' : {
-                  'margin' : 1,
+                  'margin' : 0.5,
                   'min_threshold' : -8,
                   'cancelTime' : 30,
                   'maxSellSignal' : 5
