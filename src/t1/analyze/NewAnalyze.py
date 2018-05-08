@@ -200,14 +200,18 @@ class NewAnalyze(object):
           temp = data[size * -1:]
           nowAmount = self.convertToFloat(temp[-1]['amount'])
           lastAmount = self.convertToFloat(temp[0]['amount'])
-          if (nowAmount - lastAmount) / size < self.__config.get_t1()['big_money']['amount']:
-             return False         
+          avgAmount = (nowAmount - lastAmount) / size
+          if avgAmount < self.__config.get_t1()['big_money']['amount']:
+             return False 
+          MyLog.info('[%s] average amount = %s' % (stock.get_code(),avgAmount))          
           now_line = stock.get_Lastline()
           totalAmountInSell = 0.0;
           for i in range(1,6):
               temp = self.convertToFloat(now_line['a'+ str(i) +'_p']) * self.convertToFloat(now_line['a' + str(i) + '_v']) * 100
               totalAmountInSell = totalAmountInSell + temp
-          return totalAmountInSell / (nowAmount - lastAmount) <= self.__config.get_t1()['sellWindow']['threshold']
+          ratio = totalAmountInSell / (nowAmount - lastAmount)    
+          MyLog.info('[%s] sell window ratio = %s' % (stock.get_code(),ratio))
+          return ratio <= self.__config.get_t1()['sellWindow']['threshold']
 
       def isXSpeedMatch(self,dh,stock):
           now_line = stock.get_Lastline() 

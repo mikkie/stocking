@@ -58,7 +58,7 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
-                 'enableMock' : True, 
+                 'enableMock' : False, 
                  'max_buyed' : 3,
                  'balance' : 200000,
                  'maxBuySignal' : 1,
@@ -72,7 +72,7 @@ class Config(object):
                   'r_break' : 0.2
               },
               'big_money' : {
-                  'amount' : 400000,
+                  'amount' : 500000,
                   'volume' : 60000,
                   'count' : 15
               },
