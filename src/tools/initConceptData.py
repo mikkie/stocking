@@ -11,8 +11,8 @@ headersHomePage = {
     'Accept-Encoding': 'gzip, deflate',
     'Accept-Language': 'en-US,en;q=0.9',
     'Connection': 'keep-alive',
-    'Cookie': 'uaid=3e9d33c7f0daebe595757fcd5d3722ba; spversion=20130314; searchGuide=sg; historystock=002046%7C*%7C603698%7C*%7C000901%7C*%7C300563%7C*%7C300565; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1525760999.1525775393.61; __utmc=156575163; __utmz=156575163.1525775393.61.61.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_60bad21af9c824a4a0530d5dbf4357ca=1525761708,1525767793,1525769729,1525775403; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1525394879,1525653828,1525740567,1525775403; Hm_lvt_f79b64788a4e377c608617fba4c736e2=1525761708,1525767793,1525769729,1525775403; Hm_lpvt_60bad21af9c824a4a0530d5dbf4357ca=1525779105; Hm_lpvt_f79b64788a4e377c608617fba4c736e2=1525779105; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1525779105; v=ApIkkJjeHNxyxGCgBrmEGuOd41Nwo5Q3yKKKd1zqvCcxkzxFRDPmTZg32nkv',
-    'hexin-v': 'Au1bYes3S72bKy_RH-Lzm-AU_IJjSiTGq2-F5C_bK6zx8wN095ox7DvOlcy8',
+    'Cookie': 'uaid=3e9d33c7f0daebe595757fcd5d3722ba; spversion=20130314; searchGuide=sg; historystock=002046%7C*%7C603698%7C*%7C000901%7C*%7C300563%7C*%7C300565; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1525775393.1525779546.62; __utmc=156575163; __utmz=156575163.1525779546.62.62.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1525653828,1525740567,1525775403,1525779552; __utmt=1; __utmb=156575163.3.10.1525779546; Hm_lvt_60bad21af9c824a4a0530d5dbf4357ca=1525775403,1525779552,1525779995,1525780554; Hm_lvt_f79b64788a4e377c608617fba4c736e2=1525775403,1525779552,1525779995,1525780554; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1525780557; Hm_lpvt_60bad21af9c824a4a0530d5dbf4357ca=1525780557; Hm_lpvt_f79b64788a4e377c608617fba4c736e2=1525780557; v=AtNl39F1jQuBykHf5A11DZp2Ylz5iGYwIRmrGYXxLVEo6P2KDVj3mjHsO82W',
+    'hexin-v': 'AtNl39F1jQuBykHf5A11DZp2Ylz5iGYwIRmrGYXxLVEo6P2KDVj3mjHsO82W',
     'Host': 'data.10jqka.com.cn',
     'Referer': 'http://data.10jqka.com.cn/funds/gnzjl/',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
@@ -21,7 +21,7 @@ headersHomePage = {
 
 headersAjaxConcept = {
     'Accept': 'text/html, */*; q=0.01',
-    'hexin-v': 'Au1bYes3S72bKy_RH-Lzm-AU_IJjSiTGq2-F5C_bK6zx8wN095ox7DvOlcy8',
+    'hexin-v': 'AtNl39F1jQuBykHf5A11DZp2Ylz5iGYwIRmrGYXxLVEo6P2KDVj3mjHsO82W',
     'Referer': 'http://q.10jqka.com.cn/gn/detail/code/301602/',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
     'X-Requested-With': 'XMLHttpRequest'

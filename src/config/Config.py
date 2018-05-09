@@ -58,7 +58,7 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 300,
                  'enable' : False,
-                 'enableMock' : True, 
+                 'enableMock' : False, 
                  'max_buyed' : 3,
                  'balance' : 200000,
                  'maxBuySignal' : 1,
@@ -131,7 +131,7 @@ class Config(object):
                   'minimumAmount' : 50000,
                   'maxStickNum' : 250
               },
-              'strategy' : ['time','minR','xspeed','sellWindow'],
+              'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   'margin' : 0.8,
                   'min_threshold' : -8,

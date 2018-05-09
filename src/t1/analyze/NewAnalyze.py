@@ -34,7 +34,7 @@ class NewAnalyze(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,dh,timestamp,buyCount):
+      def calcMain(self,zs,dh,timestamp,buyCount):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -43,7 +43,7 @@ class NewAnalyze(object):
               if code in dh.get_buyed() or code in dh.get_ignore():
                  continue 
               try:  
-                 if self.calc(data[code],dh):
+                 if self.calc(zs,data[code],dh):
                     result.append(data[code])
                 #  self.printPerformace(timestamp)  
               except Exception as e:
@@ -96,7 +96,7 @@ class NewAnalyze(object):
 
 
               
-      def calc(self,stock,dh):
+      def calc(self,zs,stock,dh):
           if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
@@ -107,7 +107,7 @@ class NewAnalyze(object):
           if not stock.is_inited():  
              self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(stock,conf,dh)   
+          return self.isStockMatch(zs,stock,conf,dh)   
 
 
       def isOpenMatch(self,row):
@@ -180,7 +180,9 @@ class NewAnalyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,stock,conf,dh):
+      def isStockMatch(self,zs,stock,conf,dh):
+          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
+             return False 
           if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
              return False
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
@@ -191,6 +193,17 @@ class NewAnalyze(object):
              return False   
           return self.isLastTwoMatch(stock)
 
+
+      def isZSMatch(self,zs,stock):
+          code = stock.get_code()
+          i = 0
+          if code.startswith('3'):
+             i = 5 
+          line = zs.iloc[i] 
+          pre_close = line.get('pre_close') 
+          price = line.get('price')
+          p = (float(price) - float(pre_close)) / float(pre_close) * 100 
+          return p > 0
 
       def isSellWindowMatch(self,stock):
           data = stock.get_data()
