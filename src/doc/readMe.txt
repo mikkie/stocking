@@ -25,3 +25,4 @@ main.py init 300 c 节能
 2.filter by twodayten.py (keep yesterday 10%)
 3.filter by xsg.js
 4.filter by yesterday buy
+5.filter by yg.py
