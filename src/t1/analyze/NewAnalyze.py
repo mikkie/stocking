@@ -207,7 +207,6 @@ class NewAnalyze(object):
           p = (float(price) - float(pre_close)) / float(pre_close) * 100 
           if p < -0.3:
              return False 
-          code = stock.get_code()
           if code in self.__config.get_conceptCodes():
              return True
           return p > 0
