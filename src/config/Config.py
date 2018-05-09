@@ -73,6 +73,7 @@ class Config(object):
               },
               'big_money' : {
                   'amount' : 500000,
+                  'amount_2' : 1000000,
                   'volume' : 60000,
                   'count' : 15
               },

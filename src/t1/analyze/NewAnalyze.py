@@ -190,8 +190,6 @@ class NewAnalyze(object):
              return False 
           if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
              return False 
-          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(stock):
-             return False     
           return self.isLastTwoMatch(stock)
 
 
@@ -222,6 +220,9 @@ class NewAnalyze(object):
           avgAmount = (nowAmount - lastAmount) / size
           if avgAmount < self.__config.get_t1()['big_money']['amount']:
              return False 
+          if avgAmount < self.__config.get_t1()['big_money']['amount_2']:
+             if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(stock):
+                return False  
           MyLog.info('[%s] average amount = %s' % (stock.get_code(),avgAmount))          
           now_line = stock.get_Lastline()
           totalAmountInSell = 0.0;
