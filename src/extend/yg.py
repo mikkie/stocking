@@ -4,7 +4,7 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-04-20'
+startDate = '2018-05-09'
 res = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
@@ -27,12 +27,19 @@ for index,row in df_all.iterrows():
         count_close = 0
         count_ma5 = 0
         count_10 = 0
+        continue_flag = True
         for index_s,row_s in df_stock.iterrows():
             if pre_close is None:
                pre_close = row_s['close']
                continue
             if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
-               count_10 = count_10 + 1
+               if continue_flag:
+                  count_10 = count_10 + 1
+               else:
+                   count_10 = 1 
+               continue_flag = True         
+            else:
+                 continue_flag = False   
             ma5 = row_s['ma5']
             ma10 = row_s['ma10']
             if not np.isnan(ma5) and not np.isnan(ma10):
@@ -41,7 +48,7 @@ for index,row in df_all.iterrows():
                if ma5 > ma10:
                   count_ma5 = count_ma5 + 1      
             pre_close = row_s['close']
-        if count_10 < 1:
+        if count_10 >= 3:
            flag = True
         if flag:
            index = index.replace('.XSHE','').replace('.XSHG','') 
