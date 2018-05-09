@@ -196,6 +196,9 @@ class NewAnalyze(object):
 
 
       def isZSMatch(self,stock):
+          code = stock.get_code()
+          if code in self.__config.get_conceptCodes():
+             return True 
           zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
           code = stock.get_code()
           i = 0
