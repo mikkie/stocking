@@ -196,9 +196,6 @@ class NewAnalyze(object):
 
 
       def isZSMatch(self,stock):
-          code = stock.get_code()
-          if code in self.__config.get_conceptCodes():
-             return True 
           zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
           code = stock.get_code()
           i = 0
@@ -208,6 +205,11 @@ class NewAnalyze(object):
           pre_close = line.get('pre_close') 
           price = line.get('price')
           p = (float(price) - float(pre_close)) / float(pre_close) * 100 
+          if p < -0.3:
+             return False 
+          code = stock.get_code()
+          if code in self.__config.get_conceptCodes():
+             return True
           return p > 0
 
       def isSellWindowMatch(self,stock):
