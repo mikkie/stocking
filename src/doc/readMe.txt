@@ -22,8 +22,6 @@ main.py init 300 c 节能
 
 0.get all today
 1.filter by common.sql (price < 30)
-2.filter by no10twomonth.py
-3.filter by twodayten.py (keep yesterday 10%)
-4.filter by xsg.js
-5.filter by yesterday buy
-6.filter by code not start with 3
+2.filter by twodayten.py (keep yesterday 10%)
+3.filter by xsg.js
+4.filter by yesterday buy
