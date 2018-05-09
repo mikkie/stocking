@@ -11,29 +11,18 @@ import sys
 sys.path.append('..')
 from config.Config import Config 
 from t1.MyLog import MyLog
-from t1.datas.DataHolder import DataHolder
-from t1.analyze.Analyze import Analyze
+from t1.datas.HitBottomDataHolder import HitBottomDataHolder
+from t1.analyze.HitBottomAnalyze import HitBottomAnalyze
 from t1.analyze.Concept import Concept
 from t1.analyze.NetMoney import NetMoney
-from t1.trade.MockTrade import MockTrade
 
-codes = ['603607']
+codes = ['603937']
 src_datas = {}
 datas = {}
 setting = Config()
 engine = create_engine(setting.get_DBurl())
-dh = DataHolder(codes)
-# thshy = pd.read_sql_table('thshy', con=engine)
-# thsgn = pd.read_sql_table('concept', con=engine)
-# analyze = Analyze(thshy,thsgn)
-analyze = Analyze(None,None)
-mockTrade = MockTrade()
-mockTrade.relogin()
-# concept = Concept()
-# netMoney = NetMoney()
-# hygn = concept.getCurrentTopHYandConcept()
-# net = netMoney.getNetMoneyRatio()
-zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+dh = HitBottomDataHolder()
+analyze = HitBottomAnalyze()
 
 for code in codes:
     try:
@@ -49,10 +38,10 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(zs,dh,None,None,dt.datetime.now())
+       codes = analyze.calcMain(dh,dt.datetime.now())
        if len(codes) > 0:
           for code in codes: 
-              dh.add_buyed(code,False)
+              dh.add_ignore(code)
 
 for i in range(5200):
     run(i)

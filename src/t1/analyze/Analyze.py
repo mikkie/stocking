@@ -20,6 +20,7 @@ class Analyze(object):
       def __init__(self,thshy,thsgn):
           self.__config = Config()
           self.__buyedCount = 0
+          self.__balance = self.__config.get_t1()['trade']['balance']
           if self.__config.get_t1()['trade']['enable']:
              self.__trade = Trade()
           if self.__config.get_t1()['trade']['enableMock']:
@@ -45,7 +46,7 @@ class Analyze(object):
           return data                  
               
  
-      def calcMain(self,zs,dh,hygn,netMoney):
+      def calcMain(self,zs,dh,hygn,netMoney,timestamp):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -65,9 +66,10 @@ class Analyze(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     self.outputRes(last_line)
-                     codes.append(stock.get_code())
-                     self.saveData(stock)
+                     res = self.outputRes(last_line,timestamp)
+                     if res is not None:
+                        codes.append(stock.get_code())
+                        self.saveData(stock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
@@ -89,23 +91,36 @@ class Analyze(object):
           t.start()  
 
 
-      def outputRes(self,df_final):
+      def outputRes(self,df_final,timestamp):
           trade = self.__config.get_t1()['trade']
           if self.__buyedCount >= trade['max_buyed']:
-             return 
-          if (float(df_final['price']) + trade['addPrice']) * trade['volume'] > trade['balance']:
-             return    
+             return None
+          buyMoney = (float(df_final['price']) + trade['addPrice']) * trade['volume']  
+          if buyMoney > self.__balance:
+             return None   
           price = str('%.2f' % (float(df_final['price']) + trade['addPrice']))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
           MyLog.info(info)
+          now = dt.datetime.now()
+          deltaSeconds = (now - timestamp).seconds
+          if deltaSeconds > trade['timestampLimit']:
+             MyLog.info('[%s] 行情超时 %s秒 放弃买入' % (df_final['code'],deltaSeconds)) 
+             return None
           if trade['enable']:
              res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
              if 'entrust_no' in res:
                 self.__buyedCount = self.__buyedCount + 1
+                self.__balance = self.__balance - buyMoney
+                return df_final['code']
+             return None  
           if trade['enableMock']:
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
              if res == 0:
                 self.__buyedCount = self.__buyedCount + 1
+                self.__balance = self.__balance - buyMoney
+                return df_final['code']
+             return None  
+          return df_final['code']  
 
 
       def goTopsis(self,result):
@@ -257,7 +272,7 @@ class Analyze(object):
 
       def updateStock(self,stock,conf):
           self.updateBreakRtimes(stock,conf)
-          self.updateSpeed(stock)
+        #   self.updateSpeed(stock)
         #   self.updatePriceVolumeMap(stock)
         #   try:
         #      self.updateBigMoney(stock,conf)
@@ -397,21 +412,21 @@ class Analyze(object):
                  return t1[key] 
 
       def isStockMatch(self,zs,stock,conf,hygn,netMoney,dh):
-          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
-             return False   
+        #   if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
+        #      return False   
           if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
              return False
-          if 'hygn' in self.__config.get_t1()['strategy'] and not self.isHygnMatch(stock,hygn):
-             return False  
-          if 'net' in self.__config.get_t1()['strategy'] and not self.isNetMatch(stock,conf):
-             return False      
-          if 'speed' in self.__config.get_t1()['strategy'] and stock.get_minR() != 'R5':
-             if not self.isSpeedMatch(stock,conf):
-                return False
-          if 'pvmap' in self.__config.get_t1()['strategy'] and not self.isPriceVolumeMapMatch(stock):
-             return False  
-          if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
-             return False  
+        #   if 'hygn' in self.__config.get_t1()['strategy'] and not self.isHygnMatch(stock,hygn):
+        #      return False  
+        #   if 'net' in self.__config.get_t1()['strategy'] and not self.isNetMatch(stock,conf):
+        #      return False      
+        #   if 'speed' in self.__config.get_t1()['strategy'] and stock.get_minR() != 'R5':
+        #      if not self.isSpeedMatch(stock,conf):
+        #         return False
+        #   if 'pvmap' in self.__config.get_t1()['strategy'] and not self.isPriceVolumeMapMatch(stock):
+        #      return False  
+        #   if 'netRatio' in self.__config.get_t1()['strategy'] and not self.netMoneyRatioMatch(stock,netMoney):
+        #      return False  
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
              return False
           if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
@@ -437,38 +452,47 @@ class Analyze(object):
           ccp = self.getCurrentPercent(stock)
           ocp = self.getOpenPercent(stock)
           if ocp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-             dh.add_buyed(stock.get_code(),False) 
-             return False 
+             stock.add_lowerThanBeforeTimes()
+             if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+                dh.add_buyed(stock.get_code(),False) 
+                return False 
           ct = dt.datetime.strptime(now_line['date'] + ' ' + now_line['time'], '%Y-%m-%d %H:%M:%S')
           len = stock.len() 
           i = len - 2
+          if i > self.__config.get_t1()['x_speed']['maxStickNum']:
+             i = self.__config.get_t1()['x_speed']['maxStickNum'] 
           while i >= 0:
                 line = stock.get_data().iloc[i] 
                 price = float(line['price'])    
                 pcp = self.getPercent(price,stock) 
                 if pcp - ccp >= self.__config.get_t1()['x_speed']['lowerThanBefore']:
-                   dh.add_buyed(stock.get_code(),False) 
-                   return False  
+                   stock.add_lowerThanBeforeTimes() 
+                   if stock.get_lowerThanBeforeTimes() > self.__config.get_t1()['x_speed']['lowerThanBeforeTimes']: 
+                      dh.add_buyed(stock.get_code(),False) 
+                      return False  
                 if ccp - pcp >= (10 - pcp) * self.__config.get_t1()['x_speed']['a']:
-                   ratio_b = self.__config.get_t1()['x_speed']['b']['m']
-                   if ocp <= 2:
-                      ratio_b = self.__config.get_t1()['x_speed']['b']['s'] 
-                   if ocp > 5:
-                      ratio_b = self.__config.get_t1()['x_speed']['b']['b']    
-                   if ccp - pcp >= (ccp - ocp) * ratio_b: 
+                   if ccp - pcp >= (ccp - ocp) * self.__config.get_t1()['x_speed']['b'] and pcp > ocp:
                       pt = dt.datetime.strptime(line['date'] + ' ' + line['time'], '%Y-%m-%d %H:%M:%S')
-                      p_change = ccp - pcp
-                      ratio_c = self.__config.get_t1()['x_speed']['c']['m']
-                      if p_change <= 2:
-                         ratio_c = self.__config.get_t1()['x_speed']['c']['s']
-                      elif p_change > 5:
-                           ratio_c = self.__config.get_t1()['x_speed']['c']['b']     
-                      if (ct - pt).seconds / 60 < (ccp - pcp) * ratio_c:
+                      if (ct - pt).seconds / 60 <= (ccp - pcp) * self.__config.get_t1()['x_speed']['c']:
                         #   MyLog.info('[%s] match cond a, ccp = %s, pcp = %s' % (stock.get_code(),ccp,pcp)) 
                         #   MyLog.info('[%s] match cond b, ccp = %s, ocp = %s' % (stock.get_code(),ccp,ocp)) 
                         #   MyLog.info('[%s] match cond c, ct = %s, pt = %s' % (stock.get_code(),ct,pt))
-                          return True
-                i = i - 1      
+                          last_second_line = stock.get_LastSecondline()
+                          deltaVolume = float(now_line['volume']) - float(last_second_line['volume'])
+                          deltaAmount = float(now_line['amount']) - float(last_second_line['amount'])
+                          stock.add_buySignal()
+                          if stock.get_buySignal() >= self.__config.get_t1()['trade']['maxBuySignal'] or deltaVolume >= self.__config.get_t1()['x_speed']['minimumVolume'] or deltaAmount >= self.__config.get_t1()['x_speed']['minimumAmount']:
+                             return True
+                          return False  
+                i = i - 1 
+          stock.reset_buySignal()   
+        #   perform the calc time test  
+        #   now = dt.datetime.now()
+        #   if stock.get_time() is not None:
+        #      deltaSeconds = (now - stock.get_time()).seconds
+        #      if deltaSeconds > 3:
+        #         print('[%s] calc more than %s s' % (stock.get_code(),deltaSeconds)) 
+        #   stock.set_time(now)
           return False                  
                    
 
@@ -577,9 +601,14 @@ class Analyze(object):
               
 
       def getOpenPercent(self,stock):
+          ocp = stock.get_cache('ocp')
+          if ocp is not None:
+             return ocp 
           lastLine = stock.get_Lastline()
           open = lastLine.get('open')
-          return self.getPercent(open,stock)  
+          ocp = self.getPercent(open,stock)
+          stock.set_cache('ocp',ocp)
+          return ocp  
 
 
       def isReachMinR(self,stock):

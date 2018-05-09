@@ -1,8 +1,6 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-import pandas as pd
-import tushare as ts
-
-df = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
-print(df)
+import math
+print(math.ceil(1.4))
+print(math.floor(1.7))
