@@ -3,6 +3,7 @@ __author__ = 'aqua'
 
 from ..MyLog import MyLog
 from sqlalchemy import create_engine
+import tushare as ts
 import pandas as pd
 import numpy as np
 import datetime as dt
@@ -34,7 +35,7 @@ class NewAnalyze(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,zs,dh,timestamp,buyCount):
+      def calcMain(self,dh,timestamp,buyCount):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -43,7 +44,7 @@ class NewAnalyze(object):
               if code in dh.get_buyed() or code in dh.get_ignore():
                  continue 
               try:  
-                 if self.calc(zs,data[code],dh):
+                 if self.calc(data[code],dh):
                     result.append(data[code])
                 #  self.printPerformace(timestamp)  
               except Exception as e:
@@ -96,7 +97,7 @@ class NewAnalyze(object):
 
 
               
-      def calc(self,zs,stock,dh):
+      def calc(self,stock,dh):
           if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
@@ -107,7 +108,7 @@ class NewAnalyze(object):
           if not stock.is_inited():  
              self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(zs,stock,conf,dh)   
+          return self.isStockMatch(stock,conf,dh)   
 
 
       def isOpenMatch(self,row):
@@ -180,9 +181,7 @@ class NewAnalyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,zs,stock,conf,dh):
-          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
-             return False 
+      def isStockMatch(self,stock,conf,dh):
           if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
              return False
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
@@ -190,11 +189,14 @@ class NewAnalyze(object):
           if 'sellWindow' in self.__config.get_t1()['strategy'] and not self.isSellWindowMatch(stock):
              return False 
           if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
-             return False   
+             return False 
+          if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(stock):
+             return False     
           return self.isLastTwoMatch(stock)
 
 
-      def isZSMatch(self,zs,stock):
+      def isZSMatch(self,stock):
+          zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
           code = stock.get_code()
           i = 0
           if code.startswith('3'):
