@@ -146,7 +146,8 @@ class Config(object):
               },
               'hit10' : {
                  'buy_b1_amount' : 10000000,
-                 'cancel_b1_amount' : 15000000
+                 'cancel_b1_amount' : 15000000,
+                 'cancel_ratio' : 0.5
               } 
           }
 

@@ -69,20 +69,21 @@ class NewAnalyze2(object):
 
       def cancelBuyIfNeed(self,stock,dh):
           trade = self.__config.get_t1()['trade']
+          last_second_line = stock.get_LastSecondline()
           now_line = stock.get_Lastline()
+          last_second_buy1_v = self.convertToFloat(last_second_line['b1_v']) 
           now_buy1_v = self.convertToFloat(now_line['b1_v'])
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           if float(now_line['price']) == stop_price:
-             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_v * float(now_line['b1_p']) * 100) < self.__config.get_t1()['hit10']['cancel_b1_amount']:
+             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and ((now_buy1_v * float(now_line['b1_p']) * 100) < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio']):
                 info = '[%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),stock.get_code(),now_buy1_v)
+                MyLog.info(info)
                 if trade['enable']:
                    self.__trade.cancelBuy(stock.get_code()) 
-                   MyLog.info(info)
                    dh.get_buyed().remove(stock.get_code())
                 if trade['enableMock']:
                    status = self.__mockTrade.cancelBuy(stock.get_code())
                    if status == 0:
-                      MyLog.info(info)
                       dh.get_buyed().remove(stock.get_code())  
 
 
