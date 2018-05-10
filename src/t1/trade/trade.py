@@ -23,6 +23,33 @@ class Trade(object):
                  return ''
 
 
+      def cancelBuy(self,code):
+          j = self.__user.today_entrusts
+          if len(j) > 0:
+             for stock in j:
+                 if stock['证券代码'] == code and stock['买卖标志'] == '买入' and (int(stock['委托数量']) - int(stock['成交数量']) - int(stock['撤单数量'])) > 0:
+                    self.__user.cancel_entrust(stock['委托序号'])
+
+
+      def cancelAllBuy(self):
+          j = self.__user.today_entrusts
+          if len(j) > 0:
+             for stock in j:
+                 if stock['买卖标志'] == '买入' and (int(stock['委托数量']) - int(stock['成交数量']) - int(stock['撤单数量'])) > 0:
+                    self.__user.cancel_entrust(stock['委托序号'])                          
+
+
+      def queryBuyStocks(self):
+          j = self.__user.today_trades
+          buyCount = 0
+          if len(j) > 0:
+             for stock in j:
+                 if stock['买卖标志'] == '买入' and int(stock['成交数量']) > 0:
+                    buyCount = buyCount + 1
+          return buyCount            
+
+
+
       def sell(self,code,price):
           try:
              isSelled = True

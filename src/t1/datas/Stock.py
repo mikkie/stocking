@@ -18,7 +18,8 @@ class Stock(object):
           self.__time = None
           self.__lowerThanBeforeTimes = 0
           self.__cache = {
-              'ocp' : None
+              'ocp' : None,
+              'buyPos' : 0
           }
           self.__rBreakTimes = {
               'R1' : {

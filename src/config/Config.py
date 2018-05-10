@@ -143,6 +143,10 @@ class Config(object):
                   'margin' : 0.2,
                   'max_p' : 0,
                   'min_p' : -5
+              },
+              'hit10' : {
+                 'buy_b1_amount' : 10000000,
+                 'cancel_b1_amount' : 15000000
               } 
           }
 

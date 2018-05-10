@@ -19,7 +19,7 @@ class MockTrade(object):
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; spversion=20130314; searchGuide=sg; historystock=002046%7C*%7C603698%7C*%7C000901%7C*%7C300563%7C*%7C300565; __utma=156575163.844587348.1519633850.1525775393.1525779546.62; __utmz=156575163.1525779546.62.62.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; v=AtNl39F1jQuBykHf5A11DZp2Ylz5iGYwIRmrGYXxLVEo6P2KDVj3mjHsO82W; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1525740567,1525775403,1525779552,1525826603; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjU4MjY3NTE6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTYyYTJkZGZmYjExNjcwODc4YzI5YjdiM2YzOWQzYWUyOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=cdec88c3ac040fbe7f9387cb745d01e4; PHPSESSID=d4794708c520e69936265cffc9e8a4d8; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp',
+              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; spversion=20130314; searchGuide=sg; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjU5MTI1MTI6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTJhNDUwMGY3NjBmZjI0NmFmOWVjOTljYWM3Y2I3YzIwOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=7879f9d837b8cd025960b73930d576c1; __utma=156575163.844587348.1519633850.1525854320.1525912981.66; __utmz=156575163.1525912981.66.66.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; historystock=000735%7C*%7C600903%7C*%7C002241%7C*%7C002046%7C*%7C603698; v=AiKUQIgujI6dfpBSCuIUqvPtc6OAcyc62HMammy7TxZAq8yVVAN2nagHauM_; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1525925852,1525943257,1525943589,1525947195; PHPSESSID=95e955ad2b3bf3a69e90bc4efe1c22ae; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
@@ -64,21 +64,23 @@ class MockTrade(object):
                  return ''
 
 
-      def queryDeligated(self,code):
+      def queryDeligated(self):
           self.__header['Cookie'] = self.__header['Cookie'].replace('timestamp',str(time.time()))
-          postData = {
-              'gdzh' : '0098894246',
-              'mkcode' : 1,
-          }
-          if code.startswith('6'):
-             postData['mkcode'] = 2
-             postData['gdzh'] = 'A474614369'
           try:   
-             response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/qryDelegated',data=postData,headers=self.__header)
+             response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/qryDelegated',headers=self.__header)
              return response.text
           except Exception as e:
-                 MyLog.info('can not get hold stock')
+                 MyLog.info('can not get delegate stock')
                  return '' 
+
+      def queryChenjiao(self):
+          self.__header['Cookie'] = self.__header['Cookie'].replace('timestamp',str(time.time()))
+          try:   
+             response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/qryChengjiao',headers=self.__header)
+             return response.text
+          except Exception as e:
+                 MyLog.info('can not get chenjiao stock')
+                 return ''          
 
 
       def cancelDeligated(self,htbh,wtrq):
@@ -91,14 +93,48 @@ class MockTrade(object):
              response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/cancelDelegated/',data=postData,headers=self.__header)
              return response.text
           except Exception as e:
-                 MyLog.info('can not get hold stock')
-                 return '' 
+                 MyLog.info('can not cancel deligate')
+                 return ''
+
+
+      def queryBuyStocks(self):
+          jsonData = self.queryChenjiao()
+          j = json.loads(jsonData)
+          stockList = j['result']['list']
+          buyCount = 0
+          if len(stockList) > 0:
+             for stock in stockList:           
+                 if stock['d_2109'] == '买入':
+                    count = count + 1
+          return buyCount     
+
+
+      def cancelAllBuy(self):
+          jsonData = self.queryDeligated()
+          j = json.loads(jsonData)
+          stockList = j['result']['list']
+          if len(stockList) > 0:
+             for stock in stockList:
+                 if (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '买入':
+                    self.cancelDeligated(stock['d_2135'],stock['d_2139'])
+
+      def cancelBuy(self,code):
+          jsonData = self.queryDeligated()
+          j = json.loads(jsonData)
+          stockList = j['result']['list']
+          if len(stockList) > 0:
+             for stock in stockList:
+                 if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '买入':
+                    text = self.cancelDeligated(stock['d_2135'],stock['d_2139'])
+                    j = json.loads(text)
+                    return j['errorcode']
+          return 0      
 
 
       def sell(self,code,price):
           try:
              isSelled = True
-             jsonData = self.queryDeligated(code)
+             jsonData = self.queryDeligated()
              j = json.loads(jsonData)
              stockList = j['result']['list']
              if len(stockList) > 0:
@@ -130,6 +166,7 @@ class MockTrade(object):
 # MyLog.info(trade.sell('300722',46.99))
 # MyLog.info(trade.sell('603080',37.04))
 # res = trade.mockTrade('300231',10.00,100)
-# MyLog.info(res)
+# count = trade.queryBuyStocks()
+# MyLog.info(count)
 
 
