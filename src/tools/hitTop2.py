@@ -33,10 +33,11 @@ def run(queue):
         while data is not None and data['df'] is not None and len(data['df']) > 0:
               timestamp = data['timestamp']
               df = data['df']
+              zs = data['zs']
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
-              res = analyze.calcMain(dh,timestamp)
+              res = analyze.calcMain(zs,dh,timestamp)
               if len(res) > 0:
                  for code in res: 
                      dh.add_buyed(code)
@@ -140,7 +141,8 @@ if __name__ == '__main__':
                  return     
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           queueMaps[key].put({'timestamp' : timestamp,'df' : df})
+           zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+           queueMaps[key].put({'timestamp' : timestamp,'df' : df,'zs' : zs})
 
    sched.start()
    pool.close()

@@ -19,7 +19,7 @@ class MockTrade(object):
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; spversion=20130314; searchGuide=sg; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjU5MTI1MTI6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTJhNDUwMGY3NjBmZjI0NmFmOWVjOTljYWM3Y2I3YzIwOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=7879f9d837b8cd025960b73930d576c1; __utma=156575163.844587348.1519633850.1525854320.1525912981.66; __utmz=156575163.1525912981.66.66.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; historystock=000735%7C*%7C600903%7C*%7C002241%7C*%7C002046%7C*%7C603698; v=AiKUQIgujI6dfpBSCuIUqvPtc6OAcyc62HMammy7TxZAq8yVVAN2nagHauM_; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1525925852,1525943257,1525943589,1525947195; PHPSESSID=95e955ad2b3bf3a69e90bc4efe1c22ae; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp',
+              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; spversion=20130314; searchGuide=sg; __utma=156575163.844587348.1519633850.1525854320.1525912981.66; __utmz=156575163.1525912981.66.66.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; historystock=000735%7C*%7C600903%7C*%7C002241%7C*%7C002046%7C*%7C603698; v=Alfho60BwVq44EXW1PYJef5K5sClnCvUBXWvcqmFcyaN2Hk2sWy7ThVAP8e6; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1525943257,1525943589,1525947195,1525998989; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjU5OTkwMDY6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTM2ODZlNzJhNDEyYzY0MzIzMGY1YWE1ZjA0ZWJlZTg5OmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=ef3d3055644e60c302ba3ed3392647f2; PHPSESSID=ead072884f3403fb595a3201e779d841; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
@@ -105,7 +105,7 @@ class MockTrade(object):
           if len(stockList) > 0:
              for stock in stockList:           
                  if stock['d_2109'] == '买入':
-                    count = count + 1
+                    buyCount = buyCount + 1
           return buyCount     
 
 

@@ -35,7 +35,7 @@ class NewAnalyze2(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,dh,timestamp):
+      def calcMain(self,zs,dh,timestamp):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -47,7 +47,7 @@ class NewAnalyze2(object):
                  self.cancelBuyIfNeed(data[code],dh)
                  continue  
               try:  
-                 if self.calc(data[code],dh):
+                 if self.calc(zs,data[code],dh):
                     result.append(data[code])
                 #  self.printPerformace(timestamp)  
               except Exception as e:
@@ -117,10 +117,10 @@ class NewAnalyze2(object):
 
 
               
-      def calc(self,stock,dh):
+      def calc(self,zs,stock,dh):
           if not self.canCalc(stock,dh):
              return False
-          return self.isStockMatch(stock,dh)   
+          return self.isStockMatch(zs,stock,dh)   
 
       def isOpenMatch(self,row):
           if float(row['pre_close']) == 0 or float(row['open']) == 0:
@@ -147,8 +147,8 @@ class NewAnalyze2(object):
                  return 0   
 
 
-      def isStockMatch(self,stock,dh):
-          if self.isZSMatch(stock):
+      def isStockMatch(self,zs,stock,dh):
+          if self.isZSMatch(zs,stock):
              return self.isReach10(stock)
 
 
@@ -162,8 +162,9 @@ class NewAnalyze2(object):
              return tag 
 
 
-      def isZSMatch(self,stock):
-          zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+      def isZSMatch(self,zs,stock):
+          if zs is None:
+             return True 
           code = stock.get_code()
           i = 0
           if code.startswith('3'):
