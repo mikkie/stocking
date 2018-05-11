@@ -79,8 +79,9 @@ class NewAnalyze2(object):
                 info = '[%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable']:
-                   self.__trade.cancelBuy(stock.get_code()) 
-                   dh.get_buyed().remove(stock.get_code())
+                   status = self.__trade.cancelBuy(stock.get_code()) 
+                   if status == 0: 
+                      dh.get_buyed().remove(stock.get_code())
                 if trade['enableMock']:
                    status = self.__mockTrade.cancelBuy(stock.get_code())
                    if status == 0:

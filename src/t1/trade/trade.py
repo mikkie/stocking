@@ -29,6 +29,8 @@ class Trade(object):
              for stock in j:
                  if stock['证券代码'] == code and stock['买卖标志'] == '买入' and (int(stock['委托数量']) - int(stock['成交数量']) - int(stock['撤单数量'])) > 0:
                     self.__user.cancel_entrust(stock['委托序号'])
+                    return 0
+          return -1      
 
 
       def cancelAllBuy(self):

@@ -128,7 +128,7 @@ class MockTrade(object):
                     text = self.cancelDeligated(stock['d_2135'],stock['d_2139'])
                     j = json.loads(text)
                     return j['errorcode']
-          return 0      
+          return -1      
 
 
       def sell(self,code,price):
