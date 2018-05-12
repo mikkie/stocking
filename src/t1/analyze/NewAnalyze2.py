@@ -81,10 +81,12 @@ class NewAnalyze2(object):
                 if trade['enable']:
                    status = self.__trade.cancelBuy(stock.get_code()) 
                    if status == 0: 
+                      dh.add_ignore(stock.get_code())
                       dh.get_buyed().remove(stock.get_code())
                 if trade['enableMock']:
                    status = self.__mockTrade.cancelBuy(stock.get_code())
                    if status == 0:
+                      dh.add_ignore(stock.get_code())
                       dh.get_buyed().remove(stock.get_code())  
 
 
