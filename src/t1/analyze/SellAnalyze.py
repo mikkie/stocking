@@ -25,14 +25,14 @@ class SellAnalyze(object):
              self.__mockTrade = MockTrade()    
           self.__engine = create_engine(self.__config.get_DBurl())
 
-      def calcMain(self,dh):
+      def calcMain(self,zs,dh):
           data = dh.get_data()
           for code in data:
               if len(dh.get_selled()) > 0:
                  if code in dh.get_selled():
                     continue 
               try:  
-                 if self.calc(data[code],dh):
+                 if self.calc(zs,data[code],dh):
                     dh.add_selled(code,True)
               except Exception as e:
                      last_line = data[code].get_Lastline()
@@ -58,15 +58,18 @@ class SellAnalyze(object):
           return self.getPercent(open,stock)                
 
 
-      def initLS(self,stock,dh):
+      def initLS(self,stock,dh,ratio):
           ccp = self.getCurrentPercent(stock)
-          ls = ccp - self.__config.get_t1()['seller']['margin']
+          ls = ccp - self.__config.get_t1()['seller']['margin'] * ratio
           if ls > self.__config.get_t1()['seller']['min_threshold']:
              stock.set_ls(ls)
 
-      def calc(self,stock,dh):
+      def calc(self,zs,stock,dh):
+          ratio = 1
+          if self.isZSMatch(zs,stock):
+             ratio = self.__config.get_t1()['seller']['ratio']
           if stock.get_ls() is None:
-             self.initLS(stock,dh)
+             self.initLS(stock,dh,ratio)
              if stock.get_ls() is None:
                 return False
           if self.getCurrentPercent(stock) < stock.get_ls():
@@ -76,11 +79,24 @@ class SellAnalyze(object):
           else:
                stock.reset_sellSignal()
                ccp = self.getCurrentPercent(stock)
-               tls = ccp - self.__config.get_t1()['seller']['margin']
+               tls = ccp - self.__config.get_t1()['seller']['margin'] * ratio
                if tls > stock.get_ls():
                   stock.set_ls(tls) 
                return False     
 
+
+      def isZSMatch(self,zs,stock):
+          if zs is None:
+             return True 
+          code = stock.get_code()
+          i = 0
+          if code.startswith('3'):
+             i = 5 
+          line = zs.iloc[i] 
+          pre_close = line.get('pre_close') 
+          price = line.get('price')
+          p = (float(price) - float(pre_close)) / float(pre_close) * 100 
+          return p < 0
 
 
       def sell(self,stock):
