@@ -134,7 +134,9 @@ class Config(object):
               },
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
-                  'margin' : 0.8,
+                  'margin' : {
+                      '600929' : 0.8
+                  },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
                   'cancelTime' : 30,

@@ -60,7 +60,7 @@ class SellAnalyze(object):
 
       def initLS(self,stock,dh,ratio):
           ccp = self.getCurrentPercent(stock)
-          ls = ccp - self.__config.get_t1()['seller']['margin'] * ratio
+          ls = ccp - self.__config.get_t1()['seller']['margin'][stock.get_code()] * ratio
           if ls > self.__config.get_t1()['seller']['min_threshold']:
              stock.set_ls(ls)
 
@@ -79,7 +79,7 @@ class SellAnalyze(object):
           else:
                stock.reset_sellSignal()
                ccp = self.getCurrentPercent(stock)
-               tls = ccp - self.__config.get_t1()['seller']['margin'] * ratio
+               tls = ccp - self.__config.get_t1()['seller']['margin'][stock.get_code()] * ratio
                if tls > stock.get_ls():
                   stock.set_ls(tls) 
                return False     
