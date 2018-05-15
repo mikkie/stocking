@@ -93,11 +93,14 @@ class NewAnalyze2(object):
 
       def outputRes(self,df_final,timestamp):
           trade = self.__config.get_t1()['trade']
-          buyMoney = (float(df_final['price'])) * trade['volume']  
+          buyVolume = trade['volume']
+          if trade['dynamicVolume']:
+             buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
+          buyMoney = (float(df_final['price'])) * buyVolume  
           if buyMoney > self.__balance:
              return None   
           price = str('%.2f' % (float(df_final['price'])))
-          info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(trade['volume']))
+          info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
           MyLog.info(info)
           now = dt.datetime.now()
           deltaSeconds = (now - timestamp).seconds
@@ -105,13 +108,13 @@ class NewAnalyze2(object):
              MyLog.info('[%s] 行情超时 %s秒 放弃买入' % (df_final['code'],deltaSeconds)) 
              return None
           if trade['enable']:
-             res = str(self.__trade.buy(df_final['code'],trade['volume'],float(price)))
+             res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
              if 'entrust_no' in res:
                 self.__balance = self.__balance - buyMoney
                 return df_final['code']
              return None  
           if trade['enableMock']:
-             res = self.__mockTrade.mockTrade(df_final['code'],float(price),trade['volume'])
+             res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
              if res == 0:
                 self.__balance = self.__balance - buyMoney
                 return df_final['code']
