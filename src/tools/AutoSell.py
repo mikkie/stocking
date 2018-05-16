@@ -19,7 +19,7 @@ import os
 from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
-codeList = ['600929']
+codeList = ['002888','300107','600110','603036']
 setting = Config()
 mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
