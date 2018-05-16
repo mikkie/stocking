@@ -145,6 +145,9 @@ class NewAnalyze2(object):
           lastLine = stock.get_Lastline() 
           if float(lastLine['open']) == 0.0:
              return False
+          if stock.get_time() == lastLine['time']:
+             return False
+          stock.set_time(lastLine['time'])      
           return True     
 
 
