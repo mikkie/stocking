@@ -88,10 +88,12 @@ class NewAnalyze2(object):
                       status = self.__mockTrade.cancelBuy(stock.get_code())   
                    #cancel success
                    if status == 0: 
+                      MyLog.info('[%s] 撤单成功' % stock.get_code()) 
                       dh.add_ignore(stock.get_code())
                       dh.get_buyed().remove(stock.get_code())
                    #cancel failed, already buyed   
                    else:
+                       MyLog.info('[%s] 撤单失败' % stock.get_code())
                        stock.add_cancelTimes()
                        if stock.get_cancelTimes() >= 2:
                           dh.add_ignore(stock.get_code())
