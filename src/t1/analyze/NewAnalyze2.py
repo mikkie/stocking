@@ -41,6 +41,8 @@ class NewAnalyze2(object):
           result = []
           codes = []
           for code in data:
+              if self.hasNewData(data[code]):
+                 continue 
               if code in dh.get_ignore():
                  continue
               if code in dh.get_buyed():
@@ -139,15 +141,20 @@ class NewAnalyze2(object):
           return (float(row['open']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= -1.5
 
 
+      def hasNewData(self,stock):
+          lastLine = stock.get_Lastline()
+          if stock.get_time() == lastLine['time']:
+             return False
+          stock.set_time(lastLine['time'])  
+          return True
+
+
       def canCalc(self,stock,dh):
           if stock.len() < 0:
              return False
           lastLine = stock.get_Lastline() 
           if float(lastLine['open']) == 0.0:
              return False
-          if stock.get_time() == lastLine['time']:
-             return False
-          stock.set_time(lastLine['time'])      
           return True     
 
 

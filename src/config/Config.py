@@ -137,10 +137,10 @@ class Config(object):
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   'margin' : {
-                     '002888' : 0.5,
-                     '300107' : 0.5,
-                     '600110' : 0.5,
-                     '603036' : 0.1
+                     '002504' : 0.8,
+                     '300063' : 0.8,
+                     '603036' : 0.1,
+                     '603777' : 0.2
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
