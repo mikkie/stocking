@@ -137,10 +137,10 @@ class Config(object):
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   'margin' : {
-                     '002504' : 0.8,
-                     '300063' : 0.8,
-                     '603036' : 0.1,
-                     '603777' : 0.2
+                     '002820' : 0.8,
+                     '300167' : 0.8,
+                     '300175' : 0.2,
+                     '603157' : 0.8
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
@@ -155,7 +155,8 @@ class Config(object):
               'hit10' : {
                  'buy_b1_amount' : 10000000,
                  'cancel_b1_amount' : 15000000,
-                 'cancel_ratio' : 0.5
+                 'cancel_ratio' : 0.6,
+                 'cancel_ratio_max_amount' : 0.35 
               } 
           }
 
