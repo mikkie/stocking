@@ -86,7 +86,7 @@ class Config(object):
                   'v300' : 0.013
               },
               'get_hygn_inter' : 15,
-              'get_data_inter' : 2,
+              'get_data_inter' : 3,
               'need_recover_data' : False,
               'split_size' : 880,
               'pvRatio' : 1.5,
