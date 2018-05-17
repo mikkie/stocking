@@ -74,6 +74,7 @@ if __name__ == '__main__':
              start = end
        return codeList
 
+   stopBuy = False
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
 
@@ -130,7 +131,7 @@ if __name__ == '__main__':
              if count >= setting.get_t1()['trade']['max_buyed']:
                 mockTrade.cancelAllBuy()
                 MyLog.info('buyed 3 stocks')
-                return 
+                stopBuy = True 
        if setting.get_t1()['trade']['enable']: 
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
               interDataHolder['currentTime'] = timestamp
@@ -138,7 +139,9 @@ if __name__ == '__main__':
               if count >= setting.get_t1()['trade']['max_buyed']:
                  trade.cancelAllBuy() 
                  MyLog.info('buyed 3 stocks')
-                 return     
+                 stopBuy = True  
+       if stopBuy:
+          return              
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
            zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
