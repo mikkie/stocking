@@ -18,6 +18,7 @@ class NewStock(object):
           self.__buySignal = 0
           self.__time = None
           self.__lowerThanBeforeTimes = 0
+          self.__cancelTimes = 0
           self.__cache = {
               'ocp' : None
           }
@@ -51,8 +52,17 @@ class NewStock(object):
       def set_inited(self):
           self.__inited = True  
 
+      def get_cancelTimes(self):
+          return self.__cancelTimes
+
+      def add_cancelTimes(self):
+          self.__cancelTimes = self.__cancelTimes + 1
+    
+
       def get_cache(self,key):
-          return self.__cache[key]
+          if key in self.__cache: 
+             return self.__cache[key]
+          return None  
 
       def set_cache(self,key,val):
           self.__cache[key] = val  

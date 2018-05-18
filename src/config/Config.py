@@ -86,7 +86,7 @@ class Config(object):
                   'v300' : 0.013
               },
               'get_hygn_inter' : 15,
-              'get_data_inter' : 2,
+              'get_data_inter' : 3,
               'need_recover_data' : False,
               'split_size' : 880,
               'pvRatio' : 1.5,
@@ -137,10 +137,10 @@ class Config(object):
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   'margin' : {
-                     '002888' : 0.5,
-                     '300107' : 0.5,
-                     '600110' : 0.5,
-                     '603036' : 0.1
+                     '002820' : 0.8,
+                     '300167' : 0.8,
+                     '300175' : 0.2,
+                     '603157' : 0.8
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
@@ -155,7 +155,8 @@ class Config(object):
               'hit10' : {
                  'buy_b1_amount' : 10000000,
                  'cancel_b1_amount' : 15000000,
-                 'cancel_ratio' : 0.5
+                 'cancel_ratio' : 0.6,
+                 'cancel_ratio_max_amount' : 0.35 
               } 
           }
 

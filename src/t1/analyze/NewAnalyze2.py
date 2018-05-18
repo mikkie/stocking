@@ -41,8 +41,11 @@ class NewAnalyze2(object):
           result = []
           codes = []
           for code in data:
+              if not self.hasNewData(data[code]):
+                 continue 
               if code in dh.get_ignore():
                  continue
+              self.updateStock(data[code])  
               if code in dh.get_buyed():
                  self.cancelBuyIfNeed(data[code],dh)
                  continue  
@@ -64,7 +67,16 @@ class NewAnalyze2(object):
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
-          return codes   
+          return codes 
+
+
+      def updateStock(self,stock):
+          max_amount = stock.get_cache('max_b1_amount') 
+          now_line = stock.get_Lastline()
+          now_amount = float(now_line['b1_p']) * self.convertToFloat(float(now_line['b1_v'])) * 100  
+          if max_amount is None or now_amount > max_amount:
+             stock.set_cache('max_b1_amount',now_amount)
+                 
 
 
       def cancelBuyIfNeed(self,stock,dh):
@@ -73,9 +85,13 @@ class NewAnalyze2(object):
           now_line = stock.get_Lastline()
           last_second_buy1_v = self.convertToFloat(last_second_line['b1_v']) 
           now_buy1_v = self.convertToFloat(now_line['b1_v'])
+          now_buy1_amount = float(now_line['b1_p']) * now_buy1_v * 100 
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
+          max_b1_amount = stock.get_cache('max_b1_amount')
+          if max_b1_amount is None:
+             max_b1_amount = -1 
           if float(now_line['price']) == stop_price:
-             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and ((now_buy1_v * float(now_line['b1_p']) * 100) < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio']):
+             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount']):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
@@ -86,10 +102,12 @@ class NewAnalyze2(object):
                       status = self.__mockTrade.cancelBuy(stock.get_code())   
                    #cancel success
                    if status == 0: 
+                      MyLog.info('[%s] 撤单成功' % stock.get_code()) 
                       dh.add_ignore(stock.get_code())
                       dh.get_buyed().remove(stock.get_code())
                    #cancel failed, already buyed   
                    else:
+                       MyLog.info('[%s] 撤单失败' % stock.get_code())
                        stock.add_cancelTimes()
                        if stock.get_cancelTimes() >= 2:
                           dh.add_ignore(stock.get_code())
@@ -137,6 +155,14 @@ class NewAnalyze2(object):
           if float(row['pre_close']) == 0 or float(row['open']) == 0:
              return False
           return (float(row['open']) - float(row['pre_close'])) / float(row['pre_close']) * 100 >= -1.5
+
+
+      def hasNewData(self,stock):
+          lastLine = stock.get_Lastline()
+          if stock.get_time() == lastLine['time']:
+             return False
+          stock.set_time(lastLine['time'])  
+          return True
 
 
       def canCalc(self,stock,dh):
