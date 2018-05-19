@@ -29,4 +29,6 @@ for index,row in df_all.iterrows():
 
 total = len(res) + len(failedRes) 
 print('win= %.2f' % (float(len(res)) / float(total) * 100))
+print(res)
 print('loss= %.2f' % (float(len(failedRes)) / float(total) * 100))
+print(failedRes)
