@@ -66,8 +66,18 @@ class SellAnalyze(object):
 
       def calc(self,zs,stock,dh):
           ratio = 1
+          stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_good']
+          stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_good']
           if self.isZSMatch(zs,stock):
              ratio = self.__config.get_t1()['seller']['ratio']
+             stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_bad']
+             stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_bad']
+          if self.getCurrentPercent() < stop_loss:
+             return True
+          if self.getCurrentPercent() >= stop_win:
+             stock.set_cache('start_stop_win',True)
+          if stock.get_cache('start_stop_win') is None:
+             return False    
           if stock.get_ls() is None:
              self.initLS(stock,dh,ratio)
              if stock.get_ls() is None:

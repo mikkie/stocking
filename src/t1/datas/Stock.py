@@ -75,7 +75,9 @@ class Stock(object):
 
 
       def get_cache(self,key):
-          return self.__cache[key]
+          if key in self.__cache:
+             return self.__cache[key]
+          return None   
 
       def set_cache(self,key,val):
           self.__cache[key] = val  

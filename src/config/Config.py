@@ -136,11 +136,17 @@ class Config(object):
               },
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
+                  'stop_loss_win' : {
+                     'loss_good' : -2.5,
+                     'loss_bad' : -2,
+                     'win_good' : 3,
+                     'win_bad' : 2.5 
+                  },
                   'margin' : {
-                     '002820' : 0.8,
-                     '300167' : 0.8,
-                     '300175' : 0.2,
-                     '603157' : 0.8
+                     '002820' : 0.5,
+                     '300167' : 0.5,
+                     '300175' : 0.5,
+                     '603157' : 0.5
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
