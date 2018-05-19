@@ -18,14 +18,15 @@ for index,row in df_all.iterrows():
         if first['close'] == first['open'] and first['close'] == first['low'] and first['close'] == first['high']:
                continue   
         index = index.replace('.XSHE','').replace('.XSHG','') 
-        if (first['close'] - first['pre_close']) / first['pre_close'] * 100 >= 9.90 and (last['high'] - last['pre_close']) / last['pre_close'] * 100 >= 0.0:
-            res.append(index)
-        else:
-            failedRes.append(index)   
+        if (first['close'] - first['pre_close']) / first['pre_close'] * 100 >= 9.90:
+            if (last['high'] - last['pre_close']) / last['pre_close'] * 100 >= 0.0:
+               res.append(index)
+            else:
+                failedRes.append(index)   
     except Exception as e:
            print(e)
         
 
 total = len(res) + len(failedRes)        
-print('win= %s' % len(res) / total * 100)  
-print('loss= %s' % len(failedRes) / total * 100)            
+print('win= %s' + str(len(res) / total * 100))  
+print('loss= %s' + str(len(failedRes) / total * 100))            
