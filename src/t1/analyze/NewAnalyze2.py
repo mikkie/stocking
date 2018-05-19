@@ -73,7 +73,7 @@ class NewAnalyze2(object):
       def updateStock(self,stock):
           max_amount = stock.get_cache('max_b1_amount') 
           now_line = stock.get_Lastline()
-          now_amount = float(now_line['b1_p']) * self.convertToFloat(float(now_line['b1_v'])) * 100  
+          now_amount = float(now_line['b1_p']) * self.convertToFloat(now_line['b1_v']) * 100  
           if max_amount is None or now_amount > max_amount:
              stock.set_cache('max_b1_amount',now_amount)
                  
