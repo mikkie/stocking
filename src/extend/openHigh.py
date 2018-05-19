@@ -4,9 +4,13 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-05-18'
+startDate = '2018-05-10'
+hitDate='2018-05-09'
+winStop = 3.0
+lossStop = -2.0
 res = []
 failedRes = []
+low_list = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
@@ -19,7 +23,10 @@ for index,row in df_all.iterrows():
                continue   
         index = index.replace('.XSHE','').replace('.XSHG','') 
         if (first['close'] - first['pre_close']) / first['pre_close'] * 100 >= 9.90:
-            if (last['high'] - last['pre_close']) / last['pre_close'] * 100 >= 0.0:
+            if (last['high'] - last['pre_close']) / last['pre_close'] * 100 >= winStop:
+               low_p = (last['low'] - last['pre_close']) / last['pre_close'] * 100  
+               if low_p < lossStop:
+                  low_list.append(index) 
                res.append(index)
             else:
                 failedRes.append(index)   
@@ -28,7 +35,9 @@ for index,row in df_all.iterrows():
         
 
 total = len(res) + len(failedRes) 
-print('win= %.2f' % (float(len(res)) / float(total) * 100))
+print(u'%s号打板,%s号卖出' % (hitDate,startDate))
+print(u'最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,float(len(res)) / float(total) * 100))
 print(res)
-print('loss= %.2f' % (float(len(failedRes)) / float(total) * 100))
+print(u'最高涨幅<%.2f%%的概率= %.2f%%' % (winStop,float(len(failedRes)) / float(total) * 100))
 print(failedRes)
+print(u'最高涨幅>%.2f%%时,最低跌幅超过%.2f%%的概率=%.2f%%' % (winStop,lossStop,float(len(low_list)) / float(len(res)) * 100))
