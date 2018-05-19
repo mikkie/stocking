@@ -14,12 +14,12 @@ for index,row in df_all.iterrows():
         if len(df_stock) < 2:
            continue    
         first = df_stock.iloc[0]
-        if first['close'] == first['open'] == first['low'] == first['high']:
-           continue   
         last = df_stock.iloc[1]
+        if first['close'] == first['open'] and first['close'] == first['low'] and first['close'] == first['high']:
+               continue   
         index = index.replace('.XSHE','').replace('.XSHG','') 
-        if (first['close'] - first['pre_close']) / first['pre_close'] * 100 >= 9.90 and (last['open'] - last['pre_close']) / last['pre_close'] * 100 >= 3.0:
-               res.append(index)
+        if (first['close'] - first['pre_close']) / first['pre_close'] * 100 >= 9.90 and (last['high'] - last['pre_close']) / last['pre_close'] * 100 >= 0.0:
+            res.append(index)
         else:
             failedRes.append(index)   
     except Exception as e:
@@ -27,5 +27,5 @@ for index,row in df_all.iterrows():
         
 
 total = len(res) + len(failedRes)        
-print('win=' + str(len(res) / total * 100))  
-print('loss=' + str(len(failedRes) / total * 100))            
+print('win= %s' % len(res) / total * 100)  
+print('loss= %s' % len(failedRes) / total * 100)            
