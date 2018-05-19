@@ -139,8 +139,8 @@ class Config(object):
                   'stop_loss_win' : {
                      'loss_good' : -2.5,
                      'loss_bad' : -2,
-                     'win_good' : 3,
-                     'win_bad' : 2.5 
+                     'win_good' : 2.5,
+                     'win_bad' : 2 
                   },
                   'margin' : {
                      '002820' : 0.5,
