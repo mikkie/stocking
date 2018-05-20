@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
-   lock = multiprocessing.Lock()
+   lock = mp.Lock()
 
    codeLists = init(False)
    MyLog.info('calc stocks %s' % codeLists)
