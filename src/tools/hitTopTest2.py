@@ -38,7 +38,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(None,dh,dt.datetime.now())
+       codes = analyze.calcMain(None,dh,dt.datetime.now(),None)
        if len(codes) > 0:
           for code in codes: 
               dh.add_buyed_mock(code)

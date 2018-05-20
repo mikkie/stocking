@@ -25,7 +25,7 @@ if setting.get_t1()['trade']['enable']:
 engine = create_engine(setting.get_DBurl())
 analyze = NewAnalyze2()
 
-def run(queue):
+def run(queue,lock):
     MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
@@ -37,7 +37,7 @@ def run(queue):
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
-              res = analyze.calcMain(zs,dh,timestamp)
+              res = analyze.calcMain(zs,dh,timestamp,lock)
               if len(res) > 0:
                  for code in res: 
                      dh.add_buyed(code)
@@ -76,6 +76,7 @@ if __name__ == '__main__':
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
+   lock = multiprocessing.Lock()
 
    codeLists = init(False)
    MyLog.info('calc stocks %s' % codeLists)
@@ -113,7 +114,7 @@ if __name__ == '__main__':
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
        queueMaps[i] = queue
-       pool.apply_async(run, (queue,))
+       pool.apply_async(run, (queue,lock))
        begin = end
        if begin >= length:
           break
@@ -137,7 +138,13 @@ if __name__ == '__main__':
               interDataHolder['currentTime'] = timestamp
               count = trade.queryBuyStocks()
               if count >= setting.get_t1()['trade']['max_buyed']:
-                 trade.cancelAllBuy() 
+                 try:
+                    lock.acquire()
+                    trade.cancelAllBuy() 
+                 except Exception as e:
+                        pass 
+                 finally:    
+                        lock.release()
                  MyLog.info('buyed 3 stocks')
                  interDataHolder['stopBuy'] = True  
        if interDataHolder['stopBuy']:

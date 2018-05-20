@@ -35,7 +35,7 @@ class NewAnalyze2(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,zs,dh,timestamp):
+      def calcMain(self,zs,dh,timestamp,lock):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -47,7 +47,7 @@ class NewAnalyze2(object):
                  continue
               self.updateStock(data[code])  
               if code in dh.get_buyed():
-                 self.cancelBuyIfNeed(data[code],dh)
+                 self.cancelBuyIfNeed(data[code],dh,lock)
                  continue  
               try:  
                  if self.calc(zs,data[code],dh):
@@ -61,7 +61,7 @@ class NewAnalyze2(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     res = self.outputRes(last_line,timestamp)
+                     res = self.outputRes(last_line,timestamp,lock)
                      if res is not None:
                         codes.append(stock.get_code())
                  except Exception as e:
@@ -79,7 +79,7 @@ class NewAnalyze2(object):
                  
 
 
-      def cancelBuyIfNeed(self,stock,dh):
+      def cancelBuyIfNeed(self,stock,dh,lock):
           trade = self.__config.get_t1()['trade']
           last_second_line = stock.get_LastSecondline()
           now_line = stock.get_Lastline()
@@ -97,7 +97,13 @@ class NewAnalyze2(object):
                 if trade['enable'] or trade['enableMock']:
                    status = -1
                    if trade['enable']:
-                      status = self.__trade.cancelBuy(stock.get_code()) 
+                      try:
+                          lock.acquire()
+                          status = self.__trade.cancelBuy(stock.get_code()) 
+                      except Exception as e:
+                             pass
+                      finally:
+                              lock.release()            
                    if trade['enableMock']:
                       status = self.__mockTrade.cancelBuy(stock.get_code())   
                    #cancel success
@@ -114,7 +120,7 @@ class NewAnalyze2(object):
 
 
 
-      def outputRes(self,df_final,timestamp):
+      def outputRes(self,df_final,timestamp,lock):
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
@@ -131,11 +137,17 @@ class NewAnalyze2(object):
              MyLog.info('[%s] 行情超时 %s秒 放弃买入' % (df_final['code'],deltaSeconds)) 
              return None
           if trade['enable']:
-             res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
-             if 'entrust_no' in res:
-                self.__balance = self.__balance - buyMoney
-                return df_final['code']
-             return None  
+             try:
+                lock.acquire() 
+                res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
+                if 'entrust_no' in res:
+                   self.__balance = self.__balance - buyMoney
+                   return df_final['code']
+                return None
+             except Exception as e:
+                   return None
+             finally:
+                    lock.release()
           if trade['enableMock']:
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
              if res == 0:
