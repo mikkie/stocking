@@ -1,8 +1,10 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-a = {}
-print(a['s'])
+import tushare as ts
+
+df = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+print(df)
 
 
 

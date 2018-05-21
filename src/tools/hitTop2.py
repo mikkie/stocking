@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
-   lock = mp.Lock()
+   lock = manager.Lock()
 
    codeLists = init(False)
    MyLog.info('calc stocks %s' % codeLists)
@@ -114,7 +114,7 @@ if __name__ == '__main__':
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
        queueMaps[i] = queue
-       pool.apply_async(run, (queue,lock))
+       pool.apply_async(run, args=(queue,lock))
        begin = end
        if begin >= length:
           break
@@ -148,7 +148,7 @@ if __name__ == '__main__':
                  MyLog.info('buyed 3 stocks')
                  interDataHolder['stopBuy'] = True  
        if interDataHolder['stopBuy']:
-          return              
+          return  
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
            zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
