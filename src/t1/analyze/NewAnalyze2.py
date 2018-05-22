@@ -61,13 +61,10 @@ class NewAnalyze2(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     res = self.outputRes(last_line,timestamp,lock)
-                     if res is not None:
-                        codes.append(stock.get_code())
+                     self.outputRes(last_line,timestamp,dh,lock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
-          return codes 
 
 
       def updateStock(self,stock):
@@ -77,7 +74,6 @@ class NewAnalyze2(object):
           if max_amount is None or now_amount > max_amount:
              stock.set_cache('max_b1_amount',now_amount)
                  
-
 
       def cancelBuyIfNeed(self,stock,dh,lock):
           trade = self.__config.get_t1()['trade']
@@ -95,32 +91,37 @@ class NewAnalyze2(object):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
-                   status = -1
-                   if trade['enable']:
-                      try:
-                          lock.acquire()
-                          status = self.__trade.cancelBuy(stock.get_code()) 
-                      except Exception as e:
-                             pass
-                      finally:
-                              lock.release()            
-                   if trade['enableMock']:
-                      status = self.__mockTrade.cancelBuy(stock.get_code())   
-                   #cancel success
-                   if status == 0: 
-                      MyLog.info('[%s] 撤单成功' % stock.get_code()) 
-                      dh.add_ignore(stock.get_code())
-                      dh.get_buyed().remove(stock.get_code())
-                   #cancel failed, already buyed   
-                   else:
-                       MyLog.info('[%s] 撤单失败' % stock.get_code())
-                       stock.add_cancelTimes()
-                       if stock.get_cancelTimes() >= 2:
-                          dh.add_ignore(stock.get_code())
+                   self.cancelBuy(trade,stock,dh,lock) 
+
+      @Utils.async   
+      def cancelBuy(self,trade,stock,dh,lock):
+          status = -1
+          if trade['enable']:                    
+             try:
+                lock.acquire()
+                status = self.__trade.cancelBuy(stock.get_code()) 
+             except Exception as e:
+                    pass
+             finally:
+                     lock.release()
+          if trade['enableMock']:
+             status = self.__mockTrade.cancelBuy(stock.get_code())
+          #cancel success
+          if status == 0: 
+             MyLog.info('[%s] 撤单成功' % stock.get_code()) 
+             dh.add_ignore(stock.get_code())
+             dh.get_buyed().remove(stock.get_code()) 
+          #cancel failed, already buyed   
+          else:
+              MyLog.info('[%s] 撤单失败' % stock.get_code())
+              stock.add_cancelTimes()
+              if stock.get_cancelTimes() >= 2:
+                 dh.add_ignore(stock.get_code()) 
 
 
 
-      def outputRes(self,df_final,timestamp,lock):
+      @Utils.async
+      def outputRes(self,df_final,timestamp,dh,lock):
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
@@ -142,6 +143,7 @@ class NewAnalyze2(object):
                 res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
                 if 'entrust_no' in res:
                    self.__balance = self.__balance - buyMoney
+                   dh.add_buyed(df_final['code'])
                    return df_final['code']
                 return None
              except Exception as e:
@@ -152,8 +154,10 @@ class NewAnalyze2(object):
              res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
              if res == 0:
                 self.__balance = self.__balance - buyMoney
+                dh.add_buyed(df_final['code'])
                 return df_final['code']
              return None  
+          dh.add_buyed(df_final['code'])  
           return df_final['code']  
 
 

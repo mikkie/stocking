@@ -32,7 +32,6 @@ class Trade(object):
                     return 0
           return -1      
 
-
       def cancelAllBuy(self):
           j = self.__user.today_entrusts
           if len(j) > 0:

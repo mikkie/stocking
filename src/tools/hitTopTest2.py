@@ -16,7 +16,7 @@ from t1.analyze.NewAnalyze2 import NewAnalyze2
 # from t1.analyze.Concept import Concept
 # from t1.analyze.NetMoney import NetMoney
 
-codes = ['603813']
+codes = ['300730']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -39,9 +39,6 @@ def run(i):
     if len(df) > 0:
        dh.addData(df)
        codes = analyze.calcMain(None,dh,dt.datetime.now(),None)
-       if len(codes) > 0:
-          for code in codes: 
-              dh.add_buyed_mock(code)
 
 for i in range(5200):
     run(i)

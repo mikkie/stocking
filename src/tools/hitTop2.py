@@ -37,10 +37,7 @@ def run(queue,lock):
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
-              res = analyze.calcMain(zs,dh,timestamp,lock)
-              if len(res) > 0:
-                 for code in res: 
-                     dh.add_buyed(code)
+              analyze.calcMain(zs,dh,timestamp,lock)
               data = queue.get(True)   
     except Exception as e:
            MyLog.error('error %s' % str(e))
@@ -120,6 +117,7 @@ if __name__ == '__main__':
           break
 
    sched = BlockingScheduler()
+
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():

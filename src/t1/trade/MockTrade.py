@@ -110,8 +110,11 @@ class MockTrade(object):
 
 
       def cancelAllBuy(self):
+          print("aaa")
           jsonData = self.queryDeligated()
           j = json.loads(jsonData)
+          if 'result' not in j or 'list' not in j['result']:
+              return
           stockList = j['result']['list']
           if len(stockList) > 0:
              for stock in stockList:
@@ -121,6 +124,8 @@ class MockTrade(object):
       def cancelBuy(self,code):
           jsonData = self.queryDeligated()
           j = json.loads(jsonData)
+          if 'result' not in j or 'list' not in j['result']:
+              return -1
           stockList = j['result']['list']
           if len(stockList) > 0:
              for stock in stockList:

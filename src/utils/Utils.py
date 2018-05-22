@@ -5,10 +5,10 @@ import numpy as np
 import pandas as pd
 import talib as ta
 import time
+import threading
 
 class Utils(object):
-      pass
-
+    
       def getCurrentTime():
           return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
@@ -59,3 +59,11 @@ class Utils(object):
           df['k'] = rsv.ewm(com=2,adjust=True,ignore_na=False,min_periods=0).mean()
           df['d'] = df.k.ewm(com=2,adjust=True,ignore_na=False,min_periods=0).mean()
           df['j'] = 3 * df['k'] - 2 * df['d']
+
+
+      @staticmethod 
+      def async(f):
+          def wrapper(*args, **kwargs):
+              t = threading.Thread(target=f,args = args, kwargs = kwargs)
+              t.start()
+          return wrapper    
