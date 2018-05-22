@@ -72,9 +72,9 @@ class SellAnalyze(object):
              ratio = self.__config.get_t1()['seller']['ratio']
              stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_bad']
              stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_bad']
-          if self.getCurrentPercent() < stop_loss:
+          if self.getCurrentPercent(stock) < stop_loss:
              return True
-          if self.getCurrentPercent() >= stop_win:
+          if self.getCurrentPercent(stock) >= stop_win:
              stock.set_cache('start_stop_win',True)
           if stock.get_cache('start_stop_win') is None:
              return False    
