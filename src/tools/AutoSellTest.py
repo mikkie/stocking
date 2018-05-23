@@ -17,7 +17,7 @@ from t1.analyze.NetMoney import NetMoney
 from t1.trade.MockTrade import MockTrade
 from t1.analyze.SellAnalyze import SellAnalyze
 
-codes = ['603607']
+codes = ['300116']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -49,7 +49,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addSellData(df)
-       analyze.calcMain(dh)
+       analyze.calcMain(None,dh)
 
 for i in range(5200):
     run(i)
