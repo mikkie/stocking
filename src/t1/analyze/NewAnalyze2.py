@@ -210,7 +210,7 @@ class NewAnalyze2(object):
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           if float(now_line['price']) == stop_price:
              tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100) >= self.__config.get_t1()['hit10']['buy_b1_amount']  
-             info = '[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),stock.get_code(),now_line['b1_v'])
+             info = '[%s]在[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_line['b1_v'])
              MyLog.info(info)
              return tag 
 
