@@ -19,7 +19,7 @@ class MockTrade(object):
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; searchGuide=sg; historystock=000735%7C*%7C600903%7C*%7C002241%7C*%7C002046%7C*%7C603698; __utma=156575163.844587348.1519633850.1526864146.1526893447.72; __utmz=156575163.1526893447.72.72.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; v=AiieXtaM58jlLctMacMrLvcL-R0-UYzFbrBg1eJYdKOWPcYLimFc677FMGgx; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1526952847,1526987637,1526996627,1527036480; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjcwMzg0MjU6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTQ2YTUxZWY4MTk5MjRhZjZjNTY0MTQ5MTVhYWFkMTgyOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=58b042b5a71b6f15c2433b6122162486; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp; PHPSESSID=hu5ocesl7l1h7cgvi1p6pbv5o2',
+              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; searchGuide=sg; historystock=000735%7C*%7C600903%7C*%7C002241%7C*%7C002046%7C*%7C603698; v=AjKEsHj-vUjVWYF0Ye6B6LHZg3MQwzYbaMIqh_wKXuXQj9wl5FOGbThXepnP; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1526893447.1527122480.73; __utmc=156575163; __utmz=156575163.1527122480.73.73.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1526996627,1527036480,1527074138,1527124919; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1MjcxMjQ5MzQ6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MTNkY2E1ZjNjZTliZjMzMzI2MDgzODMyN2M1ZjA4NWZmOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=c65cf1034e6a36741d0d082be8dcc937; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp; PHPSESSID=h2cofv0gi5ljt8f51kuklhd6h1',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
@@ -110,7 +110,6 @@ class MockTrade(object):
 
 
       def cancelAllBuy(self):
-          print("aaa")
           jsonData = self.queryDeligated()
           j = json.loads(jsonData)
           if 'result' not in j or 'list' not in j['result']:
