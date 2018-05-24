@@ -81,7 +81,8 @@ if __name__ == '__main__':
    queueMaps = {}
    interDataHolder = {
       'currentTime' : dt.datetime.now(),
-      'stopBuy' : False
+      'stopBuy' : False,
+      'zs' : None
    }
    if setting.get_t1()['trade']['enableMock']:
       mockTrade.relogin() 
@@ -125,6 +126,7 @@ if __name__ == '__main__':
        if setting.get_t1()['trade']['enableMock']:
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
              interDataHolder['currentTime'] = timestamp
+             interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
              mockTrade.relogin() 
              count = mockTrade.queryBuyStocks()
              if count >= setting.get_t1()['trade']['max_buyed']:
@@ -134,6 +136,7 @@ if __name__ == '__main__':
        if setting.get_t1()['trade']['enable']: 
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
               interDataHolder['currentTime'] = timestamp
+              interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
               count = trade.queryBuyStocks()
               if count >= setting.get_t1()['trade']['max_buyed']:
                  try:
@@ -146,11 +149,12 @@ if __name__ == '__main__':
                  MyLog.info('buyed 3 stocks')
                  interDataHolder['stopBuy'] = True  
        if interDataHolder['stopBuy']:
-          return  
+          return 
+       if interDataHolder['zs'] is None:
+          interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])   
        for key in codeSplitMaps:
            df = ts.get_realtime_quotes(codeSplitMaps[key])
-           zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
-           queueMaps[key].put({'timestamp' : timestamp,'df' : df,'zs' : zs})
+           queueMaps[key].put({'timestamp' : timestamp,'df' : df,'zs' : interDataHolder['zs']})
 
    sched.start()
    pool.close()
