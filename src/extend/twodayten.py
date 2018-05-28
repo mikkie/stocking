@@ -3,7 +3,7 @@ import jqdata
 import numpy as np
 import talib as ta
 
-startDate = '2018-05-25'
+startDate = '2018-05-28'
 res = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
