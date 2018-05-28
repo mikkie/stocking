@@ -80,14 +80,16 @@ class NewAnalyze2(object):
           last_second_line = stock.get_LastSecondline()
           now_line = stock.get_Lastline()
           last_second_buy1_v = self.convertToFloat(last_second_line['b1_v']) 
+          last_second_buy1_amount = float(last_second_line['b1_p']) * last_second_buy1_v * 100
           now_buy1_v = self.convertToFloat(now_line['b1_v'])
           now_buy1_amount = float(now_line['b1_p']) * now_buy1_v * 100 
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           max_b1_amount = stock.get_cache('max_b1_amount')
+          deal_amount = self.convertToFloat(now_line['amount']) - self.convertToFloat(last_second_line['amount'])
           if max_b1_amount is None:
              max_b1_amount = -1 
           if float(now_line['price']) == stop_price:
-             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount']):
+             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio']):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
