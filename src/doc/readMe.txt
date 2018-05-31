@@ -24,6 +24,7 @@ main.py init 300 c 节能
 1.filter by common.sql (price < 30)
 2.filter by twodayten.py (keep yesterday 10%)
 3.filter by NewStock.py
-4.filter by xsg.js
-5.filter by yesterday buy
-6.filter by yg.py
+4.filter by bull2.py 
+5.filter by xsg.js
+6.filter by yesterday buy
+7.filter by yg.py
