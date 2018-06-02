@@ -129,7 +129,7 @@ class NewAnalyze2(object):
           if trade['dynamicVolume']:
              buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
           buyMoney = (float(df_final['price'])) * buyVolume  
-          if buyMoney > self.__balance:
+          if buyMoney > self.__balance or buyVolume == 0:
              return None   
           price = str('%.2f' % (float(df_final['price'])))
           info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
