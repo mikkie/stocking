@@ -10,6 +10,7 @@ from config.Config import Config
 from t1.datas.NewDataHolder2 import NewDataHolder2
 from t1.analyze.NewAnalyze2 import NewAnalyze2
 from t1.trade.MockTrade import MockTrade
+from t1.trade.trade import Trade
 from t1.MyLog import MyLog
 from utils.Utils import Utils
 from sqlalchemy import create_engine
