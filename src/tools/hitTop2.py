@@ -26,7 +26,7 @@ if setting.get_t1()['trade']['enable']:
 engine = create_engine(setting.get_DBurl())
 analyze = NewAnalyze2()
 
-def run(queue,lock):
+def run(queue,lock,shareObj):
     MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
@@ -38,7 +38,7 @@ def run(queue,lock):
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
-              analyze.calcMain(zs,dh,timestamp,lock)
+              analyze.calcMain(zs,dh,timestamp,lock,shareObj)
               data = queue.get(True)   
     except Exception as e:
            MyLog.error('error %s' % str(e))
@@ -85,6 +85,9 @@ if __name__ == '__main__':
       'stopBuy' : False,
       'zs' : None
    }
+   shareObj = {
+       'balance' : setting.get_t1()['trade']['balance']
+   }
    if setting.get_t1()['trade']['enableMock']:
       mockTrade.relogin() 
    for code in setting.get_ignore():
@@ -113,7 +116,7 @@ if __name__ == '__main__':
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
        queueMaps[i] = queue
-       pool.apply_async(run, args=(queue,lock))
+       pool.apply_async(run, args=(queue,lock,shareObj))
        begin = end
        if begin >= length:
           break

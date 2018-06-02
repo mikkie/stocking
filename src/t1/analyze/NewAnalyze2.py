@@ -35,7 +35,7 @@ class NewAnalyze2(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,zs,dh,timestamp,lock):
+      def calcMain(self,zs,dh,timestamp,lock,shareObj):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -61,7 +61,7 @@ class NewAnalyze2(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     self.outputRes(last_line,timestamp,dh,lock)
+                     self.outputRes(last_line,timestamp,dh,lock,shareObj)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
@@ -123,7 +123,7 @@ class NewAnalyze2(object):
 
 
       @Utils.async
-      def outputRes(self,df_final,timestamp,dh,lock):
+      def outputRes(self,df_final,timestamp,dh,lock,shareObj):
           try:
              lock.acquire()  
              trade = self.__config.get_t1()['trade']
@@ -131,7 +131,7 @@ class NewAnalyze2(object):
              if trade['dynamicVolume']:
                 buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
              buyMoney = (float(df_final['price'])) * buyVolume  
-             if buyMoney > self.__balance or buyVolume == 0:
+             if buyMoney > shareObj['balance'] or buyVolume == 0:
                 return None   
              price = str('%.2f' % (float(df_final['price'])))
              info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
@@ -143,15 +143,15 @@ class NewAnalyze2(object):
                 return None
              if trade['enable']:
                 res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
-                if 'entrust_no' in res:
-                   self.__balance = self.__balance - buyMoney
+                if 'entrust_no' in res or ('message' in res and res['message'] == 'success'):
+                   shareObj['balance'] = shareObj['balance'] - buyMoney
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
                 return None
              if trade['enableMock']:
                 res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
                 if res == 0:
-                   self.__balance = self.__balance - buyMoney
+                   shareObj['balance'] = shareObj['balance'] - buyMoney
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
                 return None  
