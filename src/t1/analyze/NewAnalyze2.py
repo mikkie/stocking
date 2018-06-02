@@ -124,16 +124,16 @@ class NewAnalyze2(object):
 
       @Utils.async
       def outputRes(self,df_final,timestamp,dh,lock):
+          trade = self.__config.get_t1()['trade']
+          buyVolume = trade['volume']
+          if trade['dynamicVolume']:
+             buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
+          buyMoney = (float(df_final['price'])) * buyVolume  
+          if buyMoney > self.__balance or buyVolume == 0:
+             return None   
+          price = str('%.2f' % (float(df_final['price'])))
           try:
-             lock.acquire()  
-             trade = self.__config.get_t1()['trade']
-             buyVolume = trade['volume']
-             if trade['dynamicVolume']:
-                buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
-             buyMoney = (float(df_final['price'])) * buyVolume  
-             if buyMoney > self.__balance or buyVolume == 0:
-                return None   
-             price = str('%.2f' % (float(df_final['price'])))
+             lock.acquire()
              info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
              MyLog.info(info)
              now = dt.datetime.now()
@@ -143,7 +143,7 @@ class NewAnalyze2(object):
                 return None
              if trade['enable']:
                 res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
-                if 'entrust_no' in res:
+                if 'entrust_no' in res or ('message' in res and res['message'] == 'success'):
                    self.__balance = self.__balance - buyMoney
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
