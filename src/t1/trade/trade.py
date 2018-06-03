@@ -10,34 +10,27 @@ class Trade(object):
 
       def __init__(self):
           self.__user = easytrader.use('ths')
-          self.__user.connect(r'C:/xyzqdlxd/xiadan.exe')
+          self.__user.connect(r'C:/aqua/stock/dlxd/xiadan.exe')
 
 
       def buy(self,code,amout,price):
           try:
-              res = self.__user.buy(code, price=price, amount=amout)
-              MyLog.info(res)
-              return res
+              self.__user.buy(code, price=price, amount=amout)
+              MyLog.info('buyed %s' % code)
+              return {'message' : 'success'}
           except Exception as e:
                  MyLog.info('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
-                 return ''
+                 return {'message' : 'failed'}
 
 
-      def cancelBuy(self,code):
-          j = self.__user.today_entrusts
-          if len(j) > 0:
-             for stock in j:
-                 if stock['证券代码'] == code and stock['买卖标志'] == '买入' and (int(stock['委托数量']) - int(stock['成交数量']) - int(stock['撤单数量'])) > 0:
-                    self.__user.cancel_entrust(stock['委托序号'])
-                    return 0
-          return -1      
-
-      def cancelAllBuy(self):
-          j = self.__user.today_entrusts
-          if len(j) > 0:
-             for stock in j:
-                 if stock['买卖标志'] == '买入' and (int(stock['委托数量']) - int(stock['成交数量']) - int(stock['撤单数量'])) > 0:
-                    self.__user.cancel_entrust(stock['委托序号'])                          
+      def cancel(self,code,isBuy):
+          try:
+             self.__user.cancel_entrust(code=code,isBuy=isBuy)
+             MyLog.info('cancel code = %s isBuy = %s'  % (code,isBuy))
+             return 0
+          except Exception as e:
+                 MyLog.info('撤单code = %s失败, e = %s' % (code,e))
+                 return -1   
 
 
       def queryBuyStocks(self):
@@ -45,7 +38,7 @@ class Trade(object):
           buyCount = 0
           if len(j) > 0:
              for stock in j:
-                 if stock['买卖标志'] == '买入' and int(stock['成交数量']) > 0:
+                 if stock['操作'].find('买入') >= 0  and int(stock['成交数量']) > 0:
                     buyCount = buyCount + 1
           return buyCount            
 
@@ -53,27 +46,36 @@ class Trade(object):
 
       def sell(self,code,price):
           try:
-             isSelled = True
-             j = self.__user.today_entrusts
-             if len(j) > 0:
-                for stock in j:
-                    if stock['证券代码'] == code and stock['买卖标志'] == '卖出' and (int(stock['委托数量']) - int(stock['成交数量']) - int(stock['撤单数量'])) > 0:
-                        isSelled = False 
-                        ct = dt.datetime.strptime(stock['委托日期'] + ' ' + stock['委托时间'], '%Y%m%d %H:%M:%S')
-                        if (dt.datetime.now() - ct).seconds > 30: 
-                           self.__user.cancel_entrust(stock['委托序号'])
-             j = self.__user.position
-             if len(j) > 0:
-                for stock in j:
-                    if stock['证券代码'] == code and int(stock['股份可用']) > 0:
-                       isSelled = False
-                       self.__user.sell(code, price=price, amount=int(stock['股份可用']))   
-             return isSelled
+             self.cancel(code,False)
+             res = self.__user.sell(code, price=price, amount=None) 
+             MyLog.info('卖出code = %s' % code)
+             return res
           except Exception as e:
-                 MyLog.info('sell [%s] error' % code)
-                 return False  
+                 MyLog.info('卖出code = %s失败, e = %s' % (code,e))
+                 return False    
 
 
 # trade = Trade()
-# trade.sell('002012',7.69)                 
+# # #buy1
+# trade.buy('300022',100,4.68)
+# # # #buy1
+# trade.buy('002031',100,2.47)
+# # # #buy3
+# trade.buy('002481',100,4.91)
+# # #cancel1
+# trade.cancel('300022',True)
+# # #cancel2
+# trade.cancel('002031',True) 
+# # #cancel all
+# trade.cancel(None,True) 
+# # #cancel again
+# trade.cancel('002031',True) 
+# #sell1
+# trade.sell('002031',2.45)
+# # #sell2
+# trade.sell('002031',2.44) 
+# # #cancel sell
+# trade.cancel('002031',False) 
+# #count buy
+# trade.queryBuyStocks()             
           

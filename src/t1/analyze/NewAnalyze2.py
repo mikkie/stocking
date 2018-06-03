@@ -101,7 +101,7 @@ class NewAnalyze2(object):
           if trade['enable']:                    
              try:
                 lock.acquire()
-                status = self.__trade.cancelBuy(stock.get_code()) 
+                status = self.__trade.cancel(stock.get_code(),True) 
              except Exception as e:
                     pass
              finally:

@@ -142,7 +142,7 @@ if __name__ == '__main__':
               if count >= setting.get_t1()['trade']['max_buyed']:
                  try:
                     lock.acquire()
-                    trade.cancelAllBuy() 
+                    trade.cancel(None,True) 
                  except Exception as e:
                         pass 
                  finally:    
