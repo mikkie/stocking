@@ -95,6 +95,19 @@ class SellAnalyze(object):
                return False     
 
 
+      def can_sell(self,stock):
+          last_sell_time = stock.get_cache('last_sell_time')      
+          if last_sell_time is None:
+             stock.set_cache('last_sell_time',dt.datetime.now())
+             return True 
+          now = dt.datetime.now()
+          if (now - last_sell_time).seconds > 30:
+             stock.set_cache('last_sell_time',now)
+             return True
+          return False   
+              
+              
+
       def isZSMatch(self,zs,stock):
           if zs is None:
              return True 
@@ -110,6 +123,8 @@ class SellAnalyze(object):
 
 
       def sell(self,stock):
+          if not self.can_sell(stock):
+             return False 
           last_line = stock.get_Lastline()
           price = float(str('%.2f' % (float(last_line['price']) - self.__config.get_t1()['trade']['minusPrice'])))
           info = '[%s] 在 %s 以 %s 卖出 [%s]%s 全部股票' % (Utils.getCurrentTime(),str(last_line['date']) + ' ' + str(last_line['time']), price, last_line['code'], last_line['name'])
