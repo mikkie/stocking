@@ -4,6 +4,9 @@ __author__ = 'aqua'
 import easytrader
 import json
 import datetime as dt
+# import sys
+# sys.path.append('..')
+# import MyLog
 from ..MyLog import MyLog
 
 class Trade(object):
@@ -57,7 +60,7 @@ class Trade(object):
 
 # trade = Trade()
 # # #buy1
-# trade.buy('300022',100,4.68)
+# trade.buy('300022',33800,4.68)
 # # # #buy1
 # trade.buy('002031',100,2.47)
 # # # #buy3
@@ -71,7 +74,7 @@ class Trade(object):
 # # #cancel again
 # trade.cancel('002031',True) 
 # #sell1
-# trade.sell('002031',2.45)
+# trade.sell('603577',16.00)
 # # #sell2
 # trade.sell('002031',2.44) 
 # # #cancel sell

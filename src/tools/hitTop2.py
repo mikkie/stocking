@@ -150,6 +150,7 @@ if __name__ == '__main__':
                         lock.release()
                  MyLog.info('buyed 3 stocks')
                  interDataHolder['stopBuy'] = True  
+                 sys.exit(0)
        if interDataHolder['stopBuy']:
           return 
        if interDataHolder['zs'] is None:
