@@ -143,9 +143,7 @@ class Config(object):
                      'win_bad' : 2 
                   },
                   'margin' : {
-                     '603500' : 0.5,
-                     '002554' : 0.5,
-                     '002655' : 0.5
+                     '603577' : 0.5
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
