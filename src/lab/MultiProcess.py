@@ -14,22 +14,26 @@ def async(f):
     return wrapper    
 
 @async
-def run2(lock):
-    # lock.acquire()
+def run2(value,lock):
+    lock.acquire()
+    value['v'] = value['v'] - 1
     for i in range(10):
-        print('thread name = %s, pid = %s' % (threading.current_thread().name,os.getpid()))
-    # lock.release()    
+        print('thread name = %s, pid = %s, value = %s' % (threading.current_thread().name,os.getpid(),value['v']))
+    lock.release()    
 
-def run(lock):
+def run(value,lock):
     for i in range(3):
-        run2(lock)
+        run2(value,lock)
 
 if __name__ == '__main__':
    pool = mp.Pool(3)
    manager = mp.Manager()
    lock = manager.Lock()
+   value = {
+       'v' : 4
+   }
    for i in range(3):
-       pool.apply_async(run, args=(lock,))
+       pool.apply_async(run, args=(value,lock))
    input('please enter to exit')   
 
 
