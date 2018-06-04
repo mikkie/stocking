@@ -26,7 +26,7 @@ if setting.get_t1()['trade']['enable']:
 engine = create_engine(setting.get_DBurl())
 analyze = NewAnalyze2()
 
-def run(queue,lock):
+def run(queue,balance,lock):
     MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
@@ -38,7 +38,7 @@ def run(queue,lock):
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
-              analyze.calcMain(zs,dh,timestamp,lock)
+              analyze.calcMain(zs,dh,timestamp,balance,lock)
               data = queue.get(True)   
     except Exception as e:
            MyLog.error('error %s' % str(e))
@@ -75,6 +75,7 @@ if __name__ == '__main__':
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
    lock = manager.Lock()
+   balance = manager.Value('i',setting.get_t1()['trade']['balance'])
 
    codeLists = init(False)
    MyLog.info('calc stocks %s' % codeLists)
@@ -113,7 +114,7 @@ if __name__ == '__main__':
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
        queueMaps[i] = queue
-       pool.apply_async(run, args=(queue,lock))
+       pool.apply_async(run, args=(queue,balance,lock))
        begin = end
        if begin >= length:
           break

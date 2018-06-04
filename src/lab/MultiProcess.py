@@ -21,7 +21,7 @@ def run2(value,lock):
         print('thread name = %s, pid = %s, value = %s' % (threading.current_thread().name,os.getpid(),value.value))
     lock.release()    
 
-def run(value,lock):
+def run(value,test,lock):
     for i in range(3):
         run2(value,lock)
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
    value = manager.Value('i',5)
    lock = manager.Lock()
    for i in range(3):
-       pool.apply_async(run, args=(value,lock))
+       pool.apply_async(run, args=(value,'aa',lock))
    input('please enter to exit')   
 
 
