@@ -16,9 +16,9 @@ def async(f):
 @async
 def run2(value,lock):
     lock.acquire()
-    value['v'] = value['v'] - 1
+    value.value = value.value - 1
     for i in range(10):
-        print('thread name = %s, pid = %s, value = %s' % (threading.current_thread().name,os.getpid(),value['v']))
+        print('thread name = %s, pid = %s, value = %s' % (threading.current_thread().name,os.getpid(),value.value))
     lock.release()    
 
 def run(value,lock):
@@ -28,10 +28,8 @@ def run(value,lock):
 if __name__ == '__main__':
    pool = mp.Pool(3)
    manager = mp.Manager()
+   value = manager.Value('i',5)
    lock = manager.Lock()
-   value = {
-       'v' : 4
-   }
    for i in range(3):
        pool.apply_async(run, args=(value,lock))
    input('please enter to exit')   
