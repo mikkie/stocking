@@ -20,7 +20,7 @@ class SellAnalyze(object):
       def __init__(self):
           self.__config = Config()
           if self.__config.get_t1()['trade']['enable']:
-             self.__trade = Trade()
+             self.__trade = Trade(isSell=True)
           if self.__config.get_t1()['trade']['enableMock']:
              self.__mockTrade = MockTrade()    
           self.__engine = create_engine(self.__config.get_DBurl())
