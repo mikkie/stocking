@@ -134,6 +134,8 @@ class NewAnalyze2(object):
           price = str('%.2f' % (float(df_final['price'])))
           try:
              lock.acquire()
+             if df_final['code'] in dh.get_buyed():
+                return None 
              info = '[%s] 在 %s 以 %s 买入 [%s]%s %s 股' % (Utils.getCurrentTime(),str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
              MyLog.info(info)
              now = dt.datetime.now()
@@ -143,7 +145,7 @@ class NewAnalyze2(object):
                 return None
              if trade['enable']:
                 res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
-                if 'entrust_no' in res or ('message' in res and res['message'] == 'success'):
+                if 'entrust_no' in res or 'success' in res:
                    self.__balance = self.__balance - buyMoney
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
