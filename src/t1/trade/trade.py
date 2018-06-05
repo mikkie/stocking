@@ -11,9 +11,12 @@ from ..MyLog import MyLog
 
 class Trade(object):
 
-      def __init__(self):
+      def __init__(self,isSell=False):
           self.__user = easytrader.use('ths')
-          self.__user.connect(r'C:/aqua/stock/dlxd/xiadan.exe')
+          if isSell:
+             self.__user.connect(r'C:/aqua/stock/dlxd-sell/xiadan.exe') 
+          else:    
+              self.__user.connect(r'C:/aqua/stock/dlxd/xiadan.exe')
 
 
       def buy(self,code,amout,price):
