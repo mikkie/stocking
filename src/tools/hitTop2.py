@@ -150,8 +150,8 @@ if __name__ == '__main__':
                         lock.release()
                  MyLog.info('buyed 3 stocks')
                  interDataHolder['stopBuy'] = True  
-                 sys.exit(0)
        if interDataHolder['stopBuy']:
+          os._exit(0)
           return 
        if interDataHolder['zs'] is None:
           interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])   
