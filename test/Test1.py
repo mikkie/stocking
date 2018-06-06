@@ -5,6 +5,9 @@
 请求http和https网页均适用
 """
 
+import tushare
+import threading
+import time
 from urllib.request import urlopen, Request
 import base64
 import zlib
@@ -19,16 +22,26 @@ proxy = "47.101.38.210:16818"
 username = b"842958037"
 password = b"7mqzliim"
 
-req = Request(page_url)
-req.add_header("Accept-Encoding", "Gzip") #使用gzip压缩传输数据让访问更快
-auth = base64.b64encode('842958037:7mqzliim'.encode('utf-8'))
-print(auth)
-req.add_header("Proxy-Authorization", "Basic ODQyOTU4MDM3OjdtcXpsaWlt")
-req.set_proxy(proxy, "http")
-r = urlopen(req)
+def fun_timer():
+    try:
+       req = Request(page_url)
+       req.add_header("Accept-Encoding", "Gzip") #使用gzip压缩传输数据让访问更快
+       auth = base64.b64encode('842958037:7mqzliim'.encode('utf-8'))
+       req.add_header("Proxy-Authorization", "Basic ODQyOTU4MDM3OjdtcXpsaWlt")
+       req.set_proxy(proxy, "http")
+       r = urlopen(req)
 
-content_encoding = r.headers["Content-Encoding"]
-if content_encoding and "gzip" in content_encoding:
-    print(zlib.decompress(r.read(), 16+zlib.MAX_WBITS)) #获取页面内容
-else:
-    print(r.read())  #获取页面内容
+       content_encoding = r.headers["Content-Encoding"]
+       if content_encoding and "gzip" in content_encoding:
+          print(zlib.decompress(r.read(), 16+zlib.MAX_WBITS)) #获取页面内容
+       else:
+           print(r.read())  #获取页面内容
+    except Exception as e:
+           print("error")
+           pass
+    global timer
+    timer = threading.Timer(3, fun_timer)
+    timer.start()
+
+timer = threading.Timer(3, fun_timer)
+timer.start()        
