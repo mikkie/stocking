@@ -59,7 +59,7 @@ class Config(object):
                  'volume' : 300,
                  'dynamicVolume' : True,
                  'amount' : 11500.0,
-                 'enable' : True,
+                 'enable' : False,
                  'enableMock' : False, 
                  'max_buyed' : 3,
                  'balance' : 100000,
