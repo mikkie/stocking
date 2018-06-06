@@ -47,12 +47,12 @@ class NewAnalyze2(object):
                  continue
               self.updateStock(data[code])  
               if code in dh.get_buyed():
-                 self.cancelBuyIfNeed(data[code],dh,lock)
+                 self.cancelBuyIfNeed(data[code],dh,timestamp,lock)
                  continue  
               try:  
                  if self.calc(zs,data[code],dh):
                     result.append(data[code])
-                #  self.printPerformace(timestamp)  
+                #  self.printPerformace(timestamp)
               except Exception as e:
                      last_line = data[code].get_Lastline()
                      MyLog.error(last_line['time'] + ' :calc ' + code + ' error')
@@ -75,7 +75,7 @@ class NewAnalyze2(object):
              stock.set_cache('max_b1_amount',now_amount)
                  
 
-      def cancelBuyIfNeed(self,stock,dh,lock):
+      def cancelBuyIfNeed(self,stock,dh,timestamp,lock):
           trade = self.__config.get_t1()['trade']
           last_second_line = stock.get_LastSecondline()
           now_line = stock.get_Lastline()
@@ -94,6 +94,7 @@ class NewAnalyze2(object):
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
                    self.cancelBuy(trade,stock,dh,lock) 
+                # self.printPerformace(timestamp)
 
       @Utils.async   
       def cancelBuy(self,trade,stock,dh,lock):
@@ -163,6 +164,7 @@ class NewAnalyze2(object):
                  return None
           finally:
                   lock.release()  
+                #   self.printPerformace(timestamp)
 
 
               
