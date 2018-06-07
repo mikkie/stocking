@@ -88,7 +88,7 @@ class Config(object):
               'get_hygn_inter' : 15,
               'get_data_inter' : 3,
               'need_recover_data' : False,
-              'split_size' : 880,
+              'split_size' : 430,
               'pvRatio' : 1.5,
               'R_line' : {
                   'R1' : 0.191,
