@@ -165,11 +165,6 @@ class Config(object):
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
-                  {
-                      'host' : '',
-                      'username' : '',
-                      'password' : ''
-                  }
               ]
           }
 
