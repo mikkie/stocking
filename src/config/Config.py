@@ -163,7 +163,14 @@ class Config(object):
                  'cancel_ratio' : 0.6,
                  'cancel_ratio_max_amount' : 0.4,
                  'cancel_deal_amount_ratio' : 0.4
-              } 
+              },
+              'proxy' : [
+                  {
+                      'host' : '',
+                      'username' : '',
+                      'password' : ''
+                  }
+              ]
           }
 
       def get_ignore(self):
