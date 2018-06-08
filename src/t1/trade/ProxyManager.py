@@ -80,7 +80,7 @@ class ProxyManager(object):
                  if result_df is None:
                     result_df = feature.result() 
                  else:
-                     result_df = result_df.append(feature.result())   
+                     result_df = result_df.append(feature.result(),ignore_index=True)   
              return result_df              
 
 

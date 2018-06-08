@@ -23,7 +23,7 @@ def async_exe(df):
 def fun_timer():
     try:
        for i in range(1): 
-           proxyManager.get_realtime_quotes(code_list,batch_size=50,async_exe=async_exe)
+           print(proxyManager.get_realtime_quotes(code_list,batch_size=50,async_exe=None))
     except Exception as e:
            print(e)
     # global timer
