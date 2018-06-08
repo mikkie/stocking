@@ -59,8 +59,8 @@ class Config(object):
                  'volume' : 300,
                  'dynamicVolume' : True,
                  'amount' : 11500.0,
-                 'enable' : True,
-                 'enableMock' : False, 
+                 'enable' : False,
+                 'enableMock' : True, 
                  'max_buyed' : 3,
                  'balance' : 100000,
                  'maxBuySignal' : 1,
@@ -143,9 +143,11 @@ class Config(object):
                      'win_bad' : 2 
                   },
                   'margin' : {
-                     '300578' : 0.5,
-                     '002799' : 0.5,
-                     '002290' : 0.5
+                     '002208' : 0.5,
+                     '601619' : 0.5,
+                     '300549' : 0.5,
+                     '002909' : 0.5,
+                     '000532' : 0.5
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
@@ -165,6 +167,16 @@ class Config(object):
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
+                  {
+                      'host' : '120.34.162.71:4275',  
+                      'username' : '',
+                      'password' : ''
+                  },
+                  {
+                      'host' : '59.60.141.116:4275',
+                      'username' : '',
+                      'password' : ''
+                  }
               ]
           }
 
