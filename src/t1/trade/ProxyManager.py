@@ -12,7 +12,7 @@ class ProxyManager(object):
       def __init__(self):
           self.a_list = []
           self.a_list.append(
-              {"ip":"222.219.154.84","port":4236}
+              {"ip":"local","port":0}
           )
           self.b_list = []
           self.current_list = self.a_list

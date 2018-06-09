@@ -125,9 +125,8 @@ if __name__ == '__main__':
 
    def put_data_to_queue(df,queue,data):
        data['df'] = df
-    #    print(df)
        queue.put(data)
-       
+
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():
