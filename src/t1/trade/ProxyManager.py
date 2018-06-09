@@ -30,8 +30,11 @@ class ProxyManager(object):
           if len(self.current_list) == 0:
              return None
           proxy = self.current_list.pop(0)
-          self.current_list.append(proxy)
           return proxy
+
+
+      def return_proxy(self,proxy):
+          self.current_list.append(proxy)    
 
 
       def add_proxy(self,req):
@@ -44,19 +47,19 @@ class ProxyManager(object):
           return proxy  
 
 
-      def retry_wrapper(self,codeList,add_proxy=None):
+      def retry_wrapper(self,codeList,proxyManager=None):
           try:
-             return tushare.get_realtime_quotes(codeList,add_proxy=add_proxy) 
+             return tushare.get_realtime_quotes(codeList,proxyManager=proxyManager) 
           except Exception as e:
                  print(e)
-                 return tushare.get_realtime_quotes(codeList,add_proxy=self.add_proxy)   
+                 return tushare.get_realtime_quotes(codeList,proxyManager=self)   
                     
              
 
 
       def thread_task(self,code_split_list,*args,async_exe=None):
           #force proxy for batch
-          df = self.retry_wrapper(code_split_list,add_proxy=self.add_proxy)
+          df = self.retry_wrapper(code_split_list,proxyManager=self)
           if df is not None:
              if async_exe is not None:
                 async_exe(df,*args)
@@ -69,7 +72,7 @@ class ProxyManager(object):
              res_df = None
              #force proxy for no batch
              if use_proxy_no_batch:
-                res_df = self.retry_wrapper(code_list,add_proxy=self.add_proxy) 
+                res_df = self.retry_wrapper(code_list,proxyManager=self) 
              else:   
                  res_df = self.retry_wrapper(code_list)
              if async_exe is not None:
