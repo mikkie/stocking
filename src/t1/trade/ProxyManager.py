@@ -12,11 +12,7 @@ class ProxyManager(object):
       def __init__(self):
           self.a_list = []
           self.a_list.append(
-              {
-                      'host' : '117.27.26.114:4275',
-                      'username' : '',
-                      'password' : ''
-              }
+              {"ip":"222.219.154.84","port":4236}
           )
           self.b_list = []
           self.current_list = self.a_list
@@ -31,42 +27,68 @@ class ProxyManager(object):
                  self.current_list.append(proxy)
 
       def get_proxy(self):
+          if len(self.current_list) == 0:
+             return None
           proxy = self.current_list.pop(0)
           self.current_list.append(proxy)
-          return proxy    
+          return proxy
 
 
       def add_proxy(self,req):
           proxy = self.get_proxy()
-          if proxy is not None and proxy['host'] != 'local':
-             if proxy['username'] != '' and proxy['password'] != '': 
+          if proxy is not None and proxy['ip'] != 'local':
+             if 'username' in proxy and proxy['username'] != '' and 'password' in proxy and proxy['password'] != '': 
                 auth = base64.b64encode((proxy['username'] + ':' + proxy['password']).encode('utf-8'))
                 req.add_header("Proxy-Authorization", "Basic " + auth.decode('utf-8')) 
-             req.set_proxy(proxy['host'], "http")
-          return proxy   
+             req.set_proxy(proxy['ip'] + ':' + str(proxy['port']), "http")
+          return proxy  
 
 
-      def thread_task(self,code_split_list,async_exe=None):
-          df = tushare.get_realtime_quotes(code_split_list,add_proxy=self.add_proxy)
+      def retry_wrapper(self,codeList,add_proxy=None):
+          try:
+             return tushare.get_realtime_quotes(codeList,add_proxy=add_proxy) 
+          except Exception as e:
+                 print(e)
+                 return tushare.get_realtime_quotes(codeList,add_proxy=self.add_proxy)   
+                    
+             
+
+
+      def thread_task(self,code_split_list,*args,async_exe=None):
+          #force proxy for batch
+          df = self.retry_wrapper(code_split_list,add_proxy=self.add_proxy)
           if df is not None:
              if async_exe is not None:
-                async_exe(df)
+                async_exe(df,*args)
              else:
                  return df      
 
-
-      def get_realtime_quotes(self,code_list,batch_size=0,async_exe=None):
+      #force proxy for multithread batch request, option proxy or not for no batch 
+      def get_realtime_quotes(self,code_list,*args,batch_size=0,async_exe=None,use_proxy_no_batch=False):
           if batch_size == 0:
-             return tushare.get_realtime_quotes(code_list)
+             res_df = None
+             #force proxy for no batch
+             if use_proxy_no_batch:
+                res_df = self.retry_wrapper(code_list,add_proxy=self.add_proxy) 
+             else:   
+                 res_df = self.retry_wrapper(code_list)
+             if async_exe is not None:
+                async_exe(res_df,*args)
+                return None
+             else:
+                 return res_df    
           total = len(code_list)
-          thread_size = total // batch_size + 1 
+          thread_size = total // batch_size
+          less = total % batch_size
+          if less > 0:
+             thread_size = thread_size + 1 
           start = 0
           end = batch_size
           features = []
           for i in range(thread_size):
               code_split_list = code_list[start:end]
               if async_exe is not None:
-                 self.executor.submit(self.thread_task,code_split_list,async_exe=async_exe)
+                 self.executor.submit(self.thread_task,code_split_list,*args,async_exe=async_exe)
               else:
                   future = self.executor.submit(self.thread_task,code_split_list) 
                   features.append(future)

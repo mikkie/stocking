@@ -60,7 +60,7 @@ class Config(object):
                  'dynamicVolume' : True,
                  'amount' : 11500.0,
                  'enable' : False,
-                 'enableMock' : True, 
+                 'enableMock' : False, 
                  'max_buyed' : 3,
                  'balance' : 100000,
                  'maxBuySignal' : 1,
@@ -88,7 +88,7 @@ class Config(object):
               'get_hygn_inter' : 15,
               'get_data_inter' : 3,
               'need_recover_data' : False,
-              'split_size' : 430,
+              'split_size' : 100,
               'pvRatio' : 1.5,
               'R_line' : {
                   'R1' : 0.191,
@@ -160,23 +160,14 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 15000000,
+                 'buy_b1_amount' : 100000,
                  'cancel_b1_amount' : 25000000,
                  'cancel_ratio' : 0.6,
                  'cancel_ratio_max_amount' : 0.4,
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
-                  {
-                      'host' : '120.34.162.71:4275',  
-                      'username' : '',
-                      'password' : ''
-                  },
-                  {
-                      'host' : '59.60.141.116:4275',
-                      'username' : '',
-                      'password' : ''
-                  }
+                  {"ip":"122.4.44.132","port":54252},{"ip":"117.44.137.243","port":5324},{"ip":"60.18.22.120","port":3738},{"ip":"119.116.101.186","port":8946},{"ip":"175.150.4.248","port":51767},{"ip":"112.85.106.92","port":54221},{"ip":"121.233.89.232","port":52646},{"ip":"140.255.4.20","port":57889},{"ip":"27.28.249.187","port":4282},{"ip":"220.179.214.220","port":56890},{"ip":"183.163.83.134","port":4254},{"ip":"114.237.57.70","port":52444},{"ip":"144.255.15.57","port":4252},{"ip":"119.118.125.156","port":4675},{"ip":"117.21.120.127","port":55632},{"ip":"113.121.23.243","port":59077},{"ip":"140.255.4.151","port":55649},{"ip":"115.207.125.69","port":7305},{"ip":"180.109.37.213","port":4813},{"ip":"175.155.233.107","port":7135},{"ip":"180.123.93.154","port":52837},{"ip":"183.164.90.225","port":4265},{"ip":"111.74.233.138","port":4184},{"ip":"218.65.69.91","port":1659},{"ip":"42.230.24.196","port":54242},{"ip":"60.160.171.64","port":54265},{"ip":"112.252.231.127","port":58878},{"ip":"121.233.90.158","port":6511},{"ip":"219.131.251.221","port":3217}
               ]
           }
 

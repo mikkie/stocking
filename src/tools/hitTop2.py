@@ -123,6 +123,11 @@ if __name__ == '__main__':
 
    sched = BlockingScheduler()
 
+   def put_data_to_queue(df,queue,data):
+       data['df'] = df
+    #    print(df)
+       queue.put(data)
+       
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
    def getData():
@@ -130,7 +135,7 @@ if __name__ == '__main__':
        if setting.get_t1()['trade']['enableMock']:
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
              interDataHolder['currentTime'] = timestamp
-             interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],add_proxy=proxyManager.add_proxy,remove_proxy=proxyManager.move_to_backup)
+             interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
              mockTrade.relogin() 
              count = mockTrade.queryBuyStocks()
              if count >= setting.get_t1()['trade']['max_buyed']:
@@ -140,7 +145,7 @@ if __name__ == '__main__':
        if setting.get_t1()['trade']['enable']: 
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
               interDataHolder['currentTime'] = timestamp
-              interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],add_proxy=proxyManager.add_proxy,remove_proxy=proxyManager.move_to_backup)
+              interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
               count = trade.queryBuyStocks()
               if count >= setting.get_t1()['trade']['max_buyed']:
                  try:
@@ -156,10 +161,9 @@ if __name__ == '__main__':
           os._exit(0)
           return 
        if interDataHolder['zs'] is None:
-          interDataHolder['zs'] = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],add_proxy=proxyManager.add_proxy,remove_proxy=proxyManager.move_to_backup)   
+          interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)   
        for key in codeSplitMaps:
-           df = ts.get_realtime_quotes(codeSplitMaps[key],add_proxy=proxyManager.add_proxy,remove_proxy=proxyManager.move_to_backup)
-           queueMaps[key].put({'timestamp' : timestamp,'df' : df,'zs' : interDataHolder['zs']})
+           df = proxyManager.get_realtime_quotes(codeSplitMaps[key],queueMaps[key],{'timestamp' : timestamp,'df' : None,'zs' : interDataHolder['zs']},batch_size=100,async_exe=put_data_to_queue)
 
    sched.start()
    pool.close()
