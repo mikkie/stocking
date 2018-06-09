@@ -59,7 +59,7 @@ class Config(object):
                  'volume' : 300,
                  'dynamicVolume' : True,
                  'amount' : 11500.0,
-                 'enable' : False,
+                 'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
                  'balance' : 100000,
@@ -160,7 +160,7 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 100000,
+                 'buy_b1_amount' : 15000000,
                  'cancel_b1_amount' : 25000000,
                  'cancel_ratio' : 0.6,
                  'cancel_ratio_max_amount' : 0.4,
