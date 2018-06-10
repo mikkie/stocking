@@ -145,17 +145,17 @@ if __name__ == '__main__':
           if (timestamp - interDataHolder['currentTime']).seconds > 60:
               interDataHolder['currentTime'] = timestamp
               interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-              count = trade.queryBuyStocks()
-              if count >= setting.get_t1()['trade']['max_buyed']:
-                 try:
-                    lock.acquire()
-                    trade.cancel(None,True) 
-                 except Exception as e:
-                        pass 
-                 finally:    
-                        lock.release()
-                 MyLog.info('buyed 3 stocks')
-                 interDataHolder['stopBuy'] = True  
+              try:
+                  lock.acquire()
+                  count = trade.queryBuyStocks()
+                  if count >= setting.get_t1()['trade']['max_buyed']:
+                     trade.cancel(None,True) 
+                     MyLog.info('buyed 3 stocks')
+                     interDataHolder['stopBuy'] = True  
+              except Exception as e:
+                     pass 
+              finally:    
+                      lock.release()
        if interDataHolder['stopBuy']:
           os._exit(0)
           return 
