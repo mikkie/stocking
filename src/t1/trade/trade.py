@@ -40,13 +40,17 @@ class Trade(object):
 
 
       def queryBuyStocks(self):
-          j = self.__user.today_trades
-          buyCount = 0
-          if len(j) > 0:
-             for stock in j:
-                 if stock['操作'].find('买入') >= 0  and int(stock['成交数量']) > 0:
-                    buyCount = buyCount + 1
-          return buyCount            
+          try:
+              j = self.__user.today_trades
+              buyCount = 0
+              if len(j) > 0:
+                 for stock in j:
+                     if stock['操作'].find('买入') >= 0  and int(stock['成交数量']) > 0:
+                        buyCount = buyCount + 1
+              return buyCount
+          except Exception as e:
+                 MyLog.info('查询当日买入数量失败')
+                 return 0            
 
 
 
@@ -62,26 +66,34 @@ class Trade(object):
 
 
 # trade = Trade()
-# # #buy1
-# trade.buy('300022',33800,4.68)
-# # # #buy1
+# #buy1
+# trade.buy('300022',100,4.68)
+# #buy1
 # trade.buy('002031',100,2.47)
-# # # #buy3
+# #buy3
 # trade.buy('002481',100,4.91)
-# # #cancel1
+# # cancel1
 # trade.cancel('300022',True)
-# # #cancel2
+# #cancel2
 # trade.cancel('002031',True) 
-# # #cancel all
+# #cancel all
 # trade.cancel(None,True) 
-# # #cancel again
+# #cancel again
 # trade.cancel('002031',True) 
 # #sell1
-# trade.sell('603577',16.00)
-# # #sell2
-# trade.sell('002031',2.44) 
-# # #cancel sell
+# trade.buy('002121',100,5.85)
+
+# trade.sell('002121',5.80)
+
+# trade.sell('002121',7.14)
+# #sell2
+# trade.sell('002031',3.41) 
+
+# trade.sell('002121',7.13)
+
+# trade.sell('002031',3.40)
+# #cancel sell
 # trade.cancel('002031',False) 
 # #count buy
-# trade.queryBuyStocks()             
+# print(trade.queryBuyStocks())             
           
