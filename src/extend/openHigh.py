@@ -4,8 +4,8 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-05-10'
-hitDate='2018-05-09'
+startDate = '2018-05-13'
+hitDate='2018-05-12'
 winStop = 3.0
 lossStop = -2.0
 res = []
