@@ -49,7 +49,7 @@ class Trade(object):
                         buyCount = buyCount + 1
               return buyCount
           except Exception as e:
-                 MyLog.info('查询当日买入数量失败')
+                 MyLog.info('查询当日买入数量失败,%s' % e)
                  return 0            
 
 

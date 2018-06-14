@@ -143,11 +143,9 @@ class Config(object):
                      'win_bad' : 2 
                   },
                   'margin' : {
-                     '002208' : 0.5,
-                     '601619' : 0.5,
-                     '300549' : 0.5,
-                     '002909' : 0.5,
-                     '000532' : 0.5
+                     '000019' : 0.5,
+                     '300702' : 0.5,
+                     '601619' : 0.5
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
@@ -160,7 +158,7 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 15000000,
+                 'buy_b1_amount' : 20000000,
                  'cancel_b1_amount' : 25000000,
                  'cancel_ratio' : 0.6,
                  'cancel_ratio_max_amount' : 0.4,
