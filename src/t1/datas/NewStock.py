@@ -156,9 +156,3 @@ class NewStock(object):
              last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
                 self.__data.append(row.to_dict())
-            #  now = dt.datetime.now()
-            #  if self.get_time() is not None:
-            #     deltaSeconds = (now - self.get_time()).seconds
-            #     if deltaSeconds > 3:
-            #        print('[%s] calc more than %s s' % (self.get_code(),deltaSeconds)) 
-            #  self.set_time(now) 
