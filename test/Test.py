@@ -13,14 +13,14 @@ def fun_timer():
     try:
        print(tushare.get_realtime_quotes(l))
     except Exception as e:
-           print("error")
+           print(e)
            pass   
-    global timer
-    timer = threading.Timer(3, fun_timer)
-    timer.start()
+    # global timer
+    # timer = threading.Timer(3, fun_timer)
+    # timer.start()
 
-# fun_timer()
-timer = threading.Timer(3, fun_timer)
-timer.start()
+fun_timer()
+# timer = threading.Timer(3, fun_timer)
+# timer.start()
 
 
