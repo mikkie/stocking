@@ -5,8 +5,8 @@ import talib as ta
 import datetime
 
 
-startDate = '2018-06-20'
-hitDate='2018-06-19'
+startDate = '2018-06-22'
+hitDate='2018-06-21'
 winStop = 3.0
 lossStop = -2.0
 res = []
