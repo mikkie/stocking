@@ -11,6 +11,7 @@ lossStop = -2.0
 res = []
 failedRes = []
 low_list = []
+today = datetime.date.today()
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
