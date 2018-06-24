@@ -21,14 +21,14 @@ ten_ten_df = []
 failed_ten_df = []
 ten_failed_df = []
 failed_failed_df = []
-today = datetime.date.today()
+today = datetime.datetime.strptime(hitDate,'%Y-%m-%d').date()
 
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
         df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','high_limit','low','pre_close'], skip_paused=True, fq='pre', count=3)
         stock = get_security_info(index)
-        if (today - stock.start_date).days < 20: 
+        if (today - stock.start_date).days < 30: 
             continue 
         zero = df_stock.iloc[-3] 
         first = df_stock.iloc[-2]
