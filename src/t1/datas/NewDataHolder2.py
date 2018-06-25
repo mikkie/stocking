@@ -32,7 +32,7 @@ class NewDataHolder2(object):
 
       def add_buyed(self,code):
           self.__buyed.append(code)
-          self.__tpe.submit(self.saveData,self.__data[code].get_data()) 
+        #   self.__tpe.submit(self.saveData,self.__data[code].get_data()) 
 
       #use for mock
       def add_buyed_mock(self,code):
@@ -44,16 +44,16 @@ class NewDataHolder2(object):
 
       def add_selled(self,code,save=False):
           self.__selled.append(code)
-          if save:
-             self.__tpe.submit(self.saveData,self.__data[code].get_data())   
+        #   if save:
+            #  self.__tpe.submit(self.saveData,self.__data[code].get_data())   
 
       def get_ignore(self):
           return self.__ignore       
 
       def add_ignore(self,code,save=False):
           self.__ignore.append(code)
-          if save:
-             self.__tpe.submit(self.saveData,self.__data[code].get_data())       
+        #   if save:
+            #  self.__tpe.submit(self.saveData,self.__data[code].get_data())       
 
 
       def get_data(self):

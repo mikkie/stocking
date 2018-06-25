@@ -56,13 +56,13 @@ class Config(object):
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 300,
+                 'volume' : 100,
                  'dynamicVolume' : True,
-                 'amount' : 11500.0,
-                 'enable' : False,
-                 'enableMock' : True, 
+                 'amount' : 1500.0,
+                 'enable' : True,
+                 'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 100000,
+                 'balance' : 3000,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
@@ -164,7 +164,7 @@ class Config(object):
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
-                  {"ip":"59.42.206.236","port":6897,"expire_time":"2018-06-25 10:56:05","city":"广东省广州市"},{"ip":"219.137.53.226","port":6897,"expire_time":"2018-06-25 10:56:18","city":"广东省广州市"},{"ip":"116.22.45.6","port":56897,"expire_time":"2018-06-25 10:56:15","city":"广东省广州市"},{"ip":"59.42.206.93","port":56897,"expire_time":"2018-06-25 12:56:05","city":"广东省广州市"}
+                  {"ip":"123.152.67.217","port":2682,"expire_time":"2018-06-25 19:54:01","city":"黑龙江省哈尔滨市"}
               ]
           }
 
