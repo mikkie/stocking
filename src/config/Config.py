@@ -59,8 +59,8 @@ class Config(object):
                  'volume' : 300,
                  'dynamicVolume' : True,
                  'amount' : 11500.0,
-                 'enable' : True,
-                 'enableMock' : False, 
+                 'enable' : False,
+                 'enableMock' : True, 
                  'max_buyed' : 3,
                  'balance' : 100000,
                  'maxBuySignal' : 1,
@@ -143,9 +143,8 @@ class Config(object):
                      'win_bad' : 2 
                   },
                   'margin' : {
-                     '300615' : 0.5,
-                     '300312' : 0.5,
-                     '300578' : 0.5
+                     '300345' : 0.5,
+                     '002930' : 0.5
                   },
                   'ratio' : 0.5,
                   'min_threshold' : -8,

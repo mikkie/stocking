@@ -73,19 +73,29 @@ for index,row in df_all.iterrows():
         
 
 print(u'%s号打板,%s号卖出' % (hitDate,startDate))
-ratio = float(len(ten_ten_df)) / float(len(ten_ten_df) + len(ten_failed_df))
-total = len(ten_ten_res) + len(ten_ten_failedRes) 
-print(u'ten_ten最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,ratio * float(len(ten_ten_res)) / float(total) * 100))
-ratio = float(len(failed_ten_df)) / float(len(failed_ten_df) + len(failed_failed_df))
-total = len(failed_ten_res) + len(failed_ten_failedRes) 
-print(u'failed_ten最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,ratio * float(len(failed_ten_res)) / float(total) * 100))
-ratio = float(len(ten_ten_df) + len(failed_ten_df)) / float(len(ten_ten_df) + len(failed_ten_df) + len(ten_failed_df) + len(failed_failed_df))
-total = len(res) + len(failedRes) 
-print(u'最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,ratio * float(len(res)) / float(total) * 100))
-print(ten_ten_df)
-print(ten_failed_df)
-print(failed_ten_df)
-print(failed_failed_df)
+if len(ten_ten_df) + len(ten_failed_df) != 0:
+   ratio = float(len(ten_ten_df)) / float(len(ten_ten_df) + len(ten_failed_df))
+   total = len(ten_ten_res) + len(ten_ten_failedRes) 
+   if total != 0:
+      print(u'第二板最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,ratio * float(len(ten_ten_res)) / float(total) * 100))
+      print(u'第二板封板成功%.2f%% %s' % (ratio * 100,ten_ten_df))
+      print(u'第二板封板失败 %s' % ten_failed_df)
+      print(u'第二板最高涨幅超%.2f%% %.2f%% %s' % (winStop,float(len(ten_ten_res)) / float(total) * 100,ten_ten_res))
+      print(u'第二板最高涨幅低于%.2f%% %s' % (winStop,ten_ten_failedRes))
+if len(failed_ten_df) + len(failed_failed_df) != 0:
+   ratio = float(len(failed_ten_df)) / float(len(failed_ten_df) + len(failed_failed_df))
+   total = len(failed_ten_res) + len(failed_ten_failedRes) 
+   if total != 0:
+      print(u'第一板最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,ratio * float(len(failed_ten_res)) / float(total) * 100))
+      print(u'第一板封板成功%.2f%% %s' % (ratio * 100,failed_ten_df))
+      print(u'第一板封板失败 %s' % failed_failed_df)
+      print(u'第一板最高涨幅超%.2f%% %.2f%% %s' % (winStop,float(len(failed_ten_res)) / float(total) * 100,failed_ten_res))
+      print(u'第一板最高涨幅低于%.2f%% %s' % (winStop,failed_ten_failedRes))
+if len(ten_ten_df) + len(failed_ten_df) + len(ten_failed_df) + len(failed_failed_df) != 0:   
+   ratio = float(len(ten_ten_df) + len(failed_ten_df)) / float(len(ten_ten_df) + len(failed_ten_df) + len(ten_failed_df) + len(failed_failed_df))
+   total = len(res) + len(failedRes) 
+   if total != 0:
+      print(u'最高涨幅>%.2f%%的概率= %.2f%%' % (winStop,ratio * float(len(res)) / float(total) * 100))
 # print(u'最高涨幅<%.2f%%的概率= %.2f%%' % (winStop,float(len(failedRes)) / float(total) * 100))
 # print(failedRes)
 # print(u'最高涨幅>%.2f%%时,最低跌幅超过%.2f%%的概率=%.2f%%' % (winStop,lossStop,float(len(low_list)) / float(len(res)) * 100))
