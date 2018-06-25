@@ -28,3 +28,4 @@ main.py init 300 c 节能
 5.filter by xsg.js
 6.filter by yesterday buy
 7.filter by yg.py
+8.filter by keeponly10.py
