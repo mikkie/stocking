@@ -5,10 +5,10 @@ import talib as ta
 import datetime
 
 
-startDate = '2018-04-19'
-hitDate='2018-04-18'
-beforeDate = '2018-04-17'
-winStop = 3.0
+startDate = '2018-06-26'
+hitDate='2018-06-25'
+beforeDate = '2018-06-22'
+winStop = 2.0
 lossStop = -2.0
 res = []
 failedRes = []
