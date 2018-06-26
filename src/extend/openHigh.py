@@ -7,7 +7,7 @@ import datetime
 startDate = '2018-05-13'
 hitDate='2018-05-12'
 winStop = 3.0
-lossStop = -3.0
+lossStop = -2.0
 res = []
 failedRes = []
 low_list = []
