@@ -137,10 +137,10 @@ class Config(object):
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   'stop_loss_win' : {
-                     'loss_good' : -3,
-                     'loss_bad' : -2.5,
-                     'win_good' : 3,
-                     'win_bad' : 2.5 
+                     'loss_good' : -2.5,
+                     'loss_bad' : -2,
+                     'win_good' : 2.5,
+                     'win_bad' : 2 
                   },
                   'margin' : {
                      '300345' : 0.5,
