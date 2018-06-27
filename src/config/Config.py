@@ -62,7 +62,7 @@ class Config(object):
                  'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 3000,
+                 'balance' : 2981.64,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
@@ -164,7 +164,7 @@ class Config(object):
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
-                  {"ip":"123.152.67.217","port":2682,"expire_time":"2018-06-25 19:54:01","city":"黑龙江省哈尔滨市"}
+                  {"ip":"14.211.146.67","port":52589,"expire_time":"2018-06-27 18:19:38","city":"广东省珠海市","isp":"电信"},{"ip":"14.116.107.121","port":2589,"expire_time":"2018-06-27 18:20:04","city":"广东省珠海市","isp":"电信"}
               ]
           }
 
