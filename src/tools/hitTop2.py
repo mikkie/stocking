@@ -132,7 +132,7 @@ if __name__ == '__main__':
    def getData():
        timestamp = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
-          if (timestamp - interDataHolder['currentTime']).seconds > 60:
+          if (timestamp - interDataHolder['currentTime']).seconds > 120:
              interDataHolder['currentTime'] = timestamp
              interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
              mockTrade.relogin() 
@@ -142,7 +142,7 @@ if __name__ == '__main__':
                 MyLog.info('buyed 3 stocks')
                 interDataHolder['stopBuy'] = True 
        if setting.get_t1()['trade']['enable']: 
-          if (timestamp - interDataHolder['currentTime']).seconds > 60:
+          if (timestamp - interDataHolder['currentTime']).seconds > 120:
               interDataHolder['currentTime'] = timestamp
               interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
               try:

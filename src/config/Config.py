@@ -86,7 +86,7 @@ class Config(object):
                   'v300' : 0.013
               },
               'get_hygn_inter' : 15,
-              'get_data_inter' : 3,
+              'get_data_inter' : 2,
               'need_recover_data' : False,
               'split_size' : 100,
               'pvRatio' : 1.5,
@@ -164,7 +164,6 @@ class Config(object):
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
-                  {"ip":"14.211.146.67","port":52589,"expire_time":"2018-06-27 18:19:38","city":"广东省珠海市","isp":"电信"},{"ip":"14.116.107.121","port":2589,"expire_time":"2018-06-27 18:20:04","city":"广东省珠海市","isp":"电信"}
               ]
           }
 
