@@ -2,6 +2,7 @@
 __author__ = 'aqua'
 from concurrent.futures import ThreadPoolExecutor,as_completed
 import sys
+import threading
 sys.path.append('..')
 import src.config.Config
 import base64
@@ -11,6 +12,7 @@ class ProxyManager(object):
 
       def __init__(self):
           self.a_list = []
+          self.threadLock = threading.Lock()
           self.a_list.append(
               {"ip":"local","port":0}
           )
@@ -27,14 +29,21 @@ class ProxyManager(object):
                  self.current_list.append(proxy)
 
       def get_proxy(self):
+          self.threadLock.acquire()
           if len(self.current_list) == 0:
+             self.threadLock.release()
              return None
           proxy = self.current_list.pop(0)
+          self.threadLock.release()
           return proxy
 
 
       def return_proxy(self,proxy):
-          self.current_list.append(proxy)    
+          self.current_list.append(proxy) 
+
+
+      def get_proxy_size(self):
+          return len(self.current_list)       
 
 
       def add_proxy(self,req):

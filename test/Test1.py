@@ -7,6 +7,7 @@
 
 import threading
 import tushare
+import datetime
 import sys
 sys.path.append('..')
 import src.t1.trade.ProxyManager
@@ -23,16 +24,16 @@ def async_exe(df,data):
 
 def fun_timer():
     try:
-       for i in range(1): 
-           proxyManager.get_realtime_quotes(code_list,1,batch_size=100,async_exe=async_exe,use_proxy_no_batch=False)
+        print(proxyManager.get_proxy_size())
+        starttime = datetime.datetime.now()
+        proxyManager.get_realtime_quotes(code_list,'data',batch_size=100)
+        endtime = datetime.datetime.now()
+        print('times= %s' % (endtime - starttime).seconds)
     except Exception as e:
            print(e)
     global timer
     timer = threading.Timer(3, fun_timer)
     timer.start()
 
-fun_timer()
-# fun_timer()
-# fun_timer()
 timer = threading.Timer(3, fun_timer)
 timer.start()        
