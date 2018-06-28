@@ -61,7 +61,7 @@ class ProxyManager(object):
              return tushare.get_realtime_quotes(codeList,proxyManager=proxyManager) 
           except Exception as e:
                  print(e)
-                 return tushare.get_realtime_quotes(codeList,proxyManager=self)   
+                #  return tushare.get_realtime_quotes(codeList,proxyManager=self)   
                     
              
 
