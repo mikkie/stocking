@@ -86,7 +86,7 @@ class Config(object):
                   'v300' : 0.013
               },
               'get_hygn_inter' : 15,
-              'get_data_inter' : 2,
+              'get_data_inter' : 3,
               'need_recover_data' : False,
               'split_size' : 100,
               'pvRatio' : 1.5,
@@ -157,10 +157,10 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 18000000,
-                 'cancel_b1_amount' : 20000000,
+                 'buy_b1_amount' : 17000000,
+                 'cancel_b1_amount' : 23000000,
                  'cancel_ratio' : 0.6,
-                 'cancel_ratio_max_amount' : 0.3,
+                 'cancel_ratio_max_amount' : 0.25,
                  'cancel_deal_amount_ratio' : 0.4
               },
               'proxy' : [
