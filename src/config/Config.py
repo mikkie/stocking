@@ -157,7 +157,7 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 17000000,
+                 'buy_b1_amount' : 18000000,
                  'cancel_b1_amount' : 20000000,
                  'cancel_ratio' : 0.6,
                  'cancel_ratio_max_amount' : 0.3,
