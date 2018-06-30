@@ -159,9 +159,9 @@ class Config(object):
               'hit10' : {
                  'buy_b1_amount' : 17000000,
                  'cancel_b1_amount' : 23000000,
-                 'cancel_ratio' : 0.6,
+                 'cancel_ratio' : 0.65,
                  'cancel_ratio_max_amount' : 0.25,
-                 'cancel_deal_amount_ratio' : 0.4
+                 'cancel_deal_amount_ratio' : 0.35
               },
               'proxy' : [
               ]
