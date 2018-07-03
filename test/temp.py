@@ -1,10 +1,13 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-import tushare as ts
+l = [1,2,3,4,5]
+for i in range(20):
+    if len(l) > 10:
+       l.pop(0)
+    l.append(i)
 
-df = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
-print(df)
+print(sum(l))   
 
 
 

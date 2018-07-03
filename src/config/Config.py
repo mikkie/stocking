@@ -62,7 +62,7 @@ class Config(object):
                  'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 2981.64,
+                 'balance' : 3000,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
@@ -159,11 +159,13 @@ class Config(object):
               'hit10' : {
                  'buy_b1_amount' : 17000000,
                  'cancel_b1_amount' : 23000000,
-                 'cancel_ratio' : 0.65,
+                 'cancel_ratio' : 0.8,
                  'cancel_ratio_max_amount' : 0.25,
-                 'cancel_deal_amount_ratio' : 0.35
+                 'cancel_deal_amount_ratio' : 0.2,
+                 'max_deal_amount' : 10000000
               },
               'proxy' : [
+                  {"ip":"113.76.19.191","port":3217,"expire_time":"2018-07-03 17:42:17","city":"广东省珠海市"},{"ip":"183.58.234.22","port":52589,"expire_time":"2018-07-03 19:18:05","city":"广东省珠海市"},{"ip":"183.45.61.120","port":53217,"expire_time":"2018-07-03 15:18:21","city":"广东省珠海市"},{"ip":"119.132.127.48","port":3217,"expire_time":"2018-07-03 20:06:20","city":"广东省珠海市"},{"ip":"219.135.70.50","port":2589,"expire_time":"2018-07-03 15:18:04","city":"广东省珠海市"},{"ip":"183.31.228.150","port":52589,"expire_time":"2018-07-03 15:18:06","city":"广东省珠海市"},{"ip":"183.53.140.55","port":3217,"expire_time":"2018-07-03 20:06:17","city":"广东省珠海市"},{"ip":"113.76.233.148","port":53217,"expire_time":"2018-07-03 15:18:16","city":"广东省珠海市"},{"ip":"27.40.154.237","port":54238,"expire_time":"2018-07-03 16:40:02","city":"广东省湛江市"},{"ip":"27.40.148.205","port":4238,"expire_time":"2018-07-03 16:20:08","city":"广东省湛江市"},{"ip":"27.40.151.225","port":4238,"expire_time":"2018-07-03 16:20:01","city":"广东省湛江市"},{"ip":"27.40.142.51","port":4238,"expire_time":"2018-07-03 16:40:08","city":"广东省湛江市"}
               ]
           }
 

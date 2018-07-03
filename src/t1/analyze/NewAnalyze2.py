@@ -45,7 +45,7 @@ class NewAnalyze2(object):
                  continue 
               if code in dh.get_ignore():
                  continue
-              self.updateStock(data[code])  
+              self.updateStock(data[code],dh)  
               if code in dh.get_buyed():
                  self.cancelBuyIfNeed(data[code],dh,timestamp,lock)
                  continue  
@@ -67,13 +67,28 @@ class NewAnalyze2(object):
                         MyLog.error(str(e))   
 
 
-      def updateStock(self,stock):
+      def updateStock(self,stock,dh):
           max_amount = stock.get_cache('max_b1_amount') 
           now_line = stock.get_Lastline()
-          now_amount = float(now_line['b1_p']) * self.convertToFloat(now_line['b1_v']) * 100  
-          if max_amount is None or now_amount > max_amount:
-             stock.set_cache('max_b1_amount',now_amount)
-                 
+          stop_price = round(float(now_line['pre_close']) * 1.1, 2)
+          if float(now_line['b1_p']) == stop_price:
+             now_amount = float(now_line['b1_p']) * self.convertToFloat(now_line['b1_v']) * 100  
+             if max_amount is None or now_amount > max_amount:
+                stock.set_cache('max_b1_amount',now_amount)
+          if stock.get_code() in dh.get_buyed():      
+             last_second_line = stock.get_LastSecondline()
+             if last_second_line is None or float(last_second_line['b1_p']) != stop_price:
+                return 
+             deal_amount = self.convertToFloat(now_line['amount']) - self.convertToFloat(last_second_line['amount'])   
+             old_deal_amount = stock.get_cache('deal_amount')
+             if old_deal_amount is None:
+                stock.set_cache('deal_amount',[deal_amount])  
+             else:
+                 if len(old_deal_amount) >= 15:
+                    old_deal_amount.pop(0)
+                    old_deal_amount.append(deal_amount) 
+                 stock.set_cache('deal_amount',old_deal_amount)   
+
 
       def cancelBuyIfNeed(self,stock,dh,timestamp,lock):
           trade = self.__config.get_t1()['trade']
@@ -88,8 +103,12 @@ class NewAnalyze2(object):
           deal_amount = self.convertToFloat(now_line['amount']) - self.convertToFloat(last_second_line['amount'])
           if max_b1_amount is None:
              max_b1_amount = -1 
+          sum_last_10_deal_amount = 0
+          last_10_deal_amount = stock.get_cache('deal_amount')   
+          if last_10_deal_amount is not None:
+             sum_last_10_deal_amount = sum(last_10_deal_amount)
           if float(now_line['price']) == stop_price:
-             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio']):
+             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio'] or sum_last_10_deal_amount > self.__config.get_t1()['hit10']['max_deal_amount']):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
