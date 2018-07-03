@@ -86,7 +86,7 @@ class NewAnalyze2(object):
              else:
                  if len(old_deal_amount) >= 15:
                     old_deal_amount.pop(0)
-                    old_deal_amount.append(deal_amount) 
+                 old_deal_amount.append(deal_amount) 
                  stock.set_cache('deal_amount',old_deal_amount)   
 
 
