@@ -4,7 +4,7 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-07-03'
+startDate = '2018-07-04'
 failed = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
