@@ -5,9 +5,9 @@ import talib as ta
 import datetime
 
 
-startDate = '2018-07-02'
-hitDate='2018-06-29'
-beforeDate = '2018-06-28'
+startDate = '2018-07-03'
+hitDate='2018-07-02'
+beforeDate = '2018-06-29'
 winStop = 2.0
 lossStop = -2.0
 res = []
@@ -40,6 +40,8 @@ for index,row in df_all.iterrows():
         last = df_stock.iloc[-1]
         if last.name.to_pydatetime() != datetime.datetime.strptime(startDate,'%Y-%m-%d'):
            continue
+        if last['open'] == last['high_limit'] and last['open'] == last['close'] and last['open'] == last['low']:
+           continue 
         index = index.replace('.XSHE','').replace('.XSHG','') 
         if first['high'] == first['high_limit']:
            if first['close'] == first['high_limit']:
