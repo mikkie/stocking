@@ -108,7 +108,7 @@ class NewAnalyze2(object):
           if last_10_deal_amount is not None:
              sum_last_10_deal_amount = sum(last_10_deal_amount)
           if float(now_line['price']) == stop_price:
-             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio'] or sum_last_10_deal_amount > self.__config.get_t1()['hit10']['max_deal_amount']):
+             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio'] or sum_last_10_deal_amount > now_buy1_amount * self.__config.get_t1()['hit10']['max_deal_amount']):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
@@ -251,7 +251,7 @@ class NewAnalyze2(object):
           pre_close = line.get('pre_close') 
           price = line.get('price')
           p = (float(price) - float(pre_close)) / float(pre_close) * 100 
-          return p > -0.15
+          return p > -0.5
 
 
       def getPercent(self,price,stock):
