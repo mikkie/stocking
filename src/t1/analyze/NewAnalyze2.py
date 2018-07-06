@@ -7,6 +7,7 @@ import tushare as ts
 import pandas as pd
 import numpy as np
 import datetime as dt
+import time
 import math
 import sys
 sys.path.append('../..')
@@ -101,6 +102,10 @@ class NewAnalyze2(object):
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           max_b1_amount = stock.get_cache('max_b1_amount')
           deal_amount = self.convertToFloat(now_line['amount']) - self.convertToFloat(last_second_line['amount'])
+          cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount']
+          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+          if strTime > '14:30:00':
+             cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount_1'] 
           if max_b1_amount is None:
              max_b1_amount = -1 
           sum_last_10_deal_amount = 0
@@ -108,7 +113,7 @@ class NewAnalyze2(object):
           if last_10_deal_amount is not None:
              sum_last_10_deal_amount = sum(last_10_deal_amount)
           if float(now_line['price']) == stop_price:
-             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < self.__config.get_t1()['hit10']['cancel_b1_amount'] or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio'] or sum_last_10_deal_amount > self.__config.get_t1()['hit10']['max_deal_amount']):
+             if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_buy1_amount < cancel_b1_amount or now_buy1_v < last_second_buy1_v * self.__config.get_t1()['hit10']['cancel_ratio'] or now_buy1_amount < max_b1_amount * self.__config.get_t1()['hit10']['cancel_ratio_max_amount'] or deal_amount >= last_second_buy1_amount * self.__config.get_t1()['hit10']['cancel_deal_amount_ratio'] or sum_last_10_deal_amount > now_buy1_amount * self.__config.get_t1()['hit10']['max_deal_amount']):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
