@@ -132,30 +132,34 @@ if __name__ == '__main__':
    def getData():
        timestamp = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
-          if (timestamp - interDataHolder['currentTime']).seconds > 120:
+          delSeconds = (timestamp - interDataHolder['currentTime']).seconds
+          if delSeconds > 30:
              interDataHolder['currentTime'] = timestamp
              interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-             mockTrade.relogin() 
-             count = mockTrade.queryBuyStocks()
-             if count >= setting.get_t1()['trade']['max_buyed']:
-                mockTrade.cancelAllBuy()
-                MyLog.info('buyed 3 stocks')
-                interDataHolder['stopBuy'] = True 
+             if delSeconds > 120:
+                mockTrade.relogin() 
+                count = mockTrade.queryBuyStocks()
+                if count >= setting.get_t1()['trade']['max_buyed']:
+                   mockTrade.cancelAllBuy()
+                   MyLog.info('buyed 3 stocks')
+                   interDataHolder['stopBuy'] = True 
        if setting.get_t1()['trade']['enable']: 
-          if (timestamp - interDataHolder['currentTime']).seconds > 120:
+          delSeconds = (timestamp - interDataHolder['currentTime']).seconds
+          if delSeconds > 30:
               interDataHolder['currentTime'] = timestamp
               interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-              try:
-                  lock.acquire()
-                  count = trade.queryBuyStocks()
-                  if count >= setting.get_t1()['trade']['max_buyed']:
-                     trade.cancel(None,True) 
-                     MyLog.info('buyed 3 stocks')
-                     interDataHolder['stopBuy'] = True  
-              except Exception as e:
-                     pass 
-              finally:    
-                      lock.release()
+              if delSeconds > 120:
+                 try:
+                     lock.acquire()
+                     count = trade.queryBuyStocks()
+                     if count >= setting.get_t1()['trade']['max_buyed']:
+                        trade.cancel(None,True) 
+                        MyLog.info('buyed 3 stocks')
+                        interDataHolder['stopBuy'] = True  
+                 except Exception as e:
+                        pass 
+                 finally:    
+                         lock.release()
        if interDataHolder['stopBuy']:
           os._exit(0)
           return 

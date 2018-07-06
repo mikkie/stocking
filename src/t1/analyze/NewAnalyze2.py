@@ -256,7 +256,7 @@ class NewAnalyze2(object):
           pre_close = line.get('pre_close') 
           price = line.get('price')
           p = (float(price) - float(pre_close)) / float(pre_close) * 100 
-          return p > -0.15
+          return p > -0.5
 
 
       def getPercent(self,price,stock):
