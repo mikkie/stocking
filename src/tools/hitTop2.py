@@ -58,7 +58,7 @@ if __name__ == '__main__':
        while strTime < '09:30:01':
              time.sleep(0.1)
              strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       step = setting.get_t1()['split_size']
+       step = 880
        start = 0
        codeList = []
        length = len(df_todayAll)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
    MyLog.info('calc stocks size %d' % length) 
    if length == 0:
       MyLog.info('no available stocks to calc')
-      sys.exit()
+      os._exit(0)
    step = setting.get_t1()['split_size']
    x = length // setting.get_t1()['process_num']
    y = length % setting.get_t1()['process_num']
@@ -168,6 +168,7 @@ if __name__ == '__main__':
        for key in codeSplitMaps:
            df = proxyManager.get_realtime_quotes(codeSplitMaps[key],queueMaps[key],{'timestamp' : timestamp,'df' : None,'zs' : interDataHolder['zs']},batch_size=100,async_exe=put_data_to_queue)
 
+   getData()
    sched.start()
    pool.close()
    pool.join()
