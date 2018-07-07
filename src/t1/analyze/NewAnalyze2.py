@@ -48,7 +48,7 @@ class NewAnalyze2(object):
                  continue
               self.updateStock(data[code],dh)  
               if code in dh.get_buyed():
-                 self.cancelBuyIfNeed(data[code],dh,timestamp,lock)
+                 self.cancelBuyIfNeed(data[code],dh,timestamp,lock,balance)
                  continue  
               try:  
                  if self.calc(zs,data[code],dh):
@@ -62,7 +62,7 @@ class NewAnalyze2(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     self.outputRes(last_line,timestamp,dh,balance,lock)
+                     self.outputRes(stock,last_line,timestamp,dh,balance,lock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
@@ -91,7 +91,7 @@ class NewAnalyze2(object):
                  stock.set_cache('deal_amount',old_deal_amount)   
 
 
-      def cancelBuyIfNeed(self,stock,dh,timestamp,lock):
+      def cancelBuyIfNeed(self,stock,dh,timestamp,lock,balance):
           trade = self.__config.get_t1()['trade']
           last_second_line = stock.get_LastSecondline()
           now_line = stock.get_Lastline()
@@ -117,21 +117,27 @@ class NewAnalyze2(object):
                 info = '[%s] 在 [%s] 撤单 [%s],b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_buy1_v)
                 MyLog.info(info)
                 if trade['enable'] or trade['enableMock']:
-                   self.cancelBuy(trade,stock,dh,lock) 
+                   self.cancelBuy(trade,stock,dh,lock,balance) 
                 # self.printPerformace(timestamp)
 
       @Utils.async   
-      def cancelBuy(self,trade,stock,dh,lock):
+      def cancelBuy(self,trade,stock,dh,lock,balance):
           status = -1
           if trade['enable']:                    
              try:
                 lock.acquire()
                 status = self.__trade.cancel(stock.get_code(),True) 
+                buyMoney = stock.get_cache('buyMoney')
+                if buyMoney is not None:
+                   balance.value = balance.value + buyMoney
              except Exception as e:
                     pass
              finally:
                      lock.release()
           if trade['enableMock']:
+             buyMoney = stock.get_cache('buyMoney')
+             if buyMoney is not None:
+                balance.value = balance.value + buyMoney 
              status = self.__mockTrade.cancelBuy(stock.get_code())
           #cancel success
           if status == 0: 
@@ -148,7 +154,7 @@ class NewAnalyze2(object):
 
 
       @Utils.async
-      def outputRes(self,df_final,timestamp,dh,balance,lock):
+      def outputRes(self,stock,df_final,timestamp,dh,balance,lock):
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
@@ -172,6 +178,7 @@ class NewAnalyze2(object):
                 res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
                 if 'entrust_no' in res or 'success' in res:
                    balance.value = balance.value - buyMoney
+                   stock.set_cache('buyMoney',buyMoney)
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
                 return None
@@ -179,6 +186,7 @@ class NewAnalyze2(object):
                 res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
                 if res == 0:
                    balance.value = balance.value - buyMoney
+                   stock.set_cache('buyMoney',buyMoney)
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
                 return None  
