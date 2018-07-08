@@ -160,8 +160,9 @@ class Config(object):
                  'buy_b1_amount' : 17000000,
                  'cancel_b1_amount' : 23000000,
                  'cancel_b1_amount_1' : 15000000,
+                 'cancel_b1_amount_2' : 5000000,
                  'cancel_ratio' : 0.8,
-                 'cancel_ratio_max_amount' : 0.15,
+                 'cancel_ratio_max_amount' : 0.10,
                  'cancel_deal_amount_ratio' : 0.2,
                  'max_deal_amount' : 0.4
               },

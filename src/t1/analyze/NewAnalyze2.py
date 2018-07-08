@@ -105,7 +105,9 @@ class NewAnalyze2(object):
           cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount']
           strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
           if strTime > '14:30:00':
-             cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount_1'] 
+             cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount_1']
+          if strTime > '14:45:00':
+             cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount_2']    
           if max_b1_amount is None:
              max_b1_amount = -1 
           sum_last_10_deal_amount = 0
