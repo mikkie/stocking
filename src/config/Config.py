@@ -62,7 +62,7 @@ class Config(object):
                  'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 2942,
+                 'balance' : 2950,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
@@ -161,9 +161,9 @@ class Config(object):
                  'cancel_b1_amount' : 20000000,
                  'cancel_b1_amount_1' : 15000000,
                  'cancel_b1_amount_2' : 5000000,
-                 'cancel_ratio' : 0.8,
+                 'cancel_ratio' : 0.75,
                  'cancel_ratio_max_amount' : 0.10,
-                 'cancel_deal_amount_ratio' : 0.2,
+                 'cancel_deal_amount_ratio' : 0.25,
                  'max_deal_amount' : 0.4,
                  'canceled_buyed_again' : 1.5
               },
