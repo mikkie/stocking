@@ -164,7 +164,8 @@ class Config(object):
                  'cancel_ratio' : 0.8,
                  'cancel_ratio_max_amount' : 0.10,
                  'cancel_deal_amount_ratio' : 0.2,
-                 'max_deal_amount' : 0.4
+                 'max_deal_amount' : 0.4,
+                 'canceled_buyed_again' : 1.8
               },
               'proxy' : [
               ]

@@ -144,7 +144,10 @@ class NewAnalyze2(object):
           #cancel success
           if status == 0: 
              MyLog.info('[%s] 撤单成功' % stock.get_code()) 
-             dh.add_ignore(stock.get_code())
+             now_line = stock.get_Lastline()
+             now_buy1_v = self.convertToFloat(now_line['b1_v'])
+             now_buy1_amount = float(now_line['b1_p']) * now_buy1_v * 100
+             stock.set_cache('cancel_b1_amount',now_buy1_amount)
              dh.get_buyed().remove(stock.get_code()) 
           #cancel failed, already buyed   
           else:
@@ -249,10 +252,16 @@ class NewAnalyze2(object):
           now_line = stock.get_Lastline()
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           if float(now_line['price']) == stop_price:
-             tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100) >= self.__config.get_t1()['hit10']['buy_b1_amount']  
-             info = '[%s]在[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_line['b1_v'])
-             MyLog.info(info)
-             return tag 
+             now_b1_amount = self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100 
+             tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount']  
+             cancel_b1_amount = stock.get_cache('cancel_b1_amount')
+             if tag and cancel_b1_amount is not None:
+                tag = now_b1_amount > self.__config.get_t1()['hit10']['cancel_b1_amount'] and now_b1_amount > cancel_b1_amount * self.__config.get_t1()['hit10']['canceled_buyed_again']
+             if tag:
+                info = '[%s]在[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_line['b1_v'])
+                MyLog.info(info)
+             return tag
+          return False   
 
 
       def isZSMatch(self,zs,stock):
