@@ -253,7 +253,7 @@ class NewAnalyze2(object):
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           if float(now_line['price']) == stop_price:
              now_b1_amount = self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100 
-             tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount']  
+             tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount'] and now_b1_amount < self.__config.get_t1()['hit10']['buy_b1_amount_1'] 
              cancel_b1_amount = stock.get_cache('cancel_b1_amount')
              if tag and cancel_b1_amount is not None:
                 tag = now_b1_amount > self.__config.get_t1()['hit10']['cancel_b1_amount'] and now_b1_amount > cancel_b1_amount * self.__config.get_t1()['hit10']['canceled_buyed_again']

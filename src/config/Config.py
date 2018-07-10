@@ -158,6 +158,7 @@ class Config(object):
               },
               'hit10' : {
                  'buy_b1_amount' : 15000000,
+                 'buy_b1_amount_1' : 100000000,
                  'cancel_b1_amount' : 20000000,
                  'cancel_b1_amount_1' : 15000000,
                  'cancel_b1_amount_2' : 5000000,
