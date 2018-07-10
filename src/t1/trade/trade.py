@@ -21,9 +21,10 @@ class Trade(object):
 
       def buy(self,code,amout,price):
           try:
-              self.__user.buy(code, price=price, amount=amout)
-              MyLog.info('buyed %s' % code)
-              return {'message' : 'success'}
+              if self.__user.buy(code, price=price, amount=amout):
+                 MyLog.info('buyed %s' % code)
+                 return {'message' : 'success'}
+              return {'message' : 'failed'}   
           except Exception as e:
                  MyLog.info('交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amout,e))
                  return {'message' : 'failed'}
@@ -50,7 +51,15 @@ class Trade(object):
               return buyCount
           except Exception as e:
                  MyLog.info('查询当日买入数量失败,%s' % e)
-                 return 0            
+                 return 0    
+
+
+      def queryBalance(self):
+          try:
+              return self.__user.balance
+          except Exception as e:
+                 MyLog.info('查询可用金额失败,%s' % e)
+                 return -1                    
 
 
 
