@@ -168,7 +168,7 @@ class NewAnalyze2(object):
           price = str('%.2f' % (float(df_final['price'])))
           try:
              lock.acquire()
-             if buyMoney > balance.value or buyVolume == 0:
+             if buyVolume == 0:
                 return None   
              if df_final['code'] in dh.get_buyed():
                 return None 
