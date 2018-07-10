@@ -59,7 +59,7 @@ class Trade(object):
               return self.__user.balance
           except Exception as e:
                  MyLog.info('查询可用金额失败,%s' % e)
-                 return -1                    
+                 return None                    
 
 
 

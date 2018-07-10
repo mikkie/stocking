@@ -37,6 +37,8 @@ def run(queue,balance,lock):
               timestamp = data['timestamp']
               df = data['df']
               zs = data['zs']
+              if data['balance'] is not None:
+                 balance.value = data['balance']
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
@@ -83,10 +85,14 @@ if __name__ == '__main__':
    MyLog.info('calc stocks %s' % codeLists)
    codeSplitMaps = {} 
    queueMaps = {}
+   now_temp = dt.datetime.now() 
    interDataHolder = {
-      'currentTime' : dt.datetime.now(),
+      'currentTime' : now_temp,
+      'balanceTime' : now_temp,
+      'queryBuyTime' : now_temp,
       'stopBuy' : False,
-      'zs' : None
+      'zs' : None,
+      'balance' : None
    }
    if setting.get_t1()['trade']['enableMock']:
       mockTrade.relogin() 
@@ -133,40 +139,56 @@ if __name__ == '__main__':
        timestamp = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
           delSeconds = (timestamp - interDataHolder['currentTime']).seconds
+          delQueryBuySeconds = (timestamp - interDataHolder['queryBuyTime']).seconds
           if delSeconds > 30:
              interDataHolder['currentTime'] = timestamp
              interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-             if delSeconds > 120:
-                mockTrade.relogin() 
-                count = mockTrade.queryBuyStocks()
-                if count >= setting.get_t1()['trade']['max_buyed']:
-                   mockTrade.cancelAllBuy()
-                   MyLog.info('buyed 3 stocks')
-                   interDataHolder['stopBuy'] = True 
+          if delQueryBuySeconds > 120:
+             interDataHolder['queryBuyTime'] = timestamp 
+             mockTrade.relogin() 
+             count = mockTrade.queryBuyStocks()
+             if count >= setting.get_t1()['trade']['max_buyed']:
+                mockTrade.cancelAllBuy()
+                MyLog.info('buyed 3 stocks')
+                interDataHolder['stopBuy'] = True 
        if setting.get_t1()['trade']['enable']: 
           delSeconds = (timestamp - interDataHolder['currentTime']).seconds
+          delBalanceSeconds = (timestamp - interDataHolder['balanceTime']).seconds
+          delQueryBuySeconds = (timestamp - interDataHolder['queryBuyTime']).seconds
           if delSeconds > 30:
               interDataHolder['currentTime'] = timestamp
               interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-              if delSeconds > 120:
-                 try:
-                     lock.acquire()
-                     count = trade.queryBuyStocks()
-                     if count >= setting.get_t1()['trade']['max_buyed']:
-                        trade.cancel(None,True) 
-                        MyLog.info('buyed 3 stocks')
-                        interDataHolder['stopBuy'] = True  
-                 except Exception as e:
-                        pass 
-                 finally:    
-                         lock.release()
+          if delBalanceSeconds > 70:
+             interDataHolder['balanceTime'] = timestamp 
+             try:
+                lock.acquire()
+                balance = trade.queryBalance()
+                if balance is not None:
+                   interDataHolder['balance'] = balance  
+             except Exception as e:
+                    interDataHolder['balance'] = None 
+             finally:    
+                    lock.release() 
+          if delQueryBuySeconds > 120:
+             interDataHolder['queryBuyTime'] = timestamp 
+             try:
+                lock.acquire()
+                count = trade.queryBuyStocks()
+                if count >= setting.get_t1()['trade']['max_buyed']:
+                   trade.cancel(None,True) 
+                   MyLog.info('buyed 3 stocks')
+                   interDataHolder['stopBuy'] = True  
+             except Exception as e:
+                    pass 
+             finally:    
+                    lock.release()
        if interDataHolder['stopBuy']:
           os._exit(0)
           return 
        if interDataHolder['zs'] is None:
           interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)   
        for key in codeSplitMaps:
-           df = proxyManager.get_realtime_quotes(codeSplitMaps[key],queueMaps[key],{'timestamp' : timestamp,'df' : None,'zs' : interDataHolder['zs']},batch_size=100,async_exe=put_data_to_queue)
+           df = proxyManager.get_realtime_quotes(codeSplitMaps[key],queueMaps[key],{'timestamp' : timestamp,'df' : None,'zs' : interDataHolder['zs'], 'balance' : interDataHolder['balance']},batch_size=100,async_exe=put_data_to_queue)
 
    getData()
    sched.start()
