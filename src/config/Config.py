@@ -58,11 +58,11 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 100,
                  'dynamicVolume' : True,
-                 'amount' : 1500.0,
+                 'amount' : 2000.0,
                  'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 2950,
+                 'balance' : 6000,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
