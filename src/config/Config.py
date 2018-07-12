@@ -157,16 +157,16 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 15000000,
-                 'buy_b1_amount_1' : 100000000,
-                 'cancel_b1_amount' : 20000000,
-                 'cancel_b1_amount_1' : 15000000,
+                 'buy_b1_amount' : 12000000,
+                 'buy_b1_amount_1' : 80000000,
+                 'cancel_b1_amount' : 17000000,
+                 'cancel_b1_amount_1' : 12000000,
                  'cancel_b1_amount_2' : 5000000,
-                 'cancel_ratio' : 0.7,
+                 'cancel_ratio' : 0.67,
                  'cancel_ratio_max_amount' : 0.10,
-                 'cancel_deal_amount_ratio' : 0.3,
-                 'max_deal_amount' : 0.6,
-                 'canceled_buyed_again' : 1.3
+                 'cancel_deal_amount_ratio' : 0.33,
+                 'max_deal_amount' : 0.65,
+                 'canceled_buyed_again' : 1.2
               },
               'proxy' : [
               ]
