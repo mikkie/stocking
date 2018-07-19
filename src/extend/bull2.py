@@ -4,12 +4,12 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-07-13'
+startDate = '2018-07-19'
 failed = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
-        df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','high_limit','low'], skip_paused=True, fq='pre', count=90)
+        df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','high_limit','low'], skip_paused=True, fq='pre', count=60)
         flagA = False
         flag = False
         count = 0
