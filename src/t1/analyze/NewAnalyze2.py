@@ -69,6 +69,7 @@ class NewAnalyze2(object):
 
 
       def updateStock(self,stock,dh):
+          self.updateBreak10(stock)
           max_amount = stock.get_cache('max_b1_amount') 
           now_line = stock.get_Lastline()
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
@@ -104,9 +105,9 @@ class NewAnalyze2(object):
           deal_amount = self.convertToFloat(now_line['amount']) - self.convertToFloat(last_second_line['amount'])
           cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount']
           strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-          if strTime > '14:30:00':
+          if strTime > '13:30:00':
              cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount_1']
-          if strTime > '14:45:00':
+          if strTime > '14:30:00':
              cancel_b1_amount = self.__config.get_t1()['hit10']['cancel_b1_amount_2']    
           if max_b1_amount is None:
              max_b1_amount = -1 
@@ -245,7 +246,21 @@ class NewAnalyze2(object):
 
       def isStockMatch(self,zs,stock,dh):
           if self.isZSMatch(zs,stock):
+             if stock.get_cache('status') == 1:
+                return self.isReach10Again(stock)  
              return self.isReach10(stock)
+
+
+      def updateBreak10(self,stock):
+          if stock.get_cache('status') == 0:
+             now_line = stock.get_Lastline()
+             stop_price = round(float(now_line['pre_close']) * 1.1, 2)
+             if float(now_line['price']) != stop_price:  
+                stock.set_cache('status',1)      
+
+
+      def isReach10Again(self,stock):
+          pass     
 
 
       def isReach10(self,stock):
@@ -253,14 +268,19 @@ class NewAnalyze2(object):
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           if float(now_line['price']) == stop_price:
              now_b1_amount = self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100 
-             tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount'] and now_b1_amount < self.__config.get_t1()['hit10']['buy_b1_amount_1'] 
+             tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount'] and now_b1_amount < self.__config.get_t1()['hit10']['buy_b1_amount_1']
+             tag1 = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount_0']
              cancel_b1_amount = stock.get_cache('cancel_b1_amount')
              if tag and cancel_b1_amount is not None:
                 tag = now_b1_amount > self.__config.get_t1()['hit10']['cancel_b1_amount'] and now_b1_amount > cancel_b1_amount * self.__config.get_t1()['hit10']['canceled_buyed_again']
              if tag:
+                stock.set_cache('status',0) 
                 info = '[%s]在[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_line['b1_v'])
                 MyLog.info(info)
-             return tag
+                return True
+             if tag1:
+                stock.set_cache('status',0)
+                return False    
           return False   
 
 
