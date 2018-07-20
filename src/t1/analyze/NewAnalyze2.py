@@ -48,7 +48,7 @@ class NewAnalyze2(object):
                  continue
               self.updateStock(data[code],dh)  
               if code in dh.get_buyed():
-                 self.cancelBuyIfNeed(data[code],dh,timestamp,lock,balance)
+                 #self.cancelBuyIfNeed(data[code],dh,timestamp,lock,balance)
                  continue  
               try:  
                  if self.calc(zs,data[code],dh):
@@ -164,9 +164,9 @@ class NewAnalyze2(object):
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
-             buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
-          buyMoney = (float(df_final['price'])) * buyVolume  
-          price = str('%.2f' % (float(df_final['price'])))
+             buyVolume = int(trade['amount'] / float(df_final['b1_p']) / 100) * 100
+          buyMoney = (float(df_final['b1_p'])) * buyVolume  
+          price = str('%.2f' % (float(df_final['b1_p'])))
           try:
              lock.acquire()
              if buyMoney > balance.value or buyVolume == 0:
@@ -249,30 +249,63 @@ class NewAnalyze2(object):
              if stock.get_cache('status') is None:
                 return self.isReach10(stock)
              if stock.get_cache('status') == 0:
-                return self.isbreak10(stock)
+                return self.isbreak10(stock,dh)
              if stock.get_cache('status') == 1:
                 return self.isReach10Again(stock)   
 
 
       def updateBreak10(self,stock):
-          if stock.get_cache('status') == 0:
-             now_line = stock.get_Lastline()
-             stop_price = round(float(now_line['pre_close']) * 1.1, 2)
-             if float(now_line['price']) != stop_price:  
-                stock.set_cache('status',1)      
-
+          if stock.get_cache('status') == 1:
+             if stock.get_cache('break_time') is None:
+                stock.set_cache('break_time',dt.datetime.now())
+             if stock.get_cache('min_break') is None:
+                stock.set_cache('min_break',self.getCurrentPercent())
+             elif self.getCurrentPercent() < stock.get_cache('min_break'):
+                  stock.set_cache('min_break',self.getCurrentPercent())        
 
       def isReach10Again(self,stock):
-          # info = '[%s]在[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_line['b1_v'])
-          # MyLog.info(info)
-          pass     
+          now_line = stock.get_Lastline()
+          stop_price = round(float(now_line['pre_close']) * 1.1, 2)
+          if float(now_line['price']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0:
+             stock.set_cache('status',None) 
+             return False
+          else:
+              if self.convertToFloat(now_line['a5_v']) != 0:
+                 return False
+              if self.getCurrentPercent() < self.__config.get_t1()['hit10']['hit_again_percent']:
+                 return False
+              if stock.get_cache('min_break') is None or stock.get_cache('min_break') > self.__config.get_t1()['hit10']['min_break']:
+                 return False
+              if stock.get_cache('break_time') is None or (dt.datetime.now() - stock.get_cache('break_time')).seconds > self.__config.get_t1()['hit10']['break_time']:      
+                 return False
+              total_sell = 0
+              for i in range(1,6):
+                  total_sell += self.convertToFloat(now_line['a' + str(i) + '_v']) * self.convertToFloat(now_line['a' + str(i) + '_p']) * 100
+              if total_sell > stock.get_cache('max_b1_amount') * self.__config.get_t1()['hit10']['max_b1_amount_ratio']:
+                 return False       
+              info = '[%s]在[%s][%s] match 10,b1_v=%s' % (Utils.getCurrentTime(),str(now_line['date']) + ' ' + str(now_line['time']),stock.get_code(),now_line['b1_v'])
+              MyLog.info(info)
+              return True
+               
 
 
-      def isbreak10(self,stock):
-          if self.getCurrentPercent() < -8.0:
-             stock.set_cache('status',1)
+      def isbreak10(self,stock,dh):
+          now_line = stock.get_Lastline()
+          stop_price = round(float(now_line['pre_close']) * 1.1, 2)
+          if float(now_line['price']) != stop_price and self.convertToFloat(now_line['a1_v']) != 0:
+             count = stock.get_cache('break_count')
+             if count is None:
+                count = 1 
+             else:
+                 count = count + 1
+             stock.set_cache('break_count',count) 
+             if count >= self.__config.get_t1()['hit10']['break_count']:
+                stock.set_cache('status',0)
+                dh.add_ignore(stock.get_code())
+             else:
+                  stock.set_cache('status',1)  
           return False         
-
+              
 
       def isReach10(self,stock):
           now_line = stock.get_Lastline()
