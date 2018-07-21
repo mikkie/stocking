@@ -161,12 +161,13 @@ class NewAnalyze2(object):
 
       @Utils.async
       def outputRes(self,stock,df_final,timestamp,dh,balance,lock):
+          d_price = round(float(df_final['pre_close']) * 1.1, 2)
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
-             buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
-          buyMoney = (float(df_final['price'])) * buyVolume  
-          price = str('%.2f' % (float(df_final['price'])))
+             buyVolume = int(trade['amount'] / d_price / 100) * 100
+          buyMoney = d_price * buyVolume  
+          price = str('%.2f' % d_price)
           try:
              lock.acquire()
              if buyMoney > balance.value or buyVolume == 0:
@@ -257,9 +258,9 @@ class NewAnalyze2(object):
       def updateBreak10(self,stock):
           if stock.get_cache('status') == 1:
              if stock.get_cache('min_break') is None:
-                stock.set_cache('min_break',self.getCurrentPercent())
-             elif self.getCurrentPercent() < stock.get_cache('min_break'):
-                  stock.set_cache('min_break',self.getCurrentPercent())        
+                stock.set_cache('min_break',self.getCurrentPercent(stock))
+             elif self.getCurrentPercent(stock) < stock.get_cache('min_break'):
+                  stock.set_cache('min_break',self.getCurrentPercent(stock))        
 
       def isReach10Again(self,stock):
           now_line = stock.get_Lastline()
@@ -303,6 +304,7 @@ class NewAnalyze2(object):
                 dh.add_ignore(stock.get_code())
              else:
                   stock.set_cache('break_time',dt.datetime.now())
+                  stock.set_cache('min_break',self.getCurrentPercent(stock))
                   stock.set_cache('status',1)  
           return False         
               
