@@ -164,9 +164,9 @@ class NewAnalyze2(object):
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
-             buyVolume = int(trade['amount'] / float(df_final['price']) / 100) * 100
-          buyMoney = (float(df_final['price'])) * buyVolume  
-          price = str('%.2f' % (float(df_final['price'])))
+             buyVolume = int(trade['amount'] / float(df_final['b1_p']) / 100) * 100
+          buyMoney = (float(df_final['b1_p'])) * buyVolume  
+          price = str('%.2f' % (float(df_final['b1_p'])))
           try:
              lock.acquire()
              if buyMoney > balance.value or buyVolume == 0:
@@ -312,13 +312,8 @@ class NewAnalyze2(object):
           stop_price = round(float(now_line['pre_close']) * 1.1, 2)
           if float(now_line['price']) == stop_price:
              now_b1_amount = self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100 
-             hit_top_time = stock.get_cache('hit_top_time')
-             strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-             if hit_top_time is None and strTime > '13:00:00':
-                return False 
              tag = float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0 and (now_b1_amount) >= self.__config.get_t1()['hit10']['buy_b1_amount']
              if tag:
-                stock.set_cache('hit_top_time',dt.datetime.now()) 
                 stock.set_cache('status',0) 
           return False   
 

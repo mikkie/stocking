@@ -157,11 +157,11 @@ class Config(object):
                   'min_p' : -5
               },
               'hit10' : {
-                 'buy_b1_amount' : 60000000, 
+                 'buy_b1_amount' : 30000000, 
                  'hit_again_percent' : 9.5,
                  'min_break' : 8.0,
                  'break_time' : 120,
-                 'max_b1_amount_ratio' : 0.2,
+                 'max_b1_amount_ratio' : 0.1,
                  'break_count' : 3
               },
               'proxy' : [
