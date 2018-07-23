@@ -306,6 +306,7 @@ class NewAnalyze2(object):
                   stock.set_cache('break_time',dt.datetime.now())
                   stock.set_cache('min_break',self.getCurrentPercent(stock))
                   stock.set_cache('status',1)  
+                  MyLog.info('%s is break 10' % stock.get_code())
           return False         
               
 
@@ -320,6 +321,7 @@ class NewAnalyze2(object):
              stock.set_cache('hit_top_time',dt.datetime.now())
              now_b1_amount = self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100 
              if now_b1_amount >= self.__config.get_t1()['hit10']['buy_b1_amount']: 
+                MyLog.info('%s is reach 10' % stock.get_code()) 
                 stock.set_cache('status',0) 
           return False   
 
