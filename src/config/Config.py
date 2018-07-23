@@ -158,7 +158,7 @@ class Config(object):
               },
               'hit10' : {
                  'buy_b1_amount' : 30000000, 
-                 'min_break' : 8.5,
+                 'min_break' : 9.0,
                  'break_time' : 120,
                  'hit_break_inter' : 30,
                  'max_b1_amount_ratio' : 0.2,
