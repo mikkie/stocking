@@ -270,7 +270,7 @@ class NewAnalyze2(object):
              stock.set_cache('status',None) 
              return False
           else:
-              if self.convertToFloat(now_line['a5_v']) != 0 or self.convertToFloat(now_line['a4_v']) != 0 or self.convertToFloat(now_line['a3_v']) != 0:
+              if self.convertToFloat(now_line['a5_v']) != 0 or self.convertToFloat(now_line['a4_v']) != 0:
                  return False
               if stock.get_cache('min_break') is None or stock.get_cache('min_break') > self.__config.get_t1()['hit10']['min_break']:
                  return False
