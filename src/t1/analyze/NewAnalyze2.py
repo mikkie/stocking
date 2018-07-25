@@ -316,7 +316,7 @@ class NewAnalyze2(object):
           if float(now_line['b1_p']) == stop_price and self.convertToFloat(now_line['a1_v']) == 0:
              hit_top_time = stock.get_cache('hit_top_time')
              strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-             if hit_top_time is None and strTime > '13:00:00':
+             if hit_top_time is None and strTime > self.__config.get_t1()['hit10']['hit_top_time']:
                 return False 
              stock.set_cache('hit_top_time',dt.datetime.now())
              now_b1_amount = self.convertToFloat(now_line['b1_v']) * float(now_line['b1_p']) * 100 
