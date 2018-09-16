@@ -277,25 +277,22 @@ class NewAnalyze2(object):
                 return False 
              return True   
           else:
-               if length < 20:
-                  if p < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                     return False
-                  if amount < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
-                     return False
-                  return True      
-               else:
-                   step = 5
-                   i = -20
-                   while i >= length * -1:
-                         p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
-                         amount = self.convertToFloat(datas[-1]['amount']) - self.convertToFloat(datas[i]['amount'])
-                         fist_datetime = self.get_data_time(datas[i])
-                         i = i - step
-                         if p < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                            return False
-                         if p < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
-                            return False 
-                         return True  
+               if length > 20:
+                  step = 5
+                  i = -20
+                  while i >= length * -1:
+                        p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
+                        amount = self.convertToFloat(datas[-1]['amount']) - self.convertToFloat(datas[i]['amount'])
+                        fist_datetime_temp = self.get_data_time(datas[i])
+                        i = i - step
+                        if (last_datetime - fist_datetime_temp).seconds < 60:
+                           continue 
+                        if p >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
+                           if p >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                              return True 
+               if p >= pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
+                  if amount >= pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                     return True
           return False                  
 
                     
