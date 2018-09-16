@@ -46,7 +46,7 @@ class NewAnalyze2(object):
                  continue 
               if code in dh.get_ignore():
                  continue
-              self.updateStock(data[code],dh)  
+            #   self.updateStock(data[code],dh)  
               if code in dh.get_buyed():
                  #self.cancelBuyIfNeed(data[code],dh,timestamp,lock,balance)
                  continue  
@@ -227,7 +227,7 @@ class NewAnalyze2(object):
 
 
       def canCalc(self,stock,dh):
-          if stock.len() < 0:
+          if stock.len() < 2:
              return False
           lastLine = stock.get_Lastline() 
           if float(lastLine['open']) == 0.0:
@@ -247,12 +247,59 @@ class NewAnalyze2(object):
 
       def isStockMatch(self,zs,stock,dh):
           if self.isZSMatch(zs,stock):
-             if stock.get_cache('status') is None:
-                return self.isReach10(stock)
-             if stock.get_cache('status') == 0:
-                return self.isbreak10(stock,dh)
-             if stock.get_cache('status') == 1:
-                return self.isReach10Again(stock)   
+             return self.isYDLS(stock)
+
+
+      def get_data_time(self,data):
+          return dt.datetime.strptime(data['date'] + ' ' + data['time'],'%Y-%m-%d %H:%M:%S')      
+
+
+      def isYDLS(self, stock):
+          now_line = stock.get_Lastline()  
+          if float(now_line['high']) >= float(now_line['price']):
+             return False
+          stop_p = self.__config.get_t1()['ydls']['stop_p']
+          current_p = self.getCurrentPercent(stock)
+          if current_p < stop_p[0] or current_p > stop_p[1]:
+             return False
+          if self.getOpenPercent(stock) - self.getPercent(now_line['low'],stock) > self.__config.get_t1()['ydls']['open-low']:
+             return False
+          datas = stock.get_data_in_len(self.__config.get_t1()['ydls']['in_len'])
+          length = len(datas)
+          last_datetime = self.get_data_time(datas[-1])
+          fist_datetime = self.get_data_time(datas[-1 * length])
+          p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[-1 * length]['price'],stock)
+          amount = self.convertToFloat(datas[-1]['amount']) - self.convertToFloat(datas[-1 * length]['amount'])
+          if (last_datetime - fist_datetime).seconds < 60:
+             if p < self.__config.get_t1()['ydls']['yd_p']:
+                return False
+             if amount < self.__config.get_t1()['ydls']['yd_amount']:
+                return False 
+             return True   
+          else:
+               if length < 20:
+                  if p < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
+                     return False
+                  if amount < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                     return False
+                  return True      
+               else:
+                   step = 5
+                   i = -20
+                   while i >= length * -1:
+                         p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
+                         amount = self.convertToFloat(datas[-1]['amount']) - self.convertToFloat(datas[i]['amount'])
+                         fist_datetime = self.get_data_time(datas[i])
+                         i = i - step
+                         if p < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
+                            return False
+                         if p < pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                            return False 
+                         return True  
+          return False                  
+
+                    
+
 
 
       def updateBreak10(self,stock):
@@ -337,7 +384,7 @@ class NewAnalyze2(object):
           pre_close = line.get('pre_close') 
           price = line.get('price')
           p = (float(price) - float(pre_close)) / float(pre_close) * 100 
-          return p > -0.3
+          return p > 0.0
 
 
       def getPercent(self,price,stock):

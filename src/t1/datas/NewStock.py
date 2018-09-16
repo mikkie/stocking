@@ -133,6 +133,14 @@ class NewStock(object):
       def get_data(self):
           return self.__data   
 
+
+      def get_data_in_len(self,in_len):
+          datas = self.get_data()
+          length = len(datas)
+          if length < in_len:
+             in_len = length
+          return datas[-1 * in_len :]
+
       def len(self):
           if self.__data is None:
              return 0 
