@@ -275,6 +275,7 @@ class NewAnalyze2(object):
                 return False
              if amount < self.__config.get_t1()['ydls']['yd_amount']:
                 return False 
+             MyLog.info('[%s] %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
              return True   
           else:
                if length > 20:
@@ -288,10 +289,12 @@ class NewAnalyze2(object):
                         if (last_datetime - fist_datetime_temp).seconds < 60:
                            continue 
                         if p >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                           if p >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                           if amount >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                              MyLog.info('[%s] %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
                               return True 
                if p >= pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
                   if amount >= pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                     MyLog.info('[%s] %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
                      return True
           return False                  
 
