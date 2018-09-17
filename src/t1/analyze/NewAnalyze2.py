@@ -229,10 +229,11 @@ class NewAnalyze2(object):
       def canCalc(self,stock,dh):
           if stock.len() < 2:
              return False
-          lastLine = stock.get_Lastline() 
-          if float(lastLine['open']) == 0.0:
+          lastLine = stock.get_Lastline()
+          lastSecondLine = stock.get_LastSecondline() 
+          if float(lastLine['open']) == 0.0 or float(lastSecondLine['open']) == 0.0:
              return False
-          return True     
+          return True
 
 
       def convertToFloat(self,str):
