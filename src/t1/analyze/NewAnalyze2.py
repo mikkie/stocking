@@ -256,7 +256,7 @@ class NewAnalyze2(object):
 
       def isYDLS(self, stock):
           now_line = stock.get_Lastline()  
-          if float(now_line['high']) >= float(now_line['price']):
+          if float(now_line['high']) > float(now_line['price']):
              return False
           stop_p = self.__config.get_t1()['ydls']['stop_p']
           current_p = self.getCurrentPercent(stock)
