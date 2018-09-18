@@ -161,7 +161,9 @@ class NewAnalyze2(object):
 
       @Utils.async
       def outputRes(self,stock,df_final,timestamp,dh,balance,lock):
-          d_price = round(float(df_final['price']) + 0.02, 2)
+          p = (float(df_final['price']) - float(df_final['pre_close'])) / float(df_final['pre_close'])
+          d_price = round(float(df_final['pre_close']) * (1 + p + 0.005), 2)
+        #   d_price = round(float(df_final['price']) + 0.02, 2)
           trade = self.__config.get_t1()['trade']
           buyVolume = trade['volume']
           if trade['dynamicVolume']:
