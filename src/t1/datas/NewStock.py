@@ -167,12 +167,11 @@ class NewStock(object):
              if lastTime != row['time']:
                 row_dict = row.to_dict()
                 last_line = self.get_Lastline()
-                last_2_line = self.get_LastSecondline() 
-                if self.isBuy():
-                   buy_amount = self.convertToFloat(lastLine['amount']) - self.convertToFloat(last_2_line['amount'])
-                   row_dict['buy_amount'] = last_2_line['buy_amount'] + buy_amount
+                if self.isBuy(row_dict):
+                   buy_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                   row_dict['buy_amount'] = last_line['buy_amount'] + buy_amount
                 else:
-                    row_dict['buy_amount'] = last_2_line['buy_amount']    
+                    row_dict['buy_amount'] = last_line['buy_amount']    
                 self.__data.append(row_dict)
 
 
@@ -188,8 +187,5 @@ class NewStock(object):
 
 
 
-      def isBuy(self):
-          last_line = self.get_Lastline()
-          last_a1_p = float(last_line['a1_p'])
-          price = float(last_line['price']) 
-          return price >= last_a1_p          
+      def isBuy(self, row_dict):
+          return float(row_dict['price']) >= float(row_dict['a1_p'])
