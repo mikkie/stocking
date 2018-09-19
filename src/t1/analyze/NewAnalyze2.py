@@ -238,6 +238,7 @@ class NewAnalyze2(object):
           return True
 
 
+      
       def convertToFloat(self,str):
           if str == '':
              return 0 
@@ -254,7 +255,7 @@ class NewAnalyze2(object):
 
 
       def get_data_time(self,data):
-          return dt.datetime.strptime(data['date'] + ' ' + data['time'],'%Y-%m-%d %H:%M:%S')      
+          return dt.datetime.strptime(data['date'] + ' ' + data['time'],'%Y-%m-%d %H:%M:%S') 
 
 
       def isYDLS(self, stock):
@@ -272,7 +273,7 @@ class NewAnalyze2(object):
           last_datetime = self.get_data_time(datas[-1])
           fist_datetime = self.get_data_time(datas[-1 * length])
           p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[-1 * length]['price'],stock)
-          amount = self.convertToFloat(datas[-1]['amount']) - self.convertToFloat(datas[-1 * length]['amount'])
+          amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[-1 * length]['buy_amount'])
           if (last_datetime - fist_datetime).seconds < 60:
              if p < self.__config.get_t1()['ydls']['yd_p']:
                 return False
@@ -286,7 +287,7 @@ class NewAnalyze2(object):
                   i = -20
                   while i >= length * -1:
                         p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
-                        amount = self.convertToFloat(datas[-1]['amount']) - self.convertToFloat(datas[i]['amount'])
+                        amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[i]['buy_amount'])
                         fist_datetime_temp = self.get_data_time(datas[i])
                         i = i - step
                         if (last_datetime - fist_datetime_temp).seconds < 60:

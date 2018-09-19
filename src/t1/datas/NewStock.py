@@ -44,7 +44,9 @@ class NewStock(object):
                  'b_times' : 0  
               }
           }
-          self.__data = [data.to_dict()]
+          data_dict = data.to_dict()
+          data_dict['buy_amount'] = 0.0
+          self.__data = [data_dict]
 
       def is_inited(self):
           return self.__inited
@@ -163,4 +165,31 @@ class NewStock(object):
              lastTime = lastLine['time'] 
              last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
-                self.__data.append(row.to_dict())
+                row_dict = row.to_dict()
+                last_line = self.get_Lastline()
+                last_2_line = self.get_LastSecondline() 
+                if self.isBuy():
+                   buy_amount = self.convertToFloat(lastLine['amount']) - self.convertToFloat(last_2_line['amount'])
+                   row_dict['buy_amount'] = last_2_line['buy_amount'] + buy_amount
+                else:
+                    row_dict['buy_amount'] = last_2_line['buy_amount']    
+                self.__data.append(row_dict)
+
+
+
+      def convertToFloat(self,str):
+          if str == '':
+             return 0.0 
+          try:
+              return float(str)
+          except Exception as e:
+                 MyLog.error('convertToFloat error: ' + str + '\n') 
+                 return 0.0
+
+
+
+      def isBuy(self):
+          last_line = self.get_Lastline()
+          last_a1_p = float(last_line['a1_p'])
+          price = float(last_line['price']) 
+          return price >= last_a1_p          
