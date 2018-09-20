@@ -1,14 +1,10 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
-l = [1,2,3,4,5]
-for i in range(20):
-    if len(l) > 10:
-       l.pop(0)
-    l.append(i)
+import tushare as ts
 
-print(sum(l))   
+df = ts.get_tick_data('600848',date='2014-01-09')
 
 
 
-
+http://stock.gtimg.cn/data/index.php?appn=detail&action=download&c=sh600848&d=20140109
