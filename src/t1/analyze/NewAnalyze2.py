@@ -204,7 +204,8 @@ class NewAnalyze2(object):
           except Exception as e:
                  return None
           finally:
-                  lock.release()  
+                  if lock is not None:
+                     lock.release()  
                 #   self.printPerformace(timestamp)
 
 
