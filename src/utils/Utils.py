@@ -6,6 +6,7 @@ import pandas as pd
 import talib as ta
 import time
 import threading
+import functools
 
 class Utils(object):
     
@@ -67,3 +68,16 @@ class Utils(object):
               t = threading.Thread(target=f,args = args, kwargs = kwargs)
               t.start()
           return wrapper    
+
+
+
+      @staticmethod
+      def printperformance(func):
+          @functools.wraps(func)
+          def wrapper(*args, **kw):
+              pre_time_stamp = time.time()
+              res = func(*args, **kw)
+              print('called %s spend %s' % (func.__name__, time.time() - pre_time_stamp))
+              return res
+          return wrapper  
+                

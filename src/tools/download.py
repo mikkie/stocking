@@ -2,6 +2,9 @@
 __author__ = 'aqua'
 
 import requests
+import sys
+sys.path.append('..')
+from utils.Utils import Utils
 
 
 dls = "http://stock.gtimg.cn/data/index.php?appn=detail&action=download&c=%s&d=%s"
@@ -11,7 +14,7 @@ headers = {
    'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36'
 }
 
-
+@Utils.printperformance
 def download(stocks, date):
     success = []
     for stock in stocks:

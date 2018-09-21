@@ -8,13 +8,16 @@ import re
 from datetime import timedelta
 import datetime as dt
 from sqlalchemy import create_engine
+import sys
+sys.path.append('..')
+from utils.Utils import Utils
 
 root_dir = 'D:/aqua/stock/stocking/data/excels'
 
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 
 
-def re_build_data(df, code, date, pre_close):
+def re_build_data(df, code, date, pre_close, save):
     df['pre_close'] = pre_close
     df = df.rename(columns={'成交时间' : 'time', '成交价格' : 'price', '价格变动' : 'change', '成交量(手)' : 'volume', '成交额(元)' : 'amount', '性质' : 'type'})
     df['code'] = code
@@ -47,7 +50,8 @@ def re_build_data(df, code, date, pre_close):
         else:
              df.loc[index,'a1_p'] = row['price'] + 0.01     
              df.loc[index,'b1_p'] = row['price'] - 0.01
-    df.to_sql('live_' + code, con=engine, if_exists='replace')         
+    if save:         
+       df.to_sql('live_' + code, con=engine, if_exists='replace')         
 
 
 
@@ -58,8 +62,9 @@ def removeall():
         except Exception as e:
                pass 
 
-
-def loaddata():
+@Utils.printperformance
+def loaddata(save=True):
+    df_list = []
     for file in os.listdir(root_dir):
         df = pd.read_csv(root_dir + '/' + file, encoding='gbk', sep='\t')
         g = re.match('(sz|sh)(\d{6})(.+)(\d{8}).xls', file)
@@ -67,8 +72,9 @@ def loaddata():
         pre_close = float(g.group(3))
         date = g.group(4)
         date = date[0:4] + '-' + date[4:6] + '-' + date[6:8]
-        re_build_data(df, code, date, pre_close)
-
+        re_build_data(df, code, date, pre_close, save)
+        df_list.append(df)
+    return df_list    
 
 # loaddata()        
 
