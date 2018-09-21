@@ -32,8 +32,11 @@ def run(i):
         if i < len(src_datas[code]):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
-       dh.addData(df)
-       analyze.calcMain(None,dh,dt.datetime.now(),None,None)
+       try:
+           dh.addData(df)
+           analyze.calcMain(None,dh,dt.datetime.now(),None,None)
+       except Exception as e:
+              pass    
 
 
 @Utils.printperformance
