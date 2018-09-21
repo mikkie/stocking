@@ -51,7 +51,8 @@ def re_build_data(df, code, date, pre_close, save):
              df.loc[index,'a1_p'] = row['price'] + 0.01     
              df.loc[index,'b1_p'] = row['price'] - 0.01
     if save:         
-       df.to_sql('live_' + code, con=engine, if_exists='replace')         
+       df.to_sql('live_' + code, con=engine, if_exists='replace') 
+    return df           
 
 
 
@@ -72,7 +73,7 @@ def loaddata(save=True):
         pre_close = float(g.group(3))
         date = g.group(4)
         date = date[0:4] + '-' + date[4:6] + '-' + date[6:8]
-        re_build_data(df, code, date, pre_close, save)
+        df = re_build_data(df, code, date, pre_close, save)
         df_list.append(df)
     return df_list    
 
