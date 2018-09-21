@@ -16,7 +16,6 @@ from t1.analyze.NewAnalyze2 import NewAnalyze2
 # from t1.analyze.Concept import Concept
 # from t1.analyze.NetMoney import NetMoney
 
-codes = ['000760']
 src_datas = {}
 datas = {}
 setting = Config()
@@ -24,12 +23,7 @@ engine = create_engine(setting.get_DBurl())
 dh = NewDataHolder2()
 analyze = NewAnalyze2()
 
-for code in codes:
-    try:
-       src_datas[code] = pd.read_sql_table('live_' + code, con=engine)
-    except Exception as e:
-           MyLog.error('read mock data error \n')
-           MyLog.error(str(e) +  '\n')   
+  
 
 def run(i):
     df = pd.DataFrame()
@@ -40,7 +34,16 @@ def run(i):
        dh.addData(df)
        analyze.calcMain(None,dh,dt.datetime.now(),None,None)
 
-for i in range(5200):
-    run(i)
+def start_test(codes):
+    for code in codes:
+        try:
+            src_datas[code] = pd.read_sql_table('live_' + code, con=engine)
+        except Exception as e:
+               MyLog.error('read mock data error \n')
+               MyLog.error(str(e) +  '\n') 
+    for i in range(5200):
+        run(i)
+    input('please enter to exit')    
 
-input('please enter to exit')    
+
+# start_test(['000760'])

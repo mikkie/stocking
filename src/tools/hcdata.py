@@ -51,14 +51,26 @@ def re_build_data(df, code, date, pre_close):
 
 
 
-for file in os.listdir(root_dir):
-    df = pd.read_csv(root_dir + '/' + file, encoding='gbk', sep='\t')
-    g = re.match('(sz|sh)(\d{6})(.+)(\d{8}).xls', file)
-    code = g.group(2)
-    pre_close = float(g.group(3))
-    date = g.group(4)
-    date = date[0:4] + '-' + date[4:6] + '-' + date[6:8]
-    re_build_data(df, code, date, pre_close)
+def removeall():
+    for file in os.listdir(root_dir):
+        try:
+           os.remove(root_dir + '/' + file)
+        except Exception as e:
+               pass 
+
+
+def loaddata():
+    for file in os.listdir(root_dir):
+        df = pd.read_csv(root_dir + '/' + file, encoding='gbk', sep='\t')
+        g = re.match('(sz|sh)(\d{6})(.+)(\d{8}).xls', file)
+        code = g.group(2)
+        pre_close = float(g.group(3))
+        date = g.group(4)
+        date = date[0:4] + '-' + date[4:6] + '-' + date[6:8]
+        re_build_data(df, code, date, pre_close)
+
+
+# loaddata()        
 
 
 
