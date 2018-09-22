@@ -171,8 +171,9 @@ class NewAnalyze2(object):
           buyMoney = d_price * buyVolume  
           price = str('%.2f' % d_price)
           try:
-             lock.acquire()
-             if buyMoney > balance.value or buyVolume == 0:
+             if lock is not None:
+                lock.acquire()
+             if balance is not None and buyMoney > balance.value or buyVolume == 0:
                 return None   
              if df_final['code'] in dh.get_buyed():
                 return None 
@@ -186,7 +187,8 @@ class NewAnalyze2(object):
              if trade['enable']:
                 res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
                 if 'entrust_no' in res or 'success' in res:
-                   balance.value = balance.value - buyMoney
+                   if balance is not None:
+                      balance.value = balance.value - buyMoney
                    stock.set_cache('buyMoney',buyMoney)
                    dh.add_buyed(df_final['code'])
                    return df_final['code']
@@ -194,7 +196,8 @@ class NewAnalyze2(object):
              if trade['enableMock']:
                 res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
                 if res == 0:
-                   balance.value = balance.value - buyMoney
+                   if balance is not None: 
+                      balance.value = balance.value - buyMoney
                    stock.set_cache('buyMoney',buyMoney)
                    dh.add_buyed(df_final['code'])
                    return df_final['code']

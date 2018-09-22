@@ -12,7 +12,7 @@ import sys
 sys.path.append('..')
 from utils.Utils import Utils
 
-root_dir = 'D:/aqua/stock/stocking/data/excels'
+root_dir = 'c:/aqua/stock/stocking/data/excels'
 
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 
