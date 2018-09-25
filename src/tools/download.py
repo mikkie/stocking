@@ -3,6 +3,7 @@ __author__ = 'aqua'
 
 import requests
 import sys
+import os
 sys.path.append('..')
 from utils.Utils import Utils
 
@@ -25,7 +26,8 @@ def download(stocks, date):
         output = None
         try:
            resp = requests.get(dls % (code, date), headers=headers)
-           output = open('C:/aqua/stock/stocking/data/excels/%s%s.xls' % (code + stock[1], date), 'wb')
+           path = os.path.join(os.path.dirname(__file__), '../../data/excels/%s%s.xls')
+           output = open(path % (code + stock[1], date), 'wb')
            output.write(resp.content)
            success.append(stock[0])
         except Exception as e:

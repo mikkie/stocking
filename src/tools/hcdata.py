@@ -12,7 +12,7 @@ import sys
 sys.path.append('..')
 from utils.Utils import Utils
 
-root_dir = 'c:/aqua/stock/stocking/data/excels'
+root_dir = '../../data/excels'
 
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 
@@ -57,18 +57,20 @@ def re_build_data(df, code, date, pre_close, save):
 
 
 def removeall():
-    for file in os.listdir(root_dir):
+    path = os.path.join(os.path.dirname(__file__), root_dir) 
+    for file in os.listdir(path):
         try:
-           os.remove(root_dir + '/' + file)
+           os.remove(path + '/' + file)
         except Exception as e:
                pass 
 
 @Utils.printperformance
 def loaddata(save=True):
     df_list = []
-    for file in os.listdir(root_dir):
+    path = os.path.join(os.path.dirname(__file__), root_dir)
+    for file in os.listdir(path):
         try:
-            df = pd.read_csv(root_dir + '/' + file, encoding='gbk', sep='\t')
+            df = pd.read_csv(path + '/' + file, encoding='gbk', sep='\t')
             g = re.match('(sz|sh)(\d{6})(.+)(\d{8}).xls', file)
             code = g.group(2)
             pre_close = float(g.group(3))
