@@ -6,7 +6,7 @@ import datetime
 
 res = []
 today = datetime.date.today()
-startDate = '2018-09-19'
+startDate = '2018-09-25'
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
