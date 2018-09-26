@@ -25,7 +25,5 @@ main.py init 300 c 节能
 2.filter by twodayten.py (keep yesterday 10%)
 3.filter by NewStock.py
 4.filter by bull.py
-5.filter by bull2.py 
-6.filter by xsg.js
-7.filter by yesterday buy
-8.filter by remove trade > 20
+5.filter by xsg.js
+6.filter by yesterday buy

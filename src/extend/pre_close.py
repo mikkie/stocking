@@ -1,4 +1,4 @@
-end_date = '2018-09-20'
+end_date = '2018-09-16'
 output = []
 
 
