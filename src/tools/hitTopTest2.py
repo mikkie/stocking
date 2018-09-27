@@ -23,6 +23,7 @@ setting = Config()
 engine = create_engine(setting.get_DBurl())
 dh = NewDataHolder2()
 analyze = NewAnalyze2()
+result = []
 
   
 
@@ -34,7 +35,9 @@ def run(i):
     if len(df) > 0:
        try:
            dh.addData(df)
-           analyze.calcMain(None,dh,dt.datetime.now(),None,None)
+           res = analyze.calcMain(None,dh,dt.datetime.now(),None,None)
+           if res is not None and len(res) == 2:
+              result.append(res) 
        except Exception as e:
               pass    
 
@@ -63,7 +66,7 @@ def start_test_by_df(df_list):
                MyLog.error(str(e) +  '\n') 
     for i in range(5200):
         run(i)
-    input('please enter to exit')      
+    return result    
 
 
 # start_test(['000760'])

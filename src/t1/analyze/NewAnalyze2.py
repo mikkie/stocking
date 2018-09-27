@@ -62,7 +62,7 @@ class NewAnalyze2(object):
              for stock in result: 
                  try:
                      last_line = stock.get_Lastline()
-                     self.outputRes(stock,last_line,timestamp,dh,balance,lock)
+                     return self.outputRes(stock,last_line,timestamp,dh,balance,lock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
                         MyLog.error(str(e))   
@@ -191,7 +191,7 @@ class NewAnalyze2(object):
                       balance.value = balance.value - buyMoney
                    stock.set_cache('buyMoney',buyMoney)
                    dh.add_buyed(df_final['code'])
-                   return df_final['code']
+                   return df_final['code'], str(d_price)
                 return None
              if trade['enableMock']:
                 res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
@@ -200,10 +200,10 @@ class NewAnalyze2(object):
                       balance.value = balance.value - buyMoney
                    stock.set_cache('buyMoney',buyMoney)
                    dh.add_buyed(df_final['code'])
-                   return df_final['code']
+                   return df_final['code'], str(d_price)
                 return None  
              dh.add_buyed(df_final['code'])  
-             return df_final['code']  
+             return df_final['code'], str(d_price)  
           except Exception as e:
                  return None
           finally:

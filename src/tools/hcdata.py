@@ -12,8 +12,6 @@ import sys
 sys.path.append('..')
 from utils.Utils import Utils
 
-root_dir = '../../data/excels'
-
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 
 
@@ -56,8 +54,8 @@ def re_build_data(df, code, date, pre_close, save):
 
 
 
-def removeall():
-    path = os.path.join(os.path.dirname(__file__), root_dir) 
+def removeall(dir):
+    path = os.path.join(os.path.dirname(__file__), dir) 
     for file in os.listdir(path):
         try:
            os.remove(path + '/' + file)
@@ -65,9 +63,9 @@ def removeall():
                pass 
 
 @Utils.printperformance
-def loaddata(save=True):
+def loaddata(dir, save=True):
     df_list = []
-    path = os.path.join(os.path.dirname(__file__), root_dir)
+    path = os.path.join(os.path.dirname(__file__), dir)
     for file in os.listdir(path):
         try:
             df = pd.read_csv(path + '/' + file, encoding='gbk', sep='\t')

@@ -16,7 +16,7 @@ headers = {
 }
 
 @Utils.printperformance
-def download(stocks, date):
+def download(stocks, date, dir):
     success = []
     for stock in stocks:
         if stock[0].startswith('6'):
@@ -26,7 +26,7 @@ def download(stocks, date):
         output = None
         try:
            resp = requests.get(dls % (code, date), headers=headers)
-           path = os.path.join(os.path.dirname(__file__), '../../data/excels/%s%s.xls')
+           path = os.path.join(os.path.dirname(__file__), dir + '/%s%s.xls')
            output = open(path % (code + stock[1], date), 'wb')
            output.write(resp.content)
            success.append(stock[0])
