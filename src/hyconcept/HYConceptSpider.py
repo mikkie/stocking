@@ -21,15 +21,17 @@ header = {
 
 codes = [];
 hy = ['881166','881163']
-gn = ['301780']
+gn = ['300382']
 hyURL = 'http://q.10jqka.com.cn/thshy/detail/code/'
 gnURL = 'http://q.10jqka.com.cn/gn/detail/code/' 
 gnURL2 = 'http://q.10jqka.com.cn/gn/detail/field/264648/order/desc/page/%s/ajax/1/code/'
 
 
 
-def parsePage(parser, html):
+def parsePage(parser, html, url):
     temps = parser.parse(html)
+    if len(temps) == 0:
+       print('error %s' % url) 
     for temp in temps:
         if temp not in codes:
            codes.append(temp)
@@ -37,14 +39,16 @@ def parsePage(parser, html):
 def func(url,url2,hygnList):
     parser = HYConceptParser()
     for code in hygnList:
-        response = requests.get(url + code+'/',headers=header, verify=False)
+        real_url = url + code+'/'
+        response = requests.get(real_url,headers=header, verify=False)
         total_page = parser.get_page_info(response.text)
-        parsePage(parser, response.text)
+        parsePage(parser, response.text, real_url)
         if total_page > 1:
            for i in range(2, total_page + 1):
                time.sleep(random.randint(10,15))
-               response = requests.get((url2 % i) + code+'/',headers=header, verify=False)   
-               parsePage(parser, response.text)  
+               real_url = (url2 % i) + code+'/'
+               response = requests.get(real_url,headers=header, verify=False)   
+               parsePage(parser, response.text, real_url)  
 
 # func(hyURL,hy)
 func(gnURL,gnURL2,gn)    
