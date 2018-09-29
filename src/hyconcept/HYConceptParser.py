@@ -9,8 +9,23 @@ class HYConceptParser():
       def get_page_info(self, html):
           page = etree.HTML(html)
           span = page.xpath('//span[@class="page_info"]')  
-          total = span[0].text
-          return int(total.split('/')[1])
+          if len(span) > 0:
+             total = span[0].text
+             return int(total.split('/')[1])
+          return 0
+
+
+      def parse_main(self, html):
+          tuples = []
+          page = etree.HTML(html)
+          trs = page.xpath('//table[@class="m-table J-ajax-table"]/tbody/tr')
+          i = 0
+          while i < len(trs):
+                name = trs[i].getchildren()[1].getchildren()[0].text
+                link = trs[i].getchildren()[1].getchildren()[0].get('href')
+                tuples.append((link, name))
+                i = i + 1
+          return tuples    
 
       def parse(self,html):
           codes = []
