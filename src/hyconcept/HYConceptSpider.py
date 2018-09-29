@@ -16,7 +16,7 @@ header = {
         'Accept-Language':'en-US,en;q=0.9',
         'Cache-Control':'max-age=0',
         'Connection':'keep-alive',
-        'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; spversion=20130314; historystock=000610%7C*%7C000593%7C*%7C603706%7C*%7C002806%7C*%7C300069; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1538122047.1538182476.119; __utmc=156575163; __utmz=156575163.1538182476.119.119.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1537852532,1537925932,1538122050,1538182486; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1538198127; v=AkL04OhOrbIE9rHukLoBqefvk0OnE0Yt-Bc6UYxbbrVg3-x1dKOWPcinimBf',
+        'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; spversion=20130314; historystock=000610%7C*%7C000593%7C*%7C603706%7C*%7C002806%7C*%7C300069; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1538122047.1538182476.119; __utmc=156575163; __utmz=156575163.1538182476.119.119.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1537852532,1537925932,1538122050,1538182486; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1538198127; v=AvxK0mIoiyDj0L_8tzQnWw0xzZGt9aAfIpm049Z9COfKoZIH_gVwr3KphHIl',
         'Host':'q.10jqka.com.cn',
         'Upgrade-Insecure-Requests':'1',
         'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
@@ -37,7 +37,7 @@ header_gn_main = {
 
 engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
 hy = ['881166','881163']
-gn = [('http://q.10jqka.com.cn/gn/detail/code/301455/','摘帽'),('http://q.10jqka.com.cn/gn/detail/code/300973/','航运'),('http://q.10jqka.com.cn/gn/detail/code/301543/','细胞免疫治疗')]
+gn = [('http://q.10jqka.com.cn/gn/detail/code/301497/','啤酒'),('http://q.10jqka.com.cn/gn/detail/code/301402/','上海国资改革'),('http://q.10jqka.com.cn/gn/detail/code/302027/','电子竞技'),('http://q.10jqka.com.cn/gn/detail/code/300777/','稀缺资源'),('http://q.10jqka.com.cn/gn/detail/code/302131/','智能音箱')]
 hyURL = 'http://q.10jqka.com.cn/thshy/detail/code/'
 gn_main_url = 'http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/%s/ajax/1/'
 failed_gn_main_url = []
@@ -79,7 +79,7 @@ def main_page(failed_gn_main_url=failed_gn_main_url):
         if len(res) == 0:
            print(real_url) 
         result += res   
-        time.sleep(random.randint(15,20))
+        time.sleep(random.randint(10,15))
     print(result)    
 
 def func(url, hygnList, failed=[]):
@@ -87,9 +87,10 @@ def func(url, hygnList, failed=[]):
     parser = HYConceptParser()
     if len(failed) > 0:
        for item in failed:
+           header['X-Requested-With'] = 'XMLHttpRequest'
            response = requests.get(item[0],headers=header, verify=False)   
            parsePage(parser, response.text, item[0], item[1], exists_df)
-           time.sleep(random.randint(15,20))
+           time.sleep(random.randint(10,15))
        return    
     for first_real_url in hygnList:
         response = requests.get(first_real_url[0],headers=header, verify=False)
@@ -97,12 +98,14 @@ def func(url, hygnList, failed=[]):
         code = g.group(2)
         total_page = parser.get_page_info(response.text)
         parsePage(parser, response.text, first_real_url[0], first_real_url[1], exists_df)
+        time.sleep(random.randint(10,15))
         if total_page > 1:
            for i in range(2, total_page + 1):
                real_url = (url % i) + code+'/'
+               header['X-Requested-With'] = 'XMLHttpRequest'
                response = requests.get(real_url,headers=header, verify=False)   
                parsePage(parser, response.text, real_url, first_real_url[1], exists_df)  
-               time.sleep(random.randint(15,20))
+               time.sleep(random.randint(10,15))
 
 # func(hyURL,hy)
 # main_page()    
