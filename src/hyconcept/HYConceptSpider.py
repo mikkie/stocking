@@ -16,7 +16,7 @@ header = {
         'Accept-Language':'en-US,en;q=0.9',
         'Cache-Control':'max-age=0',
         'Connection':'keep-alive',
-        'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; spversion=20130314; historystock=000610%7C*%7C000593%7C*%7C603706%7C*%7C002806%7C*%7C300069; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1538122047.1538182476.119; __utmc=156575163; __utmz=156575163.1538182476.119.119.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1537852532,1537925932,1538122050,1538182486; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1538198127; v=AvxK0mIoiyDj0L_8tzQnWw0xzZGt9aAfIpm049Z9COfKoZIH_gVwr3KphHIl',
+        'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; spversion=20130314; historystock=000610%7C*%7C000593%7C*%7C603706%7C*%7C002806%7C*%7C300069; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1538122047.1538182476.119; __utmc=156575163; __utmz=156575163.1538182476.119.119.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1537852532,1537925932,1538122050,1538182486; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1538198127; vvvv=1; v=AoI0oCgObfJXw3Euww9B6acv04PnU4ZtOFd6kcybrvWgHyy1tOPWfQjnyqCf',
         'Host':'q.10jqka.com.cn',
         'Upgrade-Insecure-Requests':'1',
         'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
