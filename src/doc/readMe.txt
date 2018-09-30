@@ -21,7 +21,7 @@ main.py init 300 c 节能
 4. main.py init 0 [turnover,rightTrade,macd,volume]
 
 0.get all today
-1.filter by common.sql (price < 30)
+1.filter by common.sql (price < 20)
 2.filter by twodayten.py (keep yesterday 10%)
 3.filter by NewStock.py
 4.filter by bull.py
