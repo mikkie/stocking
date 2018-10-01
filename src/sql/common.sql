@@ -1,1 +1,1 @@
-delete from today_all where name like 'ST%' or name like '*ST%' or open = 0 or trade > 20 or amount < 10000000 or nmc > 1000000 or changepercent < -8;
+delete from today_all where name like 'ST%' or name like '*ST%' or open = 0 or trade > 20 or nmc > 1000000 or amount < 10000000
