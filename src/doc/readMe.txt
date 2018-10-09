@@ -27,3 +27,9 @@ main.py init 300 c 节能
 4.filter by bull.py
 5.filter by xsg.js
 6.filter by yesterday buy
+
+New:
+非st，未停牌，非新股，价格<60，流通值<100亿，涨幅>-8%，成交额>1000万
+twodayten.py
+xsg.js
+概念+龙头+妖股
