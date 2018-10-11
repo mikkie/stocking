@@ -46,7 +46,7 @@ class Trade(object):
               buyCount = 0
               if len(j) > 0:
                  for stock in j:
-                     if stock['委托类型'].find('买入') >= 0 and int(stock['成交数量']) > 0:
+                     if stock['操作'].find('买入') >= 0 and int(stock['成交数量']) > 0:
                         buyCount = buyCount + 1
               return buyCount
           except Exception as e:
