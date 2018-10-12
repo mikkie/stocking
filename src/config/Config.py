@@ -58,11 +58,11 @@ class Config(object):
                  'minusPrice' : 0.01,
                  'volume' : 100,
                  'dynamicVolume' : True,
-                 'amount' : 2000.0,
+                 'amount' : 6000.0,
                  'enable' : True,
                  'enableMock' : False, 
                  'max_buyed' : 3,
-                 'balance' : 6000,
+                 'balance' : 18000,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
@@ -175,7 +175,8 @@ class Config(object):
                   'yd_p' : 3.0,
                   'yd_amount' : 5000000,
                   'yd_ratio' : 0.25,
-                  'amount_ratio' : 1.33
+                  'amount_ratio' : 1.33,
+                  'zs' : 0.0
               }
           }
 
