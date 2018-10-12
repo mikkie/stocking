@@ -3,15 +3,22 @@ __author__ = 'aqua'
 from concurrent.futures import ThreadPoolExecutor,as_completed
 import sys
 import threading
+from ..MyLog import MyLog
 sys.path.append('..')
 import src.config.Config
 import base64
 import tushare
+import requests
+import json
 
 class ProxyManager(object):
+     
+      PROXY_URL = 'http://webapi.http.zhimacangku.com/getip?num={proxy_size}&type=2&pro=0&city=0&yys=100017&port=11&time=4&ts=1&ys=1&cs=1&lb=1&sb=0&pb=45&mr=1&regions=310000,320000,330000,350000,440000'
 
-      def __init__(self):
+      def __init__(self, proxy_size):
           self.a_list = []
+          self.proxy_size = proxy_size
+          self.proxy_url = ProxyManager.PROXY_URL.format(proxy_size=proxy_size)
           self.threadLock = threading.Lock()
           self.a_list.append(
               {"ip":"local","port":0}
@@ -23,10 +30,18 @@ class ProxyManager(object):
           self.load_proxy()
 
       def load_proxy(self):
-          proxy_list = self.config.get_t1()['proxy']
-          if len(proxy_list) > 0:
+          proxy_list = []
+          try:
+              response = requests.get(self.proxy_url)
+              result = json.loads(response.text)
+              proxy_list = result['data']
+          except Exception as e:
+                 pass    
+          if len(proxy_list) == self.proxy_size:
              for proxy in proxy_list: 
                  self.current_list.append(proxy)
+          else:
+              MyLog.error('can not get proxy')
 
       def get_proxy(self):
           self.threadLock.acquire()

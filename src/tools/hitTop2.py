@@ -17,11 +17,12 @@ from utils.Utils import Utils
 from sqlalchemy import create_engine
 import multiprocessing as mp
 import os
+import math
 from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
 setting = Config()
-proxyManager = ProxyManager()
+proxyManager = None
 mockTrade = MockTrade()
 if setting.get_t1()['trade']['enable']:
    trade = Trade()
@@ -64,6 +65,8 @@ if __name__ == '__main__':
        start = 0
        codeList = []
        length = len(df_todayAll)
+       proxy_size = math.ceil(length // 100 * 1.5)
+       proxyManager = ProxyManager(proxy_size)
        while start < length:
              end = start + step
              if end >= length:
