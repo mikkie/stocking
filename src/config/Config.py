@@ -175,7 +175,8 @@ class Config(object):
                   'yd_p' : 3.0,
                   'yd_amount' : 5000000,
                   'yd_ratio' : 0.25,
-                  'amount_ratio' : 1.33
+                  'amount_ratio' : 1.33,
+                  'zs' : 0.0
               }
           }
 
