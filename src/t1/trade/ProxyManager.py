@@ -30,13 +30,14 @@ class ProxyManager(object):
           self.load_proxy()
 
       def load_proxy(self):
-          proxy_list = []
-          try:
-              response = requests.get(self.proxy_url)
-              result = json.loads(response.text)
-              proxy_list = result['data']
-          except Exception as e:
-                 MyLog.error(e) 
+          proxy_list = self.config.get_t1()['proxy']
+          if len(proxy_list) == 0:
+             try:
+                 response = requests.get(self.proxy_url)
+                 result = json.loads(response.text)
+                 proxy_list = result['data']
+             except Exception as e:
+                    MyLog.error(e) 
           if len(proxy_list) == self.proxy_size:
              for proxy in proxy_list: 
                  self.current_list.append(proxy)

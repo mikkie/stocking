@@ -22,8 +22,9 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
 setting = Config()
+analyze = NewAnalyze2()
 
-def run(queue,analyze,balance,lock):
+def run(queue,balance,lock):
     MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
@@ -37,6 +38,7 @@ def run(queue,analyze,balance,lock):
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
+              print(df)
               analyze.calcMain(zs,dh,timestamp,balance,lock)
               data = queue.get(True)   
     except Exception as e:
@@ -47,7 +49,6 @@ def run(queue,analyze,balance,lock):
 if __name__ == '__main__':
    MyLog.info('main process %s.' % os.getpid()) 
 
-   analyze = NewAnalyze2()
    mockTrade = MockTrade()
    if setting.get_t1()['trade']['enable']:
       trade = Trade()
@@ -65,7 +66,7 @@ if __name__ == '__main__':
        start = 0
        codeList = []
        length = len(df_todayAll)
-       proxy_size = math.ceil(length // 100 * 1.5)
+       proxy_size = math.ceil(length // setting.get_t1()['split_size'] * 1.5)
        proxyManager = ProxyManager(proxy_size)
        while start < length:
              end = start + step
@@ -125,7 +126,7 @@ if __name__ == '__main__':
        codeSplitMaps[i] = code_split
        queue = manager.Queue()
        queueMaps[i] = queue
-       pool.apply_async(run, args=(queue,analyze,balance,lock))
+       pool.apply_async(run, args=(queue,balance,lock))
        begin = end
        if begin >= length:
           break
