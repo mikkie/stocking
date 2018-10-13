@@ -3,7 +3,10 @@ __author__ = 'aqua'
 
 import easytrader
 import json
+import os
 import datetime as dt
+import psutil
+import time
 # import sys
 # sys.path.append('..')
 # import MyLog
@@ -14,10 +17,23 @@ class Trade(object):
       def __init__(self,isSell=False):
           self.__user = easytrader.use('ths')
           if isSell:
+             if not self.judgeprocess('xiadan.exe'):
+                os.popen(r'C:/aqua/stock/dlxd-sell/xiadan.exe') 
+                time.sleep(30)   
              self.__user.connect(r'C:/aqua/stock/dlxd-sell/xiadan.exe') 
-          else:    
+          else: 
+              if not self.judgeprocess('xiadan.exe'):
+                 os.popen(r'C:/aqua/stock/dlxd/xiadan.exe')   
+                 time.sleep(30)     
               self.__user.connect(r'C:/aqua/stock/dlxd/xiadan.exe')
 
+
+      def judgeprocess(self, processname):
+          pl = psutil.pids()
+          for pid in pl:
+              if psutil.Process(pid).name() == processname:
+                 return True
+          return False    
 
       def buy(self,code,amout,price):
           try:
