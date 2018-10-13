@@ -22,11 +22,6 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
 setting = Config()
-proxyManager = None
-mockTrade = MockTrade()
-if setting.get_t1()['trade']['enable']:
-   trade = Trade()
-engine = create_engine(setting.get_DBurl())
 analyze = NewAnalyze2()
 
 def run(queue,balance,lock):
@@ -52,15 +47,20 @@ def run(queue,balance,lock):
 
 if __name__ == '__main__':
    MyLog.info('main process %s.' % os.getpid()) 
+   proxyManager = None
+   mockTrade = MockTrade()
+   if setting.get_t1()['trade']['enable']:
+      trade = Trade()
 
    def init(forceUpdate):
        def cb(**kw):
            return ts.get_today_all()
+       engine = create_engine(setting.get_DBurl()) 
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-       while strTime < '09:30:01':
-             time.sleep(0.1)
-             strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+    #    while strTime < '09:30:01':
+    #          time.sleep(0.1)
+    #          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        step = 880
        start = 0
        codeList = []

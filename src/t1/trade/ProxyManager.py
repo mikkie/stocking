@@ -36,7 +36,7 @@ class ProxyManager(object):
               result = json.loads(response.text)
               proxy_list = result['data']
           except Exception as e:
-                 pass    
+                 MyLog.error(e) 
           if len(proxy_list) == self.proxy_size:
              for proxy in proxy_list: 
                  self.current_list.append(proxy)
