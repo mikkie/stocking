@@ -38,7 +38,6 @@ def run(queue,balance,lock):
               if dh is None:
                  dh = NewDataHolder2() 
               dh.addData(df)
-              print(df)
               analyze.calcMain(zs,dh,timestamp,balance,lock)
               data = queue.get(True)   
     except Exception as e:
@@ -59,9 +58,9 @@ if __name__ == '__main__':
        engine = create_engine(setting.get_DBurl()) 
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
-    #    while strTime < '09:30:01':
-    #          time.sleep(0.1)
-    #          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+       while strTime < '09:30:01':
+             time.sleep(0.1)
+             strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        step = 880
        start = 0
        codeList = []
