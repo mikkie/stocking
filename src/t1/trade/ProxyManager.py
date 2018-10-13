@@ -36,6 +36,7 @@ class ProxyManager(object):
                  response = requests.get(self.proxy_url)
                  result = json.loads(response.text)
                  proxy_list = result['data']
+                 MyLog.info(proxy_list)
              except Exception as e:
                     MyLog.error(e) 
           if len(proxy_list) == self.proxy_size:
