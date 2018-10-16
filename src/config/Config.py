@@ -87,6 +87,7 @@ class Config(object):
               },
               'get_hygn_inter' : 15,
               'get_data_inter' : 3,
+              'eyes_on_codes_change' : 120,
               'need_recover_data' : False,
               'split_size' : 100,
               'pvRatio' : 1.5,

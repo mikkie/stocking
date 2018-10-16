@@ -47,7 +47,7 @@ def run(queue,balance,lock):
 
 if __name__ == '__main__':
    MyLog.info('main process %s.' % os.getpid()) 
-
+   engine = create_engine(setting.get_DBurl()) 
    mockTrade = MockTrade()
    if setting.get_t1()['trade']['enable']:
       trade = Trade()
@@ -57,7 +57,6 @@ if __name__ == '__main__':
            df = ts.get_today_all()
            df['pick'] = 0
            return df
-       engine = create_engine(setting.get_DBurl()) 
        df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate, sql='select * from today_all where pick = 1', load_if_empty=False)
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        while strTime < '09:30:01':
@@ -70,6 +69,7 @@ if __name__ == '__main__':
        if length == 0:
           MyLog.info('no stocks to calc')
           return 
+       origin_code_list = df_todayAll['code'].tolist()
        proxy_size = math.ceil(length // setting.get_t1()['split_size'] * 1.5)
        proxyManager = ProxyManager(proxy_size)
        while start < length:
@@ -82,14 +82,14 @@ if __name__ == '__main__':
              for code in df['code'].tolist():
                  codeList.append(code)
              start = end
-       return codeList, proxyManager
+       return (origin_code_list, codeList, proxyManager)
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
    lock = manager.Lock()
    balance = manager.Value('i',setting.get_t1()['trade']['balance'])
 
-   codeLists, proxyManager = init(False)
+   old_code_list, codeLists, proxyManager = init(False)
    MyLog.info('calc stocks %s' % codeLists)
    codeSplitMaps = {} 
    queueMaps = {}
@@ -140,6 +140,60 @@ if __name__ == '__main__':
    def put_data_to_queue(df,queue,data):
        data['df'] = df
        queue.put(data)
+
+   @sched.scheduled_job('interval', seconds=setting.get_t1()['eyes_on_codes_change'],max_instances=10)
+   def eyes_on_codes_change(): 
+       global old_code_list   
+       def cb(**kw):
+           df = ts.get_today_all()
+           df['pick'] = 0
+           return df
+       new_df = Utils.queryData('today_all','code',engine, cb, forceUpdate=False, sql='select * from today_all where pick = 1', load_if_empty=False) 
+       if len(new_df) == 0:
+          return
+       new_code_list = new_df['code'].tolist() 
+       old_code_list.sort()
+       new_code_list.sort()
+       add = []
+       delete = []
+       for n_code in new_code_list:
+           if n_code not in old_code_list:
+              add.append(n_code)
+       for o_code in old_code_list:
+           if o_code not in new_code_list:
+              delete.append(o_code)
+       old_code_list = new_code_list       
+       for code in delete:
+           for key in codeSplitMaps:
+               if code in codeSplitMaps[key]:
+                  codeSplitMaps[key].remove(code)
+                  break
+       length = len(add)
+       if length == 0:
+          return 
+       x = length // 100
+       y = length % 100
+       size = x + (1 if y != 0 else 0)
+       begin = 0
+       step = setting.get_t1()['split_size']
+       index = num_splits
+       for i in range(size):
+           end = begin + step
+           if end > length:
+              end = length
+           code_list = add[begin:end]
+           codeSplitMaps[index] = code_list
+           queue = manager.Queue()
+           queueMaps[index] = queue
+           pool.apply_async(run, args=(queue,balance,lock))
+           index = index + 1
+           begin = end
+           if begin >= length:
+              break
+
+
+
+
 
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'],max_instances=10)
