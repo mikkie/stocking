@@ -144,6 +144,7 @@ if __name__ == '__main__':
    @sched.scheduled_job('interval', seconds=setting.get_t1()['eyes_on_codes_change'],max_instances=10)
    def eyes_on_codes_change(): 
        global old_code_list   
+       global num_splits
        def cb(**kw):
            df = ts.get_today_all()
            df['pick'] = 0
@@ -176,17 +177,16 @@ if __name__ == '__main__':
        size = x + (1 if y != 0 else 0)
        begin = 0
        step = setting.get_t1()['split_size']
-       index = num_splits
        for i in range(size):
            end = begin + step
            if end > length:
               end = length
            code_list = add[begin:end]
-           codeSplitMaps[index] = code_list
+           codeSplitMaps[num_splits] = code_list
            queue = manager.Queue()
-           queueMaps[index] = queue
+           queueMaps[num_splits] = queue
            pool.apply_async(run, args=(queue,balance,lock))
-           index = index + 1
+           num_splits = num_splits + 1
            begin = end
            if begin >= length:
               break
