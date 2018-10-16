@@ -13,7 +13,7 @@ class Config(object):
           self.__flatTrade = [90, 10, 1.2, 1.5] #长时间横盘后突破
           self.__longPeriod = 365 #1年
           self.__trendPeriod = 180 #主要分析范围 最近120天
-          self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
+          self.__dbUrl = 'mysql://pig:pigpiggo@112.124.69.222/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3 #换手率
           self.__updateToday = True #更新当前实时价格
           self.__strategy = ['ma'] #使用策略
