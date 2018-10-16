@@ -70,7 +70,10 @@ if __name__ == '__main__':
           MyLog.info('no stocks to calc')
           return 
        origin_code_list = df_todayAll['code'].tolist()
-       proxy_size = math.ceil(length // setting.get_t1()['split_size'] * 1.5)
+       x = length // setting.get_t1()['split_size']
+       y = length % setting.get_t1()['split_size']
+       process_size = x + (1 if y != 0 else 0)
+       proxy_size = math.ceil(process_size * 1.5)
        proxyManager = ProxyManager(proxy_size)
        while start < length:
              end = start + step
