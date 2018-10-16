@@ -2,5 +2,4 @@
 __author__ = 'aqua'
 
 import tushare as ts
-df_tiger = ts.inst_tops()
-print(df_tiger)
+print(ts.get_realtime_quotes(['603999']))
