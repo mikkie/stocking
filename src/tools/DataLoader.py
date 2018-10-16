@@ -13,7 +13,9 @@ setting = Config()
 engine = create_engine(setting.get_DBurl())
 
 def cb(**kw):
-    return ts.get_today_all()
+    df = ts.get_today_all()
+    df['pick'] = 0
+    return df
 Utils.queryData('today_all','code',engine, cb, forceUpdate=True)
 
 # def cb1(**kw):

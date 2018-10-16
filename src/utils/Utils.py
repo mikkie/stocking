@@ -14,14 +14,17 @@ class Utils(object):
           return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
       @staticmethod
-      def queryData(tableName, indexLabel, engine, cb, forceUpdate=False, **kw):   
+      def queryData(tableName, indexLabel, engine, cb, forceUpdate=False, sql=None, load_if_empty=True, **kw):   
           df_data = None
           if forceUpdate == False:
              try:
-                df_data = pd.read_sql_table(tableName, con=engine)
+                 if sql is None:
+                    df_data = pd.read_sql_table(tableName, con=engine)
+                 else:
+                      df_data = pd.read_sql(sql, con=engine)  
              except:
                 pass
-          if df_data is None or df_data.empty:
+          if load_if_empty and (df_data is None or df_data.empty):
              df_data = cb(kw=kw)
              try:
                 df_data.to_sql(tableName,con=engine,if_exists='replace',index=False,index_label=indexLabel)

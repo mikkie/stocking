@@ -54,9 +54,11 @@ if __name__ == '__main__':
 
    def init(forceUpdate):
        def cb(**kw):
-           return ts.get_today_all()
+           df = ts.get_today_all()
+           df['pick'] = 0
+           return df
        engine = create_engine(setting.get_DBurl()) 
-       df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate)
+       df_todayAll = Utils.queryData('today_all','code',engine, cb, forceUpdate=forceUpdate, sql='select * from today_all where pick = 1', load_if_empty=False)
        strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
        while strTime < '09:30:01':
              time.sleep(0.1)
@@ -65,6 +67,9 @@ if __name__ == '__main__':
        start = 0
        codeList = []
        length = len(df_todayAll)
+       if length == 0:
+          MyLog.info('no stocks to calc')
+          return 
        proxy_size = math.ceil(length // setting.get_t1()['split_size'] * 1.5)
        proxyManager = ProxyManager(proxy_size)
        while start < length:
