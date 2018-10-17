@@ -45,6 +45,23 @@ class ProxyManager(object):
           else:
               MyLog.error('can not get proxy')
 
+
+      def append_proxy(self, size):
+          proxy_list = []
+          url = ProxyManager.PROXY_URL.format(proxy_size=size)
+          try:
+              response = requests.get(url)
+              result = json.loads(response.text)
+              proxy_list = result['data']
+              MyLog.info(proxy_list)
+          except Exception as e:
+                 MyLog.error(e) 
+          if len(proxy_list) == size:
+             for proxy in proxy_list: 
+                 self.current_list.append(proxy)
+          else:
+               MyLog.error('failed to append proxy')               
+
       def get_proxy(self):
           self.threadLock.acquire()
           if len(self.current_list) == 0:
