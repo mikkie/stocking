@@ -205,6 +205,7 @@ class NewAnalyze2(object):
              dh.add_buyed(df_final['code'])  
              return df_final['code'], str(d_price)  
           except Exception as e:
+                 MyLog.error(e)
                  return None
           finally:
                   if lock is not None:
