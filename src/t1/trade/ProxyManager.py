@@ -94,8 +94,8 @@ class ProxyManager(object):
           try:
              return tushare.get_realtime_quotes(codeList,proxyManager=proxyManager) 
           except Exception as e:
-                 print(e)
-                #  return tushare.get_realtime_quotes(codeList,proxyManager=self)   
+                 MyLog.error('get %s data error, e = %s' % (codeList, e))
+                 return tushare.get_realtime_quotes(codeList,proxyManager=self)
                     
              
 
