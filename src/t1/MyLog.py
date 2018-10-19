@@ -2,6 +2,7 @@
 __author__ = 'aqua'
 
 import logging
+import datetime as dt
 
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
@@ -16,7 +17,7 @@ class MyLog(object):
     
       @staticmethod
       def info(msg):
-          logging.info(msg) 
+          logging.info('[%s] %s' % (dt.datetime.strftime(dt.datetime.now(), '%Y-%m-%d %H:%M:%S'), msg))
 
       @staticmethod
       def error(msg):

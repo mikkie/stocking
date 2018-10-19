@@ -189,6 +189,7 @@ if __name__ == '__main__':
            queue = manager.Queue()
            queueMaps[num_splits] = queue
            pool.apply_async(run, args=(queue,balance,lock))
+           MyLog.info('calc new added stocks %s' % code_list)
            num_splits = num_splits + 1
            begin = end
            if begin >= length:
