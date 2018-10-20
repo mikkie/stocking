@@ -21,15 +21,15 @@ class MyLog(object):
 
       @staticmethod
       def error(msg):
-          logging.error(msg)
+          logging.error('[%s] %s' % (dt.datetime.strftime(dt.datetime.now(), '%Y-%m-%d %H:%M:%S'), msg))
 
       @staticmethod
       def warn(msg):
-          logging.warn(msg)
+          logging.warn('[%s] %s' % (dt.datetime.strftime(dt.datetime.now(), '%Y-%m-%d %H:%M:%S'), msg))
 
       @staticmethod
       def debug(msg):
-          logging.debug(msg)        
+          logging.debug('[%s] %s' % (dt.datetime.strftime(dt.datetime.now(), '%Y-%m-%d %H:%M:%S'), msg))        
 
 
 

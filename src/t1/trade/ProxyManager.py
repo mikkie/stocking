@@ -36,7 +36,8 @@ class ProxyManager(object):
                  response = requests.get(self.proxy_url)
                  result = json.loads(response.text)
                  proxy_list = result['data']
-                 MyLog.info(proxy_list)
+                 MyLog.info('proxy_url: ' + self.proxy_url)
+                 MyLog.info('proxy_list: ' + str(proxy_list))
              except Exception as e:
                     MyLog.error(e) 
           if len(proxy_list) > 0:
@@ -53,7 +54,8 @@ class ProxyManager(object):
               response = requests.get(url)
               result = json.loads(response.text)
               proxy_list = result['data']
-              MyLog.info(proxy_list)
+              MyLog.info('proxy_url: ' + url)
+              MyLog.info('proxy_list: ' + str(proxy_list))
           except Exception as e:
                  MyLog.error(e) 
           if len(proxy_list) > 0:

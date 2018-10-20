@@ -70,11 +70,7 @@ if __name__ == '__main__':
           MyLog.info('no stocks to calc')
           return 
        origin_code_list = df_todayAll['code'].tolist()
-       x = length // setting.get_t1()['split_size']
-       y = length % setting.get_t1()['split_size']
-       process_size = x + (1 if y != 0 else 0)
-       proxy_size = math.ceil(process_size * 1.5)
-       proxyManager = ProxyManager(proxy_size)
+       
        while start < length:
              end = start + step
              if end >= length:
@@ -85,14 +81,22 @@ if __name__ == '__main__':
              for code in df['code'].tolist():
                  codeList.append(code)
              start = end
-       return (origin_code_list, codeList, proxyManager)
+       return (origin_code_list, codeList)
 
    pool = mp.Pool(setting.get_t1()['process_num'])
    manager = mp.Manager()
    lock = manager.Lock()
    balance = manager.Value('i',setting.get_t1()['trade']['balance'])
 
-   old_code_list, codeLists, proxyManager = init(False)
+   old_code_list, codeLists = init(False)
+
+   calc_stock_size = len(codeLists) 
+   x = calc_stock_size // setting.get_t1()['split_size']
+   y = calc_stock_size % setting.get_t1()['split_size']
+   process_size = x + (1 if y != 0 else 0)
+   proxy_size = math.ceil(process_size * 1.5)
+   proxyManager = ProxyManager(proxy_size)
+
    MyLog.info('calc stocks %s' % codeLists)
    codeSplitMaps = {} 
    queueMaps = {}
