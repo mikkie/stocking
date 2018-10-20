@@ -229,7 +229,7 @@ if __name__ == '__main__':
           if delSeconds > 30:
               interDataHolder['currentTime'] = timestamp
               interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-          if delBalanceSeconds > 70:
+          if delBalanceSeconds > 320:
              interDataHolder['balanceTime'] = timestamp 
              try:
                 lock.acquire()
@@ -240,7 +240,7 @@ if __name__ == '__main__':
                     interDataHolder['balance'] = None 
              finally:    
                     lock.release() 
-          if delQueryBuySeconds > 120:
+          if delQueryBuySeconds > 350:
              interDataHolder['queryBuyTime'] = timestamp 
              try:
                 lock.acquire()
