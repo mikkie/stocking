@@ -172,7 +172,7 @@ class Config(object):
                   'open-low' : 2.0,
                   'in_len' : 100,
                   'yd_p' : 3.0,
-                  'yd_amount' : 5000000,
+                  'yd_amount' : 0,
                   'yd_ratio' : 0.25,
                   'amount_ratio' : 1.33,
                   'zs' : 0.0
