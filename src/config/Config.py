@@ -4,6 +4,7 @@ __author__ = 'aqua'
 class Config(object):
 
       def __init__(self):
+          self.__proxy = None
           self.__priceRange = {'min' : 1.00, 'max' : 60.00} #价格区间
           self.__timeStart = '14:25:00' #监控起始时间
           self.__pKm5Change = 0.01 #当日5分钟振幅
@@ -45,13 +46,19 @@ class Config(object):
                    'concept' : 0.2 #概念题材
               }
           } 
+          self.__mongo_config = {
+              'load_time' : None,
+              'load_interval' : 30,
+              'load_from_mongo' : True,
+              'mongo_url' : 'mongodb://pig:pigpiggo@localhost:27017/stocking' 
+          }
           self.__t1 = {
               'process_num' : 15,
               'stop' : {
                   'am_start' : '09:14:00',
                   'am_stop' : '11:30:00',
                   'pm_start' : '13:00:00',
-                  'pm_stop' : '15:00:00',
+                  'pm_stop' : '15:00:00'
               },
               'trade' : {
                  'addPrice' : 0.02,
@@ -179,10 +186,19 @@ class Config(object):
               }
           }
 
+      def update_proxy(self, proxy):
+          self.__proxy = proxy
+
       def get_ignore(self):
           return self.__ignore
 
+
+      def get_mongo_config(self):
+          return self.__mongo_config  
+
       def get_t1(self):
+          if self.__proxy is not None:
+             return self.__proxy['t1'] 
           return self.__t1    
 
       def get_conceptCodes(self):
@@ -199,7 +215,6 @@ class Config(object):
 
       def get_DBurl(self):
           return self.__dbUrl  
-
 
       def get_StartTime(self):
           return self.__timeStart  

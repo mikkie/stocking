@@ -16,11 +16,20 @@ from utils.Utils import Utils
 from t1.trade.trade import Trade
 from t1.trade.MockTrade import MockTrade
 import threading
+import pymongo
 
 class NewAnalyze2(object):
     
       def __init__(self):
           self.__config = Config()
+          try:
+              if self.__config.get_mongo_config()['load_from_mongo']:
+                 self.__mongo_client = pymongo.MongoClient(self.__config.get_mongo_config()['mongo_url'])
+                 self.__mongo_client.admin.command('ismaster')
+                 self.__config.update_proxy(self.get_t1_from_mongo())
+                 self.__config.get_mongo_config()['load_time'] = dt.datetime.now()
+          except Exception as e:
+                 MyLog.error('can not connect to mongo, %s' % e)    
           self.__buyedCount = 0
           self.__balance = self.__config.get_t1()['trade']['balance']
           if self.__config.get_t1()['trade']['enable']:
@@ -30,6 +39,22 @@ class NewAnalyze2(object):
           self.__engine = create_engine(self.__config.get_DBurl())
 
 
+      def get_t1_from_mongo(self):
+          for doc in self.__mongo_client['stocking']['config'].find({'t1' : {'$exists' : True}}):
+              return doc
+          return None  
+
+
+      def update_config_if_needed(self):
+          try:
+              if self.__config.get_mongo_config()['load_from_mongo'] and self.__config.get_mongo_config()['load_time'] is not None and (dt.datetime.now() - self.__config.get_mongo_config()['load_time']).seconds > self.__config.get_mongo_config()['load_interval']:
+                 self.__config.update_proxy(self.get_t1_from_mongo())
+                 self.__config.get_mongo_config()['load_time'] = dt.datetime.now()
+          except Exception as e:
+                 MyLog.error('failed to update config %s ' % e)    
+                  
+
+
 
       def printPerformace(self,timestamp):
           deltaSeconds = (dt.datetime.now() - timestamp).seconds 
@@ -37,6 +62,7 @@ class NewAnalyze2(object):
              print('calc more than %s seconds' % deltaSeconds)    
 
       def calcMain(self,zs,dh,timestamp,balance,lock):
+          self.update_config_if_needed()
           data = dh.get_data()
           finalCode = ''
           result = []
