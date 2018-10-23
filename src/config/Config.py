@@ -60,7 +60,7 @@ class Config(object):
                  'dynamicVolume' : True,
                  'amount' : 6000.0,
                  'enable' : True,
-                 'enableMock' : False, 
+                 'enableMock' : False,
                  'max_buyed' : 3,
                  'balance' : 18000,
                  'maxBuySignal' : 1,
@@ -175,7 +175,7 @@ class Config(object):
                   'yd_amount' : 0,
                   'yd_ratio' : 0.25,
                   'amount_ratio' : 1.33,
-                  'zs' : 0.0
+                  'zs' : -1.0
               }
           }
 
