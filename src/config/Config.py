@@ -50,7 +50,7 @@ class Config(object):
               'load_time' : None,
               'load_interval' : 30,
               'load_from_mongo' : True,
-              'mongo_url' : 'mongodb://pig:pigpiggo@localhost:27017/stocking' 
+              'mongo_url' : 'mongodb://pig:pigpiggo@112.124.69.222:27017/stocking' 
           }
           self.__t1 = {
               'process_num' : 15,
