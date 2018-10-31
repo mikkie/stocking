@@ -315,7 +315,7 @@ class NewAnalyze2(object):
           else:
                if length > 20:
                   step = 5
-                  i = -20
+                  i = -21
                   while i >= length * -1:
                         p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
                         amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[i]['buy_amount'])
