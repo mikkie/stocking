@@ -31,7 +31,9 @@ def run(i):
     df = pd.DataFrame()
     for code in src_datas:
         if i < len(src_datas[code]):
-           df = df.append(src_datas[code].iloc[i])
+           data = src_datas[code].iloc[i] 
+           if data['time'] > '09:30:00':
+              df = df.append(data)
     if len(df) > 0:
        try:
            dh.addData(df)

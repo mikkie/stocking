@@ -31,6 +31,8 @@ def re_build_data(df, code, date, pre_close, save):
     low = init_price
     amount = 0.0
     for index, row in df.iterrows():
+        if row['time'] <= '09:30:00':
+           continue 
         if row['price'] > high:
            high = row['price']
         df.loc[index,'high'] = high
