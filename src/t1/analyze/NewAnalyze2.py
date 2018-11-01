@@ -282,30 +282,35 @@ class NewAnalyze2(object):
 
       def isStockMatch(self,zs,stock,dh):
           if self.isZSMatch(zs,stock):
-             return self.isYDLS(stock)
+             return self.isYDLS(stock, dh)
 
 
       def get_data_time(self,data):
           return dt.datetime.strptime(data['date'] + ' ' + data['time'],'%Y-%m-%d %H:%M:%S') 
 
 
-      def isYDLS(self, stock):
-          now_line = stock.get_Lastline()  
+      def isYDLS(self, stock, dh):
+          now_line = stock.get_Lastline() 
+          if self.getOpenPercent(stock) - self.getPercent(now_line['price'],stock) > self.__config.get_t1()['ydls']['open-low']:
+             dh.add_ignore(stock.get_code()) 
+             return False
+          if self.getPercent(now_line['high'],stock) - self.getPercent(now_line['price'],stock) > self.__config.get_t1()['ydls']['open-low']:
+             dh.add_ignore(stock.get_code()) 
+             return False
           if float(now_line['high']) > float(now_line['price']):
              return False
           stop_p = self.__config.get_t1()['ydls']['stop_p']
           current_p = self.getCurrentPercent(stock)
           if current_p < stop_p[0] or current_p > stop_p[1]:
-             return False
-          if self.getOpenPercent(stock) - self.getPercent(now_line['low'],stock) > self.__config.get_t1()['ydls']['open-low']:
-             return False
+             return False  
           datas = stock.get_data_in_len(self.__config.get_t1()['ydls']['in_len'])
           length = len(datas)
           last_datetime = self.get_data_time(datas[-1])
           fist_datetime = self.get_data_time(datas[-1 * length])
           p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[-1 * length]['price'],stock)
           amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[-1 * length]['buy_amount'])
-          if (last_datetime - fist_datetime).seconds < 60:
+        #   sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[-1 * length]['sell_amount'])
+          if (last_datetime - fist_datetime).seconds < 45:
              if p < self.__config.get_t1()['ydls']['yd_p']:
                 return False
              if amount < self.__config.get_t1()['ydls']['yd_amount']:
@@ -313,22 +318,23 @@ class NewAnalyze2(object):
              MyLog.info('在 %s %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
              return True   
           else:
-               if length > 20:
-                  step = 5
-                  i = -21
+               if length > 15:
+                  step = 2
+                  i = -15
                   while i >= length * -1:
                         p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
                         amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[i]['buy_amount'])
+                        # sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[i]['sell_amount'])
                         fist_datetime_temp = self.get_data_time(datas[i])
                         i = i - step
-                        if (last_datetime - fist_datetime_temp).seconds < 60:
+                        if (last_datetime - fist_datetime_temp).seconds < 45:
                            continue 
-                        if p >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                           if amount >= pow(((last_datetime - fist_datetime_temp).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+                        if p >= pow(((last_datetime - fist_datetime_temp).seconds - 45),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
+                           if amount >= pow(((last_datetime - fist_datetime_temp).seconds - 45),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
                               MyLog.info('在 %s %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
                               return True 
-               if p >= pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                  if amount >= pow(((last_datetime - fist_datetime).seconds - 60),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
+               if p >= pow(((last_datetime - fist_datetime).seconds - 45),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
+                  if amount >= pow(((last_datetime - fist_datetime).seconds - 45),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
                      MyLog.info('在 %s %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
                      return True
           return False                  

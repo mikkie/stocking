@@ -176,7 +176,7 @@ class Config(object):
               'proxy' : [],
               'ydls' : {
                   'stop_p' : [3.0,7.0],
-                  'open-low' : 2.0,
+                  'open-low' : 2.5,
                   'in_len' : 100,
                   'yd_p' : 3.0,
                   'yd_amount' : 0,

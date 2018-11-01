@@ -46,6 +46,7 @@ class NewStock(object):
           }
           data_dict = data.to_dict()
           data_dict['buy_amount'] = 0.0
+        #   data_dict['sell_amount'] = 0.0
           self.__data = [data_dict]
 
       def is_inited(self):
@@ -170,8 +171,14 @@ class NewStock(object):
                 if self.isBuy(row_dict):
                    buy_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
                    row_dict['buy_amount'] = last_line['buy_amount'] + buy_amount
+                #    row_dict['sell_amount'] = last_line['sell_amount']
+                elif self.isSell(row_dict):
+                    row_dict['buy_amount'] = last_line['buy_amount']
+                    # sell_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                    # row_dict['sell_amount'] = last_line['sell_amount'] + sell_amount 
                 else:
-                    row_dict['buy_amount'] = last_line['buy_amount']    
+                    #  row_dict['sell_amount'] = last_line['sell_amount']
+                     row_dict['buy_amount'] = last_line['buy_amount']        
                 self.__data.append(row_dict)
 
 
@@ -189,3 +196,6 @@ class NewStock(object):
 
       def isBuy(self, row_dict):
           return float(row_dict['price']) >= float(row_dict['a1_p'])
+
+      def isSell(self, row_dict):
+          return float(row_dict['price']) <= float(row_dict['b1_p'])  
