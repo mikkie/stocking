@@ -309,13 +309,14 @@ class NewAnalyze2(object):
           fist_datetime = self.get_data_time(datas[-1 * length])
           p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[-1 * length]['price'],stock)
           amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[-1 * length]['buy_amount'])
-        #   sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[-1 * length]['sell_amount'])
-          if (last_datetime - fist_datetime).seconds < 45:
+          sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[-1 * length]['sell_amount'])
+          delta = (last_datetime - fist_datetime).seconds
+          if delta < 45:
              if p < self.__config.get_t1()['ydls']['yd_p']:
                 return False
-             if amount < self.__config.get_t1()['ydls']['yd_amount']:
+             if amount < self.__config.get_t1()['ydls']['min_amount'] or (sell_amount > 0.0 and amount / sell_amount < self.__config.get_t1()['ydls']['amount_ratio']):
                 return False 
-             MyLog.info('在 %s %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
+             MyLog.info('在 %s %s is match ydls p = %s, amount = %s, sell_amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount, sell_amount))
              return True   
           else:
                if length > 15:
@@ -324,18 +325,18 @@ class NewAnalyze2(object):
                   while i >= length * -1:
                         p = self.getPercent(datas[-1]['price'],stock) - self.getPercent(datas[i]['price'],stock)
                         amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[i]['buy_amount'])
-                        # sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[i]['sell_amount'])
+                        sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[i]['sell_amount'])
                         fist_datetime_temp = self.get_data_time(datas[i])
                         i = i - step
                         if (last_datetime - fist_datetime_temp).seconds < 45:
                            continue 
                         if p >= pow(((last_datetime - fist_datetime_temp).seconds - 45),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                           if amount >= pow(((last_datetime - fist_datetime_temp).seconds - 45),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
-                              MyLog.info('在 %s %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
+                           if amount >= self.__config.get_t1()['ydls']['min_amount'] and (sell_amount == 0.0 or amount / sell_amount >= self.__config.get_t1()['ydls']['amount_ratio']):
+                              MyLog.info('在 %s %s is match ydls p = %s, amount = %s, sell_amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount, sell_amount))
                               return True 
                if p >= pow(((last_datetime - fist_datetime).seconds - 45),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
-                  if amount >= pow(((last_datetime - fist_datetime).seconds - 45),self.__config.get_t1()['ydls']['amount_ratio']) + self.__config.get_t1()['ydls']['yd_amount']:
-                     MyLog.info('在 %s %s is match ydls p = %s, amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount))
+                  if amount >= self.__config.get_t1()['ydls']['min_amount'] and (sell_amount == 0.0 or amount / sell_amount >= self.__config.get_t1()['ydls']['amount_ratio']):
+                     MyLog.info('在 %s %s is match ydls p = %s, amount = %s, sell_amount = %s' % (datas[-1]['date'] + ' ' + datas[-1]['time'] , stock.get_code(), p, amount, sell_amount))
                      return True
           return False                  
 

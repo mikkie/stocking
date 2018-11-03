@@ -50,7 +50,7 @@ class Config(object):
               'load_time' : None,
               'load_interval' : 30,
               'load_from_mongo' : True,
-              'mongo_url' : 'mongodb://pig:pigpiggo@112.124.69.222:27017/stocking' 
+              'mongo_url' : 'mongodb://pig:pigpiggo@112.124.69.222:27017/stocking'
           }
           self.__t1 = {
               'process_num' : 15,
@@ -175,13 +175,13 @@ class Config(object):
               },
               'proxy' : [],
               'ydls' : {
-                  'stop_p' : [3.0,7.0],
-                  'open-low' : 2.5,
+                  'stop_p' : [3.0,7.5],
+                  'open-low' : 2.0,
                   'in_len' : 100,
                   'yd_p' : 3.0,
-                  'yd_amount' : 0,
                   'yd_ratio' : 0.25,
-                  'amount_ratio' : 1.33,
+                  'min_amount' : 2000000,
+                  'amount_ratio' : 10.0,
                   'zs' : -0.5
               }
           }

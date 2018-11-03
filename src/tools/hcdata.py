@@ -41,15 +41,17 @@ def re_build_data(df, code, date, pre_close, save):
         df.loc[index,'low'] = low
         amount += row['amount']
         df.loc[index,'amount'] = amount
+        if index == 0:
+           continue 
         if row['type'] == '买盘':
-           df.loc[index,'a1_p'] = row['price']
-           df.loc[index,'b1_p'] = row['price'] - 0.01
+           df.loc[index - 1,'a1_p'] = row['price']
+           df.loc[index - 1,'b1_p'] = row['price'] - 0.01
         elif row['type'] == '卖盘':
-             df.loc[index,'b1_p'] = row['price']
-             df.loc[index,'a1_p'] = row['price'] + 0.01
+             df.loc[index - 1,'b1_p'] = row['price']
+             df.loc[index - 1,'a1_p'] = row['price'] + 0.01
         else:
-             df.loc[index,'a1_p'] = row['price'] + 0.01     
-             df.loc[index,'b1_p'] = row['price'] - 0.01
+             df.loc[index - 1,'a1_p'] = row['price'] + 0.01     
+             df.loc[index - 1,'b1_p'] = row['price'] - 0.01
     if save:         
        df.to_sql('live_' + code, con=engine, if_exists='replace') 
     return df           
