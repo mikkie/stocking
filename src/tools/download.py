@@ -25,13 +25,14 @@ def download(stocks, date, dir):
              code = 'sz' + stock[0]    
         output = None
         try:
-           resp = requests.get(dls % (code, date), headers=headers)
+           url = dls % (code, date) 
+           resp = requests.get(url, headers=headers)
            path = os.path.join(os.path.dirname(__file__), dir + '/%s%s.xls')
            output = open(path % (code + stock[1], date), 'wb')
            output.write(resp.content)
            success.append(stock[0])
         except Exception as e:
-               print('failed to download %s' % stock[0])
+               print('failed to download %s, url = %s, e = %s' % (stock[0], url, e))
         finally:   
                if output is not None:
                   output.close() 

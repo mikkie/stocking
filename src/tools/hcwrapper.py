@@ -14,8 +14,8 @@ if __name__ == '__main__':
    # code_pre_close_map = [('000760','3.58')]
    # date = '20180919'
 
-   code_pre_close_map = [('600319','4.06')]
-   date = '20181102'
+   code_pre_close_map = [('000760', '3.57')]
+   date = '20181105'
    date_next = '20181015'
    load_dir = '../../data/excels'
    compare_dir = '../../data/compare'
