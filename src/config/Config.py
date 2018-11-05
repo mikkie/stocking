@@ -180,8 +180,8 @@ class Config(object):
                   'in_len' : 100,
                   'yd_p' : 3.0,
                   'yd_ratio' : 0.25,
-                  'min_amount' : 2000000,
-                  'amount_ratio' : 10.0,
+                  'min_amount' : 3000000,
+                  'amount_ratio' : 7.0,
                   'zs' : -0.5
               }
           }
