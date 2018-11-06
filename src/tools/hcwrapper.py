@@ -20,8 +20,8 @@ if __name__ == '__main__':
    load_dir = '../../data/excels'
    compare_dir = '../../data/compare'
 
-#    hcdata.removeall(load_dir)
-#    code_list = download.download(code_pre_close_map, date, load_dir)
+   hcdata.removeall(load_dir)
+   code_list = download.download(code_pre_close_map, date, load_dir)
    df_list = hcdata.loaddata(load_dir, save=False)
    result = hitTopTest2.start_test_by_df(df_list)
 #    if len(result) > 0:
