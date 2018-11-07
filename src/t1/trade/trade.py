@@ -46,6 +46,12 @@ class Trade(object):
                  return {'message' : 'failed'}
 
 
+      def refresh(self):
+          try:
+              self.__user._click_refresh()
+          except Exception as e:
+                 MyLog.info('refresh trade failed')     
+
       def cancel(self,code,isBuy):
           try:
              self.__user.cancel_entrust(code=code,isBuy=isBuy)
@@ -120,5 +126,7 @@ class Trade(object):
 # #cancel sell
 # trade.cancel('002031',False) 
 # #count buy
-# print(trade.queryBuyStocks())             
+# trade.refresh()     
+# print(trade.queryBuyStocks())        
+# 
           
