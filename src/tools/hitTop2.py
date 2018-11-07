@@ -245,7 +245,6 @@ if __name__ == '__main__':
              interDataHolder['queryBuyTime'] = timestamp 
              try:
                 lock.acquire()
-                trade.refresh()
                 count = trade.queryBuyStocks()
                 if count >= setting.get_t1()['trade']['max_buyed']:
                    trade.cancel(None,True) 
