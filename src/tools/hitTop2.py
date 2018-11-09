@@ -233,6 +233,7 @@ if __name__ == '__main__':
              interDataHolder['balanceTime'] = timestamp 
              try:
                 lock.acquire()
+                trade.refresh()
                 balance = trade.queryBalance()
                 if balance is not None:
                    interDataHolder['balance'] = balance  
@@ -262,6 +263,10 @@ if __name__ == '__main__':
            df = proxyManager.get_realtime_quotes(codeSplitMaps[key],queueMaps[key],{'timestamp' : timestamp,'df' : None,'zs' : interDataHolder['zs'], 'balance' : interDataHolder['balance']},batch_size=100,async_exe=put_data_to_queue)
 
    getData()
+   try:
+       trade.refresh()
+   except Exception as e:
+          pass    
    sched.start()
    pool.close()
    pool.join()
