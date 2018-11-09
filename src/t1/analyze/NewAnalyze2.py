@@ -290,7 +290,7 @@ class NewAnalyze2(object):
 
 
       def isYDLS(self, stock, dh):
-          now_line = stock.get_Lastline() 
+          now_line = stock.get_Lastline()
           if self.getOpenPercent(stock) - self.getPercent(now_line['price'],stock) > self.__config.get_t1()['ydls']['open-low']:
              dh.add_ignore(stock.get_code()) 
              return False
@@ -336,11 +336,11 @@ class NewAnalyze2(object):
                            continue 
                         if p >= pow(((last_datetime - fist_datetime_temp).seconds - 45),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
                            if amount >= self.__config.get_t1()['ydls']['min_amount'] and (sell_amount == 0.0 or amount / sell_amount >= self.__config.get_t1()['ydls']['amount_ratio']):
-                              MyLog.info('%s is match ydls, t1 = %s , t2 = %s, p1 = %s, p2 = %s, p = %s, amount = %s, sell_amount = %s, amount_ratio = %s' % (stock.get_code(), datas[i]['date'] + ' ' + datas[i]['time'], datas[-1]['date'] + ' ' + datas[-1]['time'] , p1, p2, p, amount, sell_amount, 100 if sell_amount == 0.0 else amount / sell_amount))
-                              return True 
+                              MyLog.info('%s is match ydls, t1 = %s , t2 = %s, p1 = %s, p2 = %s, p = %s, amount = %s, sell_amount = %s, amount_ratio = %s' % (stock.get_code(), datas[i + step]['date'] + ' ' + datas[i + step]['time'], datas[-1]['date'] + ' ' + datas[-1]['time'] , p1, p2, p, amount, sell_amount, 100 if sell_amount == 0.0 else amount / sell_amount))
+                              return True
                if p >= pow(((last_datetime - fist_datetime).seconds - 45),self.__config.get_t1()['ydls']['yd_ratio']) + self.__config.get_t1()['ydls']['yd_p']:
                   if amount >= self.__config.get_t1()['ydls']['min_amount'] and (sell_amount == 0.0 or amount / sell_amount >= self.__config.get_t1()['ydls']['amount_ratio']):
-                     MyLog.info('%s is match ydls, t1 = %s , t2 = %s, p1 = %s, p2 = %s, p = %s, amount = %s, sell_amount = %s, amount_ratio = %s' % (stock.get_code(), datas[i]['date'] + ' ' + datas[i]['time'], datas[-1]['date'] + ' ' + datas[-1]['time'] , p1, p2, p, amount, sell_amount, 100 if sell_amount == 0.0 else amount / sell_amount))
+                     MyLog.info('%s is match ydls, t1 = %s , t2 = %s, p1 = %s, p2 = %s, p = %s, amount = %s, sell_amount = %s, amount_ratio = %s' % (stock.get_code(), datas[-1 * length]['date'] + ' ' + datas[-1 * length]['time'], datas[-1]['date'] + ' ' + datas[-1]['time'] , p1, p2, p, amount, sell_amount, 100 if sell_amount == 0.0 else amount / sell_amount))
                      return True
           return False                  
 
