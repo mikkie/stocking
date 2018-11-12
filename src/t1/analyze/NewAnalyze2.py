@@ -17,6 +17,8 @@ from t1.trade.trade import Trade
 from t1.trade.MockTrade import MockTrade
 import threading
 import pymongo
+import decimal
+decimal.getcontext().rounding = decimal.ROUND_05UP
 
 class NewAnalyze2(object):
     
@@ -149,6 +151,21 @@ class NewAnalyze2(object):
                    self.cancelBuy(trade,stock,dh,lock,balance) 
                 # self.printPerformace(timestamp)
 
+
+
+      @Utils.async
+      def save_to_excel(self, stock):
+          try:
+              now_line = stock.get_Lastline()
+              df = pd.DataFrame(stock.get_data())
+              writer = pd.ExcelWriter('D:/aqua/stock/stocking/data/result/%s-%s.xlsx' % (stock.get_code(),now_line['time'].replace(':','-')))
+              df.to_excel(writer,'Sheet1')
+              writer.save()
+          except Exception as e:
+                 MyLog.error('save %s error, e = %s' % (stock.get_code(), e))             
+
+
+
       @Utils.async   
       def cancelBuy(self,trade,stock,dh,lock,balance):
           status = -1
@@ -236,6 +253,7 @@ class NewAnalyze2(object):
           finally:
                   if lock is not None:
                      lock.release()  
+                  self.save_to_excel(stock)   
                 #   self.printPerformace(timestamp)
 
 
@@ -291,6 +309,11 @@ class NewAnalyze2(object):
 
       def isYDLS(self, stock, dh):
           now_line = stock.get_Lastline()
+          high_limit = round(decimal.Decimal(self.convertToFloat(now_line['pre_close']) * 1.1), 2)
+          if self.convertToFloat(now_line['price']) >= float(high_limit):
+             dh.add_ignore(stock.get_code()) 
+             self.save_to_excel(stock)
+             return False 
           if self.getOpenPercent(stock) - self.getPercent(now_line['price'],stock) > self.__config.get_t1()['ydls']['open-low']:
              dh.add_ignore(stock.get_code()) 
              return False
