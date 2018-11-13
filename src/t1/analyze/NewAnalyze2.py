@@ -337,6 +337,8 @@ class NewAnalyze2(object):
           sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[-1 * length]['sell_amount'])
           delta = (last_datetime - fist_datetime).seconds
           if delta < 45:
+             if delta < 15:
+                return False  
              if p < self.__config.get_t1()['ydls']['yd_p']:
                 return False
              if amount < self.__config.get_t1()['ydls']['min_amount'] or (sell_amount > 0.0 and amount / sell_amount < self.__config.get_t1()['ydls']['amount_ratio']):
