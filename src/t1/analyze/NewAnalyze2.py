@@ -166,7 +166,6 @@ class NewAnalyze2(object):
 
 
 
-      @Utils.async   
       def cancelBuy(self,trade,stock,dh,lock,balance):
           status = -1
           if trade['enable']:                    
@@ -202,7 +201,6 @@ class NewAnalyze2(object):
 
 
 
-      @Utils.async
       def outputRes(self,stock,df_final,timestamp,dh,balance,lock):
           p = (float(df_final['price']) - float(df_final['pre_close'])) / float(df_final['pre_close'])
           d_price = round(float(df_final['pre_close']) * (1 + p + 0.005), 2)
