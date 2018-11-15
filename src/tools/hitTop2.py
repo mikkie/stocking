@@ -45,7 +45,18 @@ def run(queue,balance,lock):
 
 
 
+def delete_log():
+    path = os.path.join(os.path.dirname(__file__), '../log') 
+    for file in os.listdir(path):
+        try:
+            os.remove(path + '/' + file)
+        except Exception as e:
+               pass           
+
+
+
 if __name__ == '__main__':
+   delete_log() 
    MyLog.info('main process %s.' % os.getpid()) 
    engine = create_engine(setting.get_DBurl()) 
    mockTrade = MockTrade()
