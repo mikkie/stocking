@@ -272,7 +272,7 @@ if __name__ == '__main__':
        if strTime > '11:30:30' and strTime < '12:59:30': 
           return
        if strTime > '15:30:30':
-          os.exit(0)
+          os._exit(0)
           return 
        if interDataHolder['zs'] is None:
           interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)   
