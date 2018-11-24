@@ -183,6 +183,19 @@ class Config(object):
                   'min_amount' : 3000000,
                   'amount_ratio' : 7.0,
                   'zs' : -0.5
+              },
+              'buy_tail' : {
+                  'p_range' : [-6.5,2.0],
+                  'p_limit_lowest' : 0.5,
+                  'high_low_diff' : 3.0,
+                  'min_amount' : 1000000,
+                  'amount_ratio' : 2.0
+              },
+              'bc_point' : {
+                  'p_drop' : 3.5,
+                  'p_limit_lowest' : 0.5,
+                  'min_amount' : 1000000,
+                  'amount_ratio' : 2.0
               }
           }
 

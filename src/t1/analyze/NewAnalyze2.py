@@ -77,7 +77,8 @@ class NewAnalyze2(object):
             #   self.updateStock(data[code],dh)  
               if code in dh.get_buyed():
                  #self.cancelBuyIfNeed(data[code],dh,timestamp,lock,balance)
-                 continue  
+                 #continue  
+                 pass
               try:  
                  if self.calc(zs,data[code],dh):
                     result.append(data[code])
@@ -93,7 +94,7 @@ class NewAnalyze2(object):
                      return self.outputRes(stock,last_line,timestamp,dh,balance,lock)
                  except Exception as e:
                         MyLog.error('outputRes error %s' % stock.get_code())
-                        MyLog.error(str(e))   
+                        MyLog.error(str(e))
 
 
       def updateStock(self,stock,dh):
@@ -217,7 +218,7 @@ class NewAnalyze2(object):
              if balance is not None and buyMoney > balance.value or buyVolume == 0:
                 return None   
              if df_final['code'] in dh.get_buyed():
-                return None 
+                dh.add_ignore(df_final['code']) 
              info = '在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
              MyLog.info(info)
              now = dt.datetime.now()
@@ -231,6 +232,7 @@ class NewAnalyze2(object):
                    if balance is not None:
                       balance.value = balance.value - buyMoney
                    stock.set_cache('buyMoney',buyMoney)
+                   stock.set_cache('buy_price',d_price)
                    dh.add_buyed(df_final['code'])
                    return df_final['code'], str(d_price)
                 return None
@@ -240,10 +242,12 @@ class NewAnalyze2(object):
                    if balance is not None: 
                       balance.value = balance.value - buyMoney
                    stock.set_cache('buyMoney',buyMoney)
+                   stock.set_cache('buy_price',d_price)
                    dh.add_buyed(df_final['code'])
                    return df_final['code'], str(d_price)
-                return None  
-             dh.add_buyed(df_final['code'])  
+                return None
+             stock.set_cache('buy_price',d_price)
+             dh.add_buyed(df_final['code'])
              return df_final['code'], str(d_price)  
           except Exception as e:
                  MyLog.error(e)
@@ -259,6 +263,8 @@ class NewAnalyze2(object):
       def calc(self,zs,stock,dh):
           if not self.canCalc(stock,dh):
              return False
+          if stock.get_code() in dh.get_buyed(): 
+             return self.is_bc_point(stock,dh)  
           return self.isStockMatch(zs,stock,dh)   
 
       def isOpenMatch(self,row):
@@ -298,25 +304,91 @@ class NewAnalyze2(object):
 
       def isStockMatch(self,zs,stock,dh):
           if self.isZSMatch(zs,stock):
-             return self.isYDLS(stock, dh)
+             if stock.get_cache('ignore_ydls') is None and self.isYDLS(stock, dh):
+                return True 
+          return self.is_tail_match(stock, dh)  
+          
+
+
+      def is_tail_match(self, stock, dh):
+          now_line = stock.get_Lastline()
+          if now_line['time'] < '14:30:00':
+             return False
+          cur_p = self.getCurrentPercent(stock)
+          if cur_p > self.__config.get_t1()['buy_tail']['p_range'][1] or cur_p < self.__config.get_t1()['buy_tail']['p_range'][0]:
+             return False
+          now_price = self.convertToFloat(now_line['price'])
+          lowest_price = self.convertToFloat(now_line['low'])
+          highest_price = self.convertToFloat(now_line['high'])
+          if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 > self.__config.get_t1()['buy_tail']['p_limit_lowest']:
+             return False  
+          if (highest_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 < self.__config.get_t1()['buy_tail']['high_low_diff']:
+             return False   
+          datas = stock.get_data()
+          start = -15
+          if len(datas) < start * -1:
+             start = len(datas) * -1 
+          amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[start]['buy_amount'])
+          sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[start]['sell_amount'])
+          amount_ratio = 100
+          if sell_amount != 0.0:
+             amount_ratio = amount / sell_amount 
+          tag = amount > self.__config.get_t1()['buy_tail']['min_amount'] and amount_ratio > self.__config.get_t1()['buy_tail']['amount_ratio']
+          if tag:
+             MyLog.info('buy tail match : time = %s, lowest_price = %s, buy_amount = %s, sell_amount = %s, amount_ratio = %s' % (now_line['date'] + ' ' + now_line['time'], lowest_price, amount, sell_amount, amount_ratio)) 
+          return tag
+
+
+
 
 
       def get_data_time(self,data):
           return dt.datetime.strptime(data['date'] + ' ' + data['time'],'%Y-%m-%d %H:%M:%S') 
 
 
+
+      def is_bc_point(self, stock, dh):
+          now_line = stock.get_Lastline()
+          now_second_line = stock.get_LastSecondline()
+          buyed_price = stock.get_cache('buy_price')
+          now_price = self.convertToFloat(now_line['price'])
+          if buyed_price is not None and (buyed_price - now_price) / self.convertToFloat(now_line['pre_close']) * 100 < self.__config.get_t1()['bc_point']['p_drop']:
+             return False
+          lowest_price = stock.get_cache('lowest_price')
+          if lowest_price is None or lowest_price > now_price:
+             lowest_price = now_price
+             stock.set_cache('lowest_price', lowest_price) 
+          if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 > self.__config.get_t1()['bc_point']['p_limit_lowest']:
+             return False
+          datas = stock.get_data()
+          start = -15
+          if len(datas) < start * -1:
+             start = len(datas) * -1 
+          amount = self.convertToFloat(datas[-1]['buy_amount']) - self.convertToFloat(datas[start]['buy_amount'])
+          sell_amount = self.convertToFloat(datas[-1]['sell_amount']) - self.convertToFloat(datas[start]['sell_amount'])
+          amount_ratio = 100
+          if sell_amount != 0.0:
+             amount_ratio = amount / sell_amount 
+          tag = amount > self.__config.get_t1()['bc_point']['min_amount'] and amount_ratio > self.__config.get_t1()['bc_point']['amount_ratio'] 
+          if tag:
+             MyLog.info('bc buy match: time = %s, lowest_price = %s, buy_amount = %s, sell_amount = %s, amount_ratio = %s' % (now_line['date'] + ' ' + now_line['time'], lowest_price, amount, sell_amount, amount_ratio)) 
+          return tag
+
+
+
+
       def isYDLS(self, stock, dh):
           now_line = stock.get_Lastline()
           high_limit = round(decimal.Decimal(self.convertToFloat(now_line['pre_close']) * 1.1), 2)
           if self.convertToFloat(now_line['price']) >= float(high_limit):
-             dh.add_ignore(stock.get_code()) 
+             stock.set_cache('ignore_ydls',True)
              self.save_to_excel(stock)
              return False 
           if self.getOpenPercent(stock) - self.getPercent(now_line['price'],stock) > self.__config.get_t1()['ydls']['open-low']:
-             dh.add_ignore(stock.get_code()) 
+             stock.set_cache('ignore_ydls',True)
              return False
           if self.getPercent(now_line['high'],stock) - self.getPercent(now_line['price'],stock) > self.__config.get_t1()['ydls']['open-low']:
-             dh.add_ignore(stock.get_code()) 
+             stock.set_cache('ignore_ydls',True)
              return False
           if float(now_line['high']) > float(now_line['price']):
              return False
