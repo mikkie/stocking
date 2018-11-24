@@ -264,7 +264,11 @@ class NewAnalyze2(object):
           if not self.canCalc(stock,dh):
              return False
           if stock.get_code() in dh.get_buyed(): 
-             return self.is_bc_point(stock,dh)  
+             try:
+                 return self.is_bc_point(stock,dh)  
+             except Exception as e:
+                    MyLog.error('bc point error %s' % e)
+                    return False 
           return self.isStockMatch(zs,stock,dh)   
 
       def isOpenMatch(self,row):
@@ -306,7 +310,13 @@ class NewAnalyze2(object):
           if self.isZSMatch(zs,stock):
              if stock.get_cache('ignore_ydls') is None and self.isYDLS(stock, dh):
                 return True 
-          return self.is_tail_match(stock, dh)  
+          try:
+              return self.is_tail_match(stock, dh)  
+          except Exception as e:
+                 MyLog.error('buy tailed error %s' % e)
+                 return False
+
+
           
 
 
