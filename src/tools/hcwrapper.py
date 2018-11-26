@@ -14,14 +14,14 @@ if __name__ == '__main__':
    # code_pre_close_map = [('000760','3.58')]
    # date = '20180919'
 
-   code_pre_close_map = [('002909', '13.03')]
-   date = '20181123'
+   code_pre_close_map = [('000533', '3.32'),('002026','5.73'),('002930','28.13'),('603505','14.35')]
+   date = '20181126'
    date_next = '20181015'
    load_dir = '../../data/excels'
    compare_dir = '../../data/compare'
 
-#    hcdata.removeall(load_dir)
-#    code_list = download.download(code_pre_close_map, date, load_dir)
+   hcdata.removeall(load_dir)
+   code_list = download.download(code_pre_close_map, date, load_dir)
    df_list = hcdata.loaddata(load_dir, save=False)
    result = hitTopTest2.start_test_by_df(df_list)
 #    if len(result) > 0:

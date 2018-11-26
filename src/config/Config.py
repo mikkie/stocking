@@ -189,7 +189,7 @@ class Config(object):
                   'p_limit_lowest' : 0.5,
                   'high_low_diff' : 3.0,
                   'min_amount' : 1000000,
-                  'amount_ratio' : 2.0
+                  'amount_ratio' : 5.0
               },
               'bc_point' : {
                   'p_drop' : 3.5,
