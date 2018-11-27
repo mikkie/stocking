@@ -169,12 +169,12 @@ class NewStock(object):
                 row_dict = row.to_dict()
                 last_line = self.get_Lastline()
                 if self.isBuy(lastLine, row_dict):
-                   buy_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                   buy_amount = self.convertToFloat(row_dict['volume']) * self.convertToFloat(row_dict['price'])
                    row_dict['buy_amount'] = last_line['buy_amount'] + buy_amount
                    row_dict['sell_amount'] = last_line['sell_amount']
                 elif self.isSell(lastLine, row_dict):
                     row_dict['buy_amount'] = last_line['buy_amount']
-                    sell_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                    sell_amount = self.convertToFloat(row_dict['volume']) * self.convertToFloat(row_dict['price'])
                     row_dict['sell_amount'] = last_line['sell_amount'] + sell_amount 
                 else:
                      row_dict['sell_amount'] = last_line['sell_amount']
