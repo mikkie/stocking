@@ -4,33 +4,26 @@ import numpy as np
 import talib as ta
 
 
-startDate = '2018-04-24'
-res = []
+startDate = '2018-09-19'
+failed = []
 df_all = get_all_securities(types=['stock'], date=startDate)
 for index,row in df_all.iterrows():
     try:
-        df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','low'], skip_paused=True, fq='pre', count=60)
-        if len(df_stock) < 10:
-           continue    
-        countContinue10 = 0    
-        pre_close = None
+        df_stock = get_price(index, end_date=startDate, frequency='daily', fields=['open','close','high','high_limit','low'], skip_paused=True, fq='pre', count=30)
+        count = 0
         flag = False
         for index_s,row_s in df_stock.iterrows():
-            if pre_close is None:
-               pre_close = row_s['close']
-               continue
-            if (row_s['close'] - pre_close) / pre_close * 100 >= 9.93:
-               countContinue10 = countContinue10 + 1
-               if countContinue10 >= 2:
-                  flag = True
-                  break 
+            if row_s['close'] == row_s['high_limit']:
+               if count == 3:
+                  flag = True 
+                  break
+               else:
+                   count += 1
             else:
-                countContinue10 = 0    
-            pre_close = row_s['close']
-        if flag:
-           index = index.replace('.XSHE','').replace('.XSHG','') 
-           res.append(index)
+                count = 0         
+        if flag:     
+           failed.append(index.replace('.XSHE','').replace('.XSHG',''))
     except Exception as e:
            print(e)
         
-print(res)            
+print(failed)        

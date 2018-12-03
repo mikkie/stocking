@@ -38,7 +38,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addData(df)
-       codes = analyze.calcMain(dh,dt.datetime.now(),3)
+       codes = analyze.calcMain(None,dh,dt.datetime.now(),3)
        if len(codes) > 0:
           for code in codes: 
               dh.add_ignore(code)

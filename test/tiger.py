@@ -1,6 +1,7 @@
-# -*-coding=utf-8-*-
-__author__ = 'aqua'
+import decimal
+from decimal import Decimal
+context=decimal.getcontext() # 获取decimal现在的上下文
+context.rounding = decimal.ROUND_05UP
 
-import tushare as ts
-df_tiger = ts.inst_tops()
-print(df_tiger)
+print(round(Decimal(2.9), 0))		# 2.6
+print(format(Decimal(2.5), '.d'))	#'2.6'

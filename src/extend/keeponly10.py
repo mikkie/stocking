@@ -1,0 +1,1 @@
+delete from today_all where changepercent < 9.90

@@ -19,7 +19,7 @@ import os
 from apscheduler.schedulers.blocking import BlockingScheduler
 import datetime as dt
 
-codeList = ['300522','300531']
+codeList = ['300345','002930']
 setting = Config()
 mockTrade = MockTrade()
 engine = create_engine(setting.get_DBurl())
@@ -33,12 +33,13 @@ def run(queue):
         data = queue.get(True)
         while data is not None and data['df'] is not None and len(data['df']) > 0:
             df = data['df']
+            zs = data['zs']
             s = int(round(time.time() * 1000))
             if dh is None:
                codeList = df['code'].tolist()
                dh = DataHolder(codeList) 
             dh.addSellData(df)
-            analyze.calcMain(dh)
+            analyze.calcMain(zs,dh)
             MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
             data = queue.get(True)   
     except Exception as e:
@@ -69,6 +70,7 @@ if __name__ == '__main__':
              interDataHolder['currentTime'] = now
              mockTrade.relogin()
        df = ts.get_realtime_quotes(codeList)
-       queue.put({'df' : df})
+       zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+       queue.put({'df' : df,'zs' : zs})
 
    sched.start()

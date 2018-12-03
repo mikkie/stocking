@@ -4,6 +4,7 @@ __author__ = 'aqua'
 class Config(object):
 
       def __init__(self):
+          self.__proxy = None
           self.__priceRange = {'min' : 1.00, 'max' : 60.00} #价格区间
           self.__timeStart = '14:25:00' #监控起始时间
           self.__pKm5Change = 0.01 #当日5分钟振幅
@@ -13,7 +14,7 @@ class Config(object):
           self.__flatTrade = [90, 10, 1.2, 1.5] #长时间横盘后突破
           self.__longPeriod = 365 #1年
           self.__trendPeriod = 180 #主要分析范围 最近120天
-          self.__dbUrl = 'mysql://root:aqua@127.0.0.1/stocking?charset=utf8' #数据库地址
+          self.__dbUrl = 'mysql://pig:pigpiggo@112.124.69.222/stocking?charset=utf8' #数据库地址
           self.__turnOver = 3 #换手率
           self.__updateToday = True #更新当前实时价格
           self.__strategy = ['ma'] #使用策略
@@ -45,22 +46,30 @@ class Config(object):
                    'concept' : 0.2 #概念题材
               }
           } 
+          self.__mongo_config = {
+              'load_time' : None,
+              'load_interval' : 30,
+              'load_from_mongo' : True,
+              'mongo_url' : 'mongodb://pig:pigpiggo@112.124.69.222:27017/stocking'
+          }
           self.__t1 = {
-              'process_num' : 3,
+              'process_num' : 15,
               'stop' : {
                   'am_start' : '09:14:00',
                   'am_stop' : '11:30:00',
                   'pm_start' : '13:00:00',
-                  'pm_stop' : '15:00:00',
+                  'pm_stop' : '15:00:00'
               },
               'trade' : {
                  'addPrice' : 0.02,
                  'minusPrice' : 0.01,
-                 'volume' : 300,
-                 'enable' : False,
-                 'enableMock' : True, 
+                 'volume' : 100,
+                 'dynamicVolume' : True,
+                 'amount' : 6000.0,
+                 'enable' : True,
+                 'enableMock' : False,
                  'max_buyed' : 3,
-                 'balance' : 200000,
+                 'balance' : 18000,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
@@ -84,9 +93,10 @@ class Config(object):
                   'v300' : 0.013
               },
               'get_hygn_inter' : 15,
-              'get_data_inter' : 2,
+              'get_data_inter' : 3,
+              'eyes_on_codes_change' : 120,
               'need_recover_data' : False,
-              'split_size' : 880,
+              'split_size' : 100,
               'pvRatio' : 1.5,
               'R_line' : {
                   'R1' : 0.191,
@@ -134,22 +144,74 @@ class Config(object):
               },
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
-                  'margin' : 0.8,
+                  'stop_loss_win' : {
+                     'loss_good' : -2.5,
+                     'loss_bad' : -2,
+                     'win_good' : 2.5,
+                     'win_bad' : 2 
+                  },
+                  'margin' : {
+                     '300345' : 0.5,
+                     '002930' : 0.5
+                  },
+                  'ratio' : 0.5,
                   'min_threshold' : -8,
                   'cancelTime' : 30,
-                  'maxSellSignal' : 5
+                  'maxSellSignal' : 3
               },
               'hitBottom' : {
                   'margin' : 0.2,
                   'max_p' : 0,
                   'min_p' : -5
-              } 
+              },
+              'hit10' : {
+                 'buy_b1_amount' : 15000000, 
+                 'min_break' : 8.5,
+                 'break_time' : 10800,
+                 'hit_break_inter' : 30,
+                 'max_b1_amount_ratio' : 0.2,
+                 'break_count' : 3,
+                 'hit_top_time' : '14:50:00'
+              },
+              'proxy' : [],
+              'ydls' : {
+                  'stop_p' : [1.5,6.0],
+                  'open-low' : 2.5,
+                  'in_len' : 100,
+                  'yd_p' : 3.0,
+                  'yd_ratio' : 0.25,
+                  'min_amount' : 3000000,
+                  'amount_ratio' : 7.0,
+                  'zs' : -0.5
+              },
+              'buy_tail' : {
+                  'p_range' : [-6.5,2.0],
+                  'p_limit_lowest' : 0.5,
+                  'high_low_diff' : 3.0,
+                  'min_amount' : 1500000,
+                  'amount_ratio' : 5.0
+              },
+              'bc_point' : {
+                  'p_drop' : 3.5,
+                  'p_limit_lowest' : 0.5,
+                  'min_amount' : 1500000,
+                  'amount_ratio' : 2.0
+              }
           }
+
+      def update_proxy(self, proxy):
+          self.__proxy = proxy
 
       def get_ignore(self):
           return self.__ignore
 
+
+      def get_mongo_config(self):
+          return self.__mongo_config  
+
       def get_t1(self):
+          if self.__proxy is not None:
+             return self.__proxy['t1'] 
           return self.__t1    
 
       def get_conceptCodes(self):
@@ -166,7 +228,6 @@ class Config(object):
 
       def get_DBurl(self):
           return self.__dbUrl  
-
 
       def get_StartTime(self):
           return self.__timeStart  

@@ -1,3 +1,5 @@
 .vscode/
+*.xls
+*.xlsx
 *.pyc
 *.log

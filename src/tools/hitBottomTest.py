@@ -1,6 +1,5 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
-#Mock数据
 import tushare as ts
 import threading
 import time

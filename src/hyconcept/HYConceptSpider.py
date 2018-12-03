@@ -1,7 +1,13 @@
 # -*-coding=utf-8-*-
 __author__ = 'aqua'
 
+import time
+import random
 import requests
+import re
+import pandas as pd
+from sqlalchemy import create_engine
+import random
 from HYConceptParser import HYConceptParser
 
 header = {
@@ -10,29 +16,98 @@ header = {
         'Accept-Language':'en-US,en;q=0.9',
         'Cache-Control':'max-age=0',
         'Connection':'keep-alive',
-        'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; spversion=20130314; historystock=002650%7C*%7C300033; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1519633826,1519692417; __utma=156575163.844587348.1519633850.1519633850.1519692420.2; __utmc=156575163; __utmz=156575163.1519692420.2.2.utmcsr=10jqka.com.cn|utmccn=(referral)|utmcmd=referral|utmcct=/; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1519692494; v=Aqge3lYMZt8hk0pb095tdgYSeZ2-0Qzb7jXgX2LZ9CMWvUYLCuHcaz5FsOex',
+        'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; spversion=20130314; historystock=000610%7C*%7C000593%7C*%7C603706%7C*%7C002806%7C*%7C300069; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1538122047.1538182476.119; __utmc=156575163; __utmz=156575163.1538182476.119.119.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1537852532,1537925932,1538122050,1538182486; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1538198127; vvvv=1; v=AoI0oCgObfJXw3Euww9B6acv04PnU4ZtOFd6kcybrvWgHyy1tOPWfQjnyqCf',
         'Host':'q.10jqka.com.cn',
-        'Referer':'http://q.10jqka.com.cn/thshy/',
         'Upgrade-Insecure-Requests':'1',
         'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
     }
 
-codes = [];
-hy = ['881166','881163','881164','881150','881147','881101','881119','881129','881127','881162','881130','881143','881121','881138','881117','881123','881118','881152','881142','881110','881135','881102','881122','881165','881120','881126','881144','881159','881124','881109','881104','881103','881116','881158','881136','881128','881132','881146','881145','881154','881137','881139','881134','881114','881160','881141','881140','881107','881156','881149','881108','881106','881133','881125','881131','881115','881148','881111','881157','881161','881153','881113','881151','881155','881112','881105']
-gn = ['301780','300013','302045','301524','300756','301786','302170','300082','304756','300134','300362','300889','301522','301050','302142','300419','300804','301284','300800','302027','300646','300835','300309','301085','300890','301436','301175','300722','300345','301249','301628','301699','301631','300843','300806','300642','301292','301683','300389','304116','301213','300019','300682','301620','300830','302035','300870','301166','302111','300132','302010','301471','301146','300402','300378','300917','300353','300127','301209','300440','300444','301223','301286','300831','301154','300816','302166','304582','301227','300188','300210','300836','300374','301543','300723','301121','301797','301139','300037','301408','300053','301505','300008','300023','301565','301416','301128','301558','301624','300903','301799','301518','301663','300105','300163','300352','300158','301605','300883','300923','301229','302154','301494','300269','301636','301489','300709','300786','300920','300730','302148','300221','300186','300277','300891','300168','301623','301100','301561','300358','302150','300085','301402','300238','301366','300337','300769','301179','301546','300265','301700','301564','302131','301539','301502','300973','300733','300858','300018','301383','300862','300200','300649','301079','300075','300350','300351','300261','306398','301497','300386','300983','300100','301346','301490','300898','300900','301496','300073','301365','302674','302182','301715','301541','305794','300220','301306','302034','300451','301783','302046','300157','301630','301171','300755','300809','300704','301236','300382','301632','301491','307512','300845','300403','300814','300316','303944','301627','300248','300061','300084','300777','301455','306750','307826']
+
+header_gn_main = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Cache-Control': 'max-age=0',
+    'Connection': 'keep-alive',
+    'Cookie': 'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; spversion=20130314; historystock=000610%7C*%7C000593%7C*%7C603706%7C*%7C002806%7C*%7C300069; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1538122047.1538182476.119; __utmc=156575163; __utmz=156575163.1538182476.119.119.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; __utmb=156575163.1.10.1538182476; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1537852532,1537925932,1538122050,1538182486; Hm_lvt_f79b64788a4e377c608617fba4c736e2=1537925933,1538122050,1538122060,1538182486; Hm_lvt_60bad21af9c824a4a0530d5dbf4357ca=1537925932,1538122050,1538122060,1538182487; Hm_lpvt_60bad21af9c824a4a0530d5dbf4357ca=1538183376; Hm_lpvt_f79b64788a4e377c608617fba4c736e2=1538183376; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1538183377; v=AvBG9s7kX111XANZSYLzN7k1wbVBOdSD9h0oh-pBvMsepZ5jkkmkE0Yt-BY5',
+    'Host': 'data.10jqka.com.cn',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36'
+}    
+
+engine = create_engine('mysql://root:aqua@127.0.0.1/stocking?charset=utf8')
+hy = ['881166','881163']
+gn = [('http://q.10jqka.com.cn/gn/detail/code/301497/','啤酒'),('http://q.10jqka.com.cn/gn/detail/code/301402/','上海国资改革'),('http://q.10jqka.com.cn/gn/detail/code/302027/','电子竞技'),('http://q.10jqka.com.cn/gn/detail/code/300777/','稀缺资源'),('http://q.10jqka.com.cn/gn/detail/code/302131/','智能音箱')]
 hyURL = 'http://q.10jqka.com.cn/thshy/detail/code/'
-gnURL = 'http://q.10jqka.com.cn/gn/detail/code/'
+gn_main_url = 'http://data.10jqka.com.cn/funds/gnzjl/field/tradezdf/order/desc/page/%s/ajax/1/'
+failed_gn_main_url = []
+gnURL = 'http://q.10jqka.com.cn/gn/detail/field/264648/order/desc/page/%s/ajax/1/code/'
 
-def func(url,hygnList):
-    for code in hygnList:
-        response = requests.get(url + code+'/',headers=header, verify=False)
-        parser = HYConceptParser()
-        temps = parser.parse(response.text)
-        for temp in temps:
-            if temp not in codes:
-               codes.append(temp)
 
-func(hyURL,hy)
-func(gnURL,gn)    
-print(codes)
+
+def parsePage(parser, html, url, concept, exists_df):
+    temps = parser.parse(html)
+    if len(temps) == 0:
+       print("('%s','%s')" % (url, concept)) 
+    codelist = []  
+    for temp in temps:
+        code_obj = {
+            'code' : temp,
+            'concept' : concept
+        }
+        match_df = exists_df[(exists_df['code'] == temp) & (exists_df['concept'] == concept)]
+        if len(match_df) == 0:
+           codelist.append(code_obj)
+    df = pd.DataFrame(codelist) 
+    df.to_sql('ths_concept', con=engine, if_exists='append', index=False)   
+
+
+
+def main_page(failed_gn_main_url=failed_gn_main_url):
+    parser = HYConceptParser()
+    result = []
+    real_urls = []
+    if len(failed_gn_main_url) != 0:
+       real_urls = failed_gn_main_url
+    else:
+        for i in range(1, 6):
+            real_url = (gn_main_url % i)
+            real_urls.append(real_url)
+    for real_url in real_urls:
+        response = requests.get(real_url,headers=header_gn_main, verify=False)
+        res = parser.parse_main(response.text)
+        if len(res) == 0:
+           print(real_url) 
+        result += res   
+        time.sleep(random.randint(10,15))
+    print(result)    
+
+def func(url, hygnList, failed=[]):
+    exists_df = pd.read_sql('select * from ths_concept', con=engine)  
+    parser = HYConceptParser()
+    if len(failed) > 0:
+       for item in failed:
+           header['X-Requested-With'] = 'XMLHttpRequest'
+           response = requests.get(item[0],headers=header, verify=False)   
+           parsePage(parser, response.text, item[0], item[1], exists_df)
+           time.sleep(random.randint(10,15))
+       return    
+    for first_real_url in hygnList:
+        response = requests.get(first_real_url[0],headers=header, verify=False)
+        g = re.match('(.+)(\d{6})/', first_real_url[0])
+        code = g.group(2)
+        total_page = parser.get_page_info(response.text)
+        parsePage(parser, response.text, first_real_url[0], first_real_url[1], exists_df)
+        time.sleep(random.randint(10,15))
+        if total_page > 1:
+           for i in range(2, total_page + 1):
+               real_url = (url % i) + code+'/'
+               header['X-Requested-With'] = 'XMLHttpRequest'
+               response = requests.get(real_url,headers=header, verify=False)   
+               parsePage(parser, response.text, real_url, first_real_url[1], exists_df)  
+               time.sleep(random.randint(10,15))
+
+# func(hyURL,hy)
+# main_page()    
+func(gnURL,gn)
 

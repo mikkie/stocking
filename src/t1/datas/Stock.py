@@ -18,7 +18,8 @@ class Stock(object):
           self.__time = None
           self.__lowerThanBeforeTimes = 0
           self.__cache = {
-              'ocp' : None
+              'ocp' : None,
+              'buyPos' : 0
           }
           self.__rBreakTimes = {
               'R1' : {
@@ -54,6 +55,7 @@ class Stock(object):
                'out' : 0
           }
           self.__netBuy = 0
+          self.__cancelTimes = 0
           self.__priceVolumeMap = {
               'last_volume' : 0,
               'last_time' : None,
@@ -65,9 +67,17 @@ class Stock(object):
           elif isinstance(data, pd.DataFrame):
                self.__data = data
 
+      def get_cancelTimes(self):
+          return self.__cancelTimes
+
+      def add_cancelTimes(self):
+          self.__cancelTimes = self.__cancelTimes + 1  
+
 
       def get_cache(self,key):
-          return self.__cache[key]
+          if key in self.__cache:
+             return self.__cache[key]
+          return None   
 
       def set_cache(self,key,val):
           self.__cache[key] = val  

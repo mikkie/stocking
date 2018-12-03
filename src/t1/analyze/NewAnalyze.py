@@ -35,7 +35,7 @@ class NewAnalyze(object):
           if deltaSeconds > 3: 
              print('calc more than %s seconds' % deltaSeconds)    
 
-      def calcMain(self,dh,timestamp,buyCount):
+      def calcMain(self,zs,dh,timestamp,buyCount):
           data = dh.get_data()
           finalCode = ''
           result = []
@@ -44,7 +44,7 @@ class NewAnalyze(object):
               if code in dh.get_buyed() or code in dh.get_ignore():
                  continue 
               try:  
-                 if self.calc(data[code],dh):
+                 if self.calc(zs,data[code],dh):
                     result.append(data[code])
                 #  self.printPerformace(timestamp)  
               except Exception as e:
@@ -97,7 +97,7 @@ class NewAnalyze(object):
 
 
               
-      def calc(self,stock,dh):
+      def calc(self,zs,stock,dh):
           if not self.canCalc(stock,dh):
              return False 
           open_p = self.getOpenPercent(stock)
@@ -108,7 +108,7 @@ class NewAnalyze(object):
           if not stock.is_inited():  
              self.initStockData(stock,open_p,conf)
           self.updateStock(stock,conf)  
-          return self.isStockMatch(stock,conf,dh)   
+          return self.isStockMatch(zs,stock,conf,dh)   
 
 
       def isOpenMatch(self,row):
@@ -181,20 +181,21 @@ class NewAnalyze(object):
               if t1[key]['open_p'][0] <= open_p and open_p < t1[key]['open_p'][1]:
                  return t1[key] 
 
-      def isStockMatch(self,stock,conf,dh):
+      def isStockMatch(self,zs,stock,conf,dh):
           if 'time' in self.__config.get_t1()['strategy'] and not self.isTimeMatch(stock,conf):
              return False
           if 'xspeed' in self.__config.get_t1()['strategy'] and not self.isXSpeedMatch(dh,stock):
              return False
-          if 'sellWindow' in self.__config.get_t1()['strategy'] and not self.isSellWindowMatch(stock):
+          if 'sellWindow' in self.__config.get_t1()['strategy'] and not self.isSellWindowMatch(zs,stock):
              return False 
           if 'minR' in self.__config.get_t1()['strategy'] and not self.isReachMinR(stock):
              return False 
           return self.isLastTwoMatch(stock)
 
 
-      def isZSMatch(self,stock):
-          zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+      def isZSMatch(self,zs,stock):
+          if zs is None:
+             return True 
           code = stock.get_code()
           i = 0
           if code.startswith('3'):
@@ -209,7 +210,7 @@ class NewAnalyze(object):
              return True
           return p > 0
 
-      def isSellWindowMatch(self,stock):
+      def isSellWindowMatch(self,zs,stock):
           data = stock.get_data()
           size = len(data)
           if size > self.__config.get_t1()['big_money']['count']:
@@ -221,7 +222,7 @@ class NewAnalyze(object):
           if avgAmount < self.__config.get_t1()['big_money']['amount']:
              return False 
           if avgAmount < self.__config.get_t1()['big_money']['amount_2']:
-             if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(stock):
+             if 'zs' in self.__config.get_t1()['strategy'] and not self.isZSMatch(zs,stock):
                 return False  
           MyLog.info('[%s] average amount = %s' % (stock.get_code(),avgAmount))          
           now_line = stock.get_Lastline()

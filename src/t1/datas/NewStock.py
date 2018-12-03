@@ -18,6 +18,7 @@ class NewStock(object):
           self.__buySignal = 0
           self.__time = None
           self.__lowerThanBeforeTimes = 0
+          self.__cancelTimes = 0
           self.__cache = {
               'ocp' : None
           }
@@ -43,7 +44,10 @@ class NewStock(object):
                  'b_times' : 0  
               }
           }
-          self.__data = [data.to_dict()]
+          data_dict = data.to_dict()
+          data_dict['buy_amount'] = 0.0
+          data_dict['sell_amount'] = 0.0
+          self.__data = [data_dict]
 
       def is_inited(self):
           return self.__inited
@@ -51,8 +55,17 @@ class NewStock(object):
       def set_inited(self):
           self.__inited = True  
 
+      def get_cancelTimes(self):
+          return self.__cancelTimes
+
+      def add_cancelTimes(self):
+          self.__cancelTimes = self.__cancelTimes + 1
+    
+
       def get_cache(self,key):
-          return self.__cache[key]
+          if key in self.__cache: 
+             return self.__cache[key]
+          return None  
 
       def set_cache(self,key,val):
           self.__cache[key] = val  
@@ -123,6 +136,14 @@ class NewStock(object):
       def get_data(self):
           return self.__data   
 
+
+      def get_data_in_len(self,in_len):
+          datas = self.get_data()
+          length = len(datas)
+          if length < in_len:
+             in_len = length
+          return datas[-1 * in_len :]
+
       def len(self):
           if self.__data is None:
              return 0 
@@ -145,10 +166,36 @@ class NewStock(object):
              lastTime = lastLine['time'] 
              last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
-                self.__data.append(row.to_dict())
-            #  now = dt.datetime.now()
-            #  if self.get_time() is not None:
-            #     deltaSeconds = (now - self.get_time()).seconds
-            #     if deltaSeconds > 3:
-            #        print('[%s] calc more than %s s' % (self.get_code(),deltaSeconds)) 
-            #  self.set_time(now) 
+                row_dict = row.to_dict()
+                last_line = self.get_Lastline()
+                if self.isBuy(lastLine, row_dict):
+                   buy_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                   row_dict['buy_amount'] = last_line['buy_amount'] + buy_amount
+                   row_dict['sell_amount'] = last_line['sell_amount']
+                elif self.isSell(lastLine, row_dict):
+                    row_dict['buy_amount'] = last_line['buy_amount']
+                    sell_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                    row_dict['sell_amount'] = last_line['sell_amount'] + sell_amount 
+                else:
+                     row_dict['sell_amount'] = last_line['sell_amount']
+                     row_dict['buy_amount'] = last_line['buy_amount']        
+                self.__data.append(row_dict)
+
+
+
+      def convertToFloat(self,str):
+          if str == '':
+             return 0.0 
+          try:
+              return float(str)
+          except Exception as e:
+                 MyLog.error('convertToFloat error: ' + str + '\n') 
+                 return 0.0
+
+
+
+      def isBuy(self, lastLine, row_dict):
+          return float(row_dict['price']) >= float(lastLine['a1_p'])
+
+      def isSell(self, lastLine, row_dict):
+          return float(row_dict['price']) <= float(lastLine['b1_p'])  
