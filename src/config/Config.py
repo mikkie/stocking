@@ -69,7 +69,7 @@ class Config(object):
                  'enable' : True,
                  'enableMock' : False,
                  'max_buyed' : 3,
-                 'balance' : 36000,
+                 'balance' : 36000.0,
                  'maxBuySignal' : 1,
                  'timestampLimit' : 7
               },
