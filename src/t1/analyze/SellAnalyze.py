@@ -82,9 +82,9 @@ class SellAnalyze(object):
              stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_bad']
              stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_bad']
           if self.getWinLossPercent(stock) < stop_loss:
-             stock.add_sellSignal()
-             if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
-                return self.sell(stock)
+            #  stock.add_sellSignal()
+            #  if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
+            #     return self.sell(stock)
              return False
           if self.getWinLossPercent(stock) >= stop_win:
              stock.set_cache('start_stop_win',True)
