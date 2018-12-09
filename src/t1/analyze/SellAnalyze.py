@@ -50,6 +50,15 @@ class SellAnalyze(object):
           lastLine = stock.get_Lastline()
           price = lastLine.get('price')
           return self.getPercent(price,stock)
+
+
+      def getWinLossPercent(self,stock):
+          buy_price = stock.get_cache('buy_price')
+          if buy_price is None:
+             state = self.__config.get_t1()['seller']['state']   
+             buy_price = state[stock.get_code()]
+             stock.set_cache('buy_price',buy_price)  
+          return self.getPercent(buy_price,stock)    
               
 
       def getOpenPercent(self,stock):
@@ -59,7 +68,7 @@ class SellAnalyze(object):
 
 
       def initLS(self,stock,dh,ratio):
-          ccp = self.getCurrentPercent(stock)
+          ccp = self.getWinLossPercent(stock)
           ls = ccp - self.__config.get_t1()['seller']['margin'][stock.get_code()] * ratio
           if ls > self.__config.get_t1()['seller']['min_threshold']:
              stock.set_ls(ls)
@@ -72,12 +81,12 @@ class SellAnalyze(object):
              ratio = self.__config.get_t1()['seller']['ratio']
              stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_bad']
              stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_bad']
-          if self.getCurrentPercent(stock) < stop_loss:
+          if self.getWinLossPercent(stock) < stop_loss:
              stock.add_sellSignal()
              if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
                 return self.sell(stock)
              return False
-          if self.getCurrentPercent(stock) >= stop_win:
+          if self.getWinLossPercent(stock) >= stop_win:
              stock.set_cache('start_stop_win',True)
           if stock.get_cache('start_stop_win') is None:
              return False    
@@ -85,14 +94,14 @@ class SellAnalyze(object):
              self.initLS(stock,dh,ratio)
              if stock.get_ls() is None:
                 return False
-          if self.getCurrentPercent(stock) < stock.get_ls():
+          if self.getWinLossPercent(stock) < stock.get_ls():
              stock.add_sellSignal()
              if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
                 return self.sell(stock)
              return False
           else:
                stock.reset_sellSignal()
-               ccp = self.getCurrentPercent(stock)
+               ccp = self.getWinLossPercent(stock)
                tls = ccp - self.__config.get_t1()['seller']['margin'][stock.get_code()] * ratio
                if tls > stock.get_ls():
                   stock.set_ls(tls) 

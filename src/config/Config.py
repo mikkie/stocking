@@ -154,6 +154,10 @@ class Config(object):
                      '300345' : 0.5,
                      '002930' : 0.5
                   },
+                  'state' : {
+                     '300345' : 12.5,
+                     '002930' : 3.5
+                  },
                   'ratio' : 0.5,
                   'min_threshold' : -8,
                   'cancelTime' : 30,
