@@ -5,7 +5,6 @@ __author__ = 'aqua'
 import pandas as pd
 import datetime as dt
 from ..MyLog import MyLog
-import datetime as dt
 
 class Stock(object):
 
@@ -62,10 +61,10 @@ class Stock(object):
               'pvMap' : []
           }
           self.__targetCCP = 0
-          if isinstance(data, pd.Series):
-             self.__data = pd.DataFrame([data])
-          elif isinstance(data, pd.DataFrame):
-               self.__data = data
+          data_dict = data.to_dict()
+          data_dict['buy_amount'] = 0.0
+          data_dict['sell_amount'] = 0.0
+          self.__data = [data_dict]
 
       def get_cancelTimes(self):
           return self.__cancelTimes
@@ -204,26 +203,49 @@ class Stock(object):
       def get_LastSecondline(self):
           if self.len() < 2:
              return None
-          return self.__data.iloc[-2]  
+          return self.__data[-2]  
 
       def get_Lastline(self):
           if self.len() == 0:
              return None
-          return self.__data.iloc[-1]    
+          return self.__data[-1]    
 
       def add_Line(self,row):
           lastLine = self.get_Lastline()
           if lastLine is not None:
-             lastTime = lastLine.get('time') 
+             lastTime = lastLine['time'] 
              last_date = dt.datetime.strptime(lastLine['date'] + ' ' + lastTime, '%Y-%m-%d %H:%M:%S')
              if lastTime != row['time']:
-                self.__data = self.__data.append(row)
-            #  now = dt.datetime.now()
-            #  if self.get_time() is not None:
-            #     deltaSeconds = (now - self.get_time()).seconds
-            #     if deltaSeconds > 3:
-            #        print('[%s] calc more than %s s' % (self.get_code(),deltaSeconds)) 
-            #  self.set_time(now) 
-                # row_date = dt.datetime.strptime(row['date'] + ' ' + row['time'], '%Y-%m-%d %H:%M:%S') 
-                # if row['time'] >= '09:30:00' and (row_date - last_date).seconds > 3:
-                #    MyLog.warn('%s get data is more than 3s,now = %s %s,last = %s %s' % (row['code'],row['date'],row['time'],lastLine['date'],lastLine['time'])) 
+                row_dict = row.to_dict()
+                last_line = self.get_Lastline()
+                if self.isBuy(lastLine, row_dict):
+                   buy_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                   row_dict['buy_amount'] = last_line['buy_amount'] + buy_amount
+                   row_dict['sell_amount'] = last_line['sell_amount']
+                elif self.isSell(lastLine, row_dict):
+                    row_dict['buy_amount'] = last_line['buy_amount']
+                    sell_amount = self.convertToFloat(row_dict['amount']) - self.convertToFloat(last_line['amount'])
+                    row_dict['sell_amount'] = last_line['sell_amount'] + sell_amount 
+                else:
+                     row_dict['sell_amount'] = last_line['sell_amount']
+                     row_dict['buy_amount'] = last_line['buy_amount']        
+                self.__data.append(row_dict)
+
+
+
+      def convertToFloat(self,str):
+          if str == '':
+             return 0.0 
+          try:
+              return float(str)
+          except Exception as e:
+                 MyLog.error('convertToFloat error: ' + str + '\n') 
+                 return 0.0
+
+
+
+      def isBuy(self, lastLine, row_dict):
+          return float(row_dict['price']) >= float(lastLine['a1_p'])
+
+      def isSell(self, lastLine, row_dict):
+          return float(row_dict['price']) <= float(lastLine['b1_p'])          

@@ -145,8 +145,8 @@ class Config(object):
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   'stop_loss_win' : {
-                     'loss_good' : -2.5,
-                     'loss_bad' : -2,
+                     'loss_good' : -3.0,
+                     'loss_bad' : -3.0,
                      'win_good' : 2.5,
                      'win_bad' : 2 
                   },
@@ -155,9 +155,17 @@ class Config(object):
                      '002930' : 0.5
                   },
                   'state' : {
-                     '300345' : 12.5,
-                     '002930' : 3.5
+                     '300345' : {
+                        'price' : 12.5,
+                        'volume' : 500
+                     },
+                     '002930' : {
+                        'price' : 3.5,
+                        'volume' : 500    
+                     }
                   },
+                  'bc_sell_profit' : 1.0,
+                  'ydxd' : 2.0,
                   'ratio' : 0.5,
                   'min_threshold' : -8,
                   'cancelTime' : 30,

@@ -24,25 +24,6 @@ class DataHolder(object):
           self.__setting = Config()
           self.__tpe = ThreadPoolExecutor(5)
           self.__engine = create_engine(self.__setting.get_DBurl()) 
-          if self.__setting.get_t1()['need_recover_data'] and self.needRecoverData():
-             self.recoverData(codes) 
-
-      def recoverData(self,codes):
-          for code in codes:
-              try:
-                 src_data = pd.read_sql_table('live_' + code, con = self.__engine) 
-                 if src_data is not None and len(src_data) > 0:
-                    last = src_data.iloc[-1]
-                    now_date = time.strftime('%Y-%m-%d',time.localtime(time.time())) 
-                    if now_date == last['date']:
-                       self.__data[code] = Stock(code,src_data) 
-              except Exception as e:
-                     MyLog.error('recover data error \n')
-                     MyLog.error(str(e) +  '\n')
-
-      def needRecoverData(self):
-          now = dt.datetime.now()
-          return now > dt.datetime(now.year,now.month,now.day,9,15)     
 
       def get_buyed(self):
           return self.__buyed
@@ -97,9 +78,10 @@ class DataHolder(object):
 
       def saveData(self,data):
           try: 
-              line = data.iloc[0]
+              line = data[0]
               code = line['code']
-              data.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
+              df = pd.DataFrame(data)
+              df.to_sql('live_' + code, con = self.__engine, if_exists='replace', index=False)
               MyLog.info('[%s] save data' % code)
           except Exception as e:
                  MyLog.error('[%s %s] save [%s] data error \n' % (line['date'],line['time'],code))
