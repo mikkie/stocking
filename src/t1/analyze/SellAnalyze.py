@@ -154,6 +154,9 @@ class SellAnalyze(object):
              stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_bad']
              stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_bad']
           if self.getWinLossPercent(stock) < stop_loss and self.getCurrentPercent(stock) < stop_loss:
+             now_line = stock.get_Lastline()
+             if now_line['time'] > '14:30:00':
+                return False
              if self.is_bc_point(stock) or self.is_ydxd(stock):
                 return self.bc_buy(stock)  
             #  stock.add_sellSignal()
