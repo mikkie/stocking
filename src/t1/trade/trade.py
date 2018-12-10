@@ -85,10 +85,10 @@ class Trade(object):
 
 
 
-      def sell(self,code,price):
+      def sell(self,code,price,amount=None):
           try:
              self.cancel(code,False)
-             res = self.__user.sell(code, price=price, amount=None) 
+             res = self.__user.sell(code, price=price, amount=amount) 
              MyLog.info('卖出code = %s' % code)
              return res
           except Exception as e:

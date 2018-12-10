@@ -145,7 +145,9 @@ class SellAnalyze(object):
       def calc(self,zs,stock,dh):
           if stock.get_cache('bc_buy_price') is not None:
              if self.is_bc_sell(stock):
-                return self.sell(stock)
+                state = self.__config.get_t1()['seller']['state']   
+                sellVolume = state[stock.get_code()]['volume'] 
+                return self.sell(stock, sellVolume)
              return False
           ratio = 1
           stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_good']
@@ -213,7 +215,7 @@ class SellAnalyze(object):
           return p < 0
 
 
-      def sell(self,stock):
+      def sell(self,stock, amount=None):
           if not self.can_sell(stock):
              return False 
           last_line = stock.get_Lastline()
@@ -221,7 +223,7 @@ class SellAnalyze(object):
           info = '[%s] 在 %s 以 %s 卖出 [%s]%s 全部股票' % (Utils.getCurrentTime(),str(last_line['date']) + ' ' + str(last_line['time']), price, last_line['code'], last_line['name'])
           MyLog.info(info)
           if self.__config.get_t1()['trade']['enable']:
-             return self.__trade.sell(stock.get_code(),price)
+             return self.__trade.sell(stock.get_code(),price, amount = amount)
           elif self.__config.get_t1()['trade']['enableMock']:
                return self.__mockTrade.sell(stock.get_code(),price) 
           return True
