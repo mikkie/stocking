@@ -4,6 +4,7 @@ __author__ = 'aqua'
 import download
 import hcdata
 import hitTopTest2
+import AutoSellTest
 import datetime as dt
 from datetime import timedelta
 """
@@ -14,16 +15,16 @@ if __name__ == '__main__':
    # code_pre_close_map = [('000760','3.58')]
    # date = '20180919'
 
-   code_pre_close_map = [('000533', '3.32'),('002026','5.73'),('002930','28.13'),('603505','14.35')]
-   date = '20181126'
-   date_next = '20181015'
+   code_pre_close_map = [('002256', '2.94')]
+   date = '20181210'
+   date_next = '20181211'
    load_dir = '../../data/excels'
    compare_dir = '../../data/compare'
 
-   hcdata.removeall(load_dir)
-   code_list = download.download(code_pre_close_map, date, load_dir)
+#    hcdata.removeall(load_dir)
+#    code_list = download.download(code_pre_close_map, date, load_dir)
    df_list = hcdata.loaddata(load_dir, save=False)
-   result = hitTopTest2.start_test_by_df(df_list)
+   result = AutoSellTest.start_test_by_df(df_list)
 #    if len(result) > 0:
 #       hcdata.removeall(compare_dir)
 #       download.download(result, date_next, compare_dir) 

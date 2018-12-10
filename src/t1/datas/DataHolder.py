@@ -13,6 +13,7 @@ import sys
 sys.path.append('../..')
 from config.Config import Config 
 from t1.MyLog import MyLog
+from utils.Utils import Utils
 from concurrent.futures import ThreadPoolExecutor
 
 class DataHolder(object):
@@ -34,12 +35,12 @@ class DataHolder(object):
       def add_selled(self,code,save=False):
           self.__selled.append(code)
           if save:
-             self.__tpe.submit(self.saveData,self.__data[code].get_data())   
+             self.__tpe.submit(self.save_to_excel,self.__data[code])   
 
       def add_buyed(self,code,save=False):
           self.__buyed.append(code)
           if save:
-             self.__tpe.submit(self.saveData,self.__data[code].get_data())
+             self.__tpe.submit(self.save_to_excel,self.__data[code])
 
       def get_data(self):
           return self.__data
@@ -86,4 +87,15 @@ class DataHolder(object):
           except Exception as e:
                  MyLog.error('[%s %s] save [%s] data error \n' % (line['date'],line['time'],code))
                  MyLog.error(str(e) +  '\n')
+
+      @Utils.async
+      def save_to_excel(self, stock):
+          try:
+              now_line = stock.get_Lastline()
+              df = pd.DataFrame(stock.get_data())
+              writer = pd.ExcelWriter('D:/aqua/stock/stocking/data/result/%s-%s.xlsx' % (stock.get_code(),now_line['time'].replace(':','-')))
+              df.to_excel(writer,'Sheet1')
+              writer.save()
+          except Exception as e:
+                 MyLog.error('save %s error, e = %s' % (stock.get_code(), e))            
  
