@@ -53,12 +53,13 @@ class SellAnalyze(object):
 
 
       def getWinLossPercent(self,stock):
+          now_line = stock.get_Lastline()
           buy_price = stock.get_cache('buy_price')
           if buy_price is None:
              state = self.__config.get_t1()['seller']['state']   
              buy_price = state[stock.get_code()]['price']
              stock.set_cache('buy_price',buy_price)  
-          return self.getPercent(buy_price,stock)    
+          return (self.convertToFloat(now_line['price']) - buy_price) / buy_price * 100
               
 
       def getOpenPercent(self,stock):
@@ -84,7 +85,7 @@ class SellAnalyze(object):
                  return 0
 
 
-      def is_bc_point(self, stock, dh):
+      def is_bc_point(self, stock):
           now_line = stock.get_Lastline()
           now_price = self.convertToFloat(now_line['price'])
           lowest_price = self.convertToFloat(now_line['low'])
@@ -107,7 +108,7 @@ class SellAnalyze(object):
 
       def is_bc_sell(self, stock):
           now_line = stock.get_Lastline()
-          buy_price = stock.get_cache('buy_price')
+          buy_price = stock.get_cache('bc_buy_price')
           if buy_price is None:
              return False 
           if (self.convertToFloat(now_line['price']) - buy_price) / self.convertToFloat(now_line['pre_close']) * 100 >= self.__config.get_t1()['seller']['bc_sell_profit']:
@@ -117,11 +118,11 @@ class SellAnalyze(object):
 
       def is_ydxd(self, stock):
           datas = stock.get_data()
-          now_price = self.convertToFloat(data[-1]['price'])
+          now_price = self.convertToFloat(datas[-1]['price'])
           start = -20
           if len(datas) < 20:
-             start = len(data) * -1
-          temp = data[start:-1]
+             start = len(datas) * -1
+          temp = datas[start:]
           high = None
           low = None
           for row in temp:
@@ -130,9 +131,9 @@ class SellAnalyze(object):
                  high = price
               if low is None or price < low:
                  low = price    
-          if (high - now_price) / self.convertToFloat(data[-1]['pre_close']) * 100 < self.__config.get_t1()['seller']['ydxd']:
+          if (high - now_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 < self.__config.get_t1()['seller']['ydxd']:
              return False
-          if now_price == low or (now_price - low) / self.convertToFloat(data[-1]['pre_close']) * 100 > self.__config.get_t1()['bc_point']['p_limit_lowest']:
+          if now_price == low or (now_price - low) / self.convertToFloat(datas[-1]['pre_close']) * 100 > self.__config.get_t1()['bc_point']['p_limit_lowest']:
              return False
           return True   
 
@@ -142,7 +143,7 @@ class SellAnalyze(object):
 
 
       def calc(self,zs,stock,dh):
-          if stock.get_cache('buy_price') is not None:
+          if stock.get_cache('bc_buy_price') is not None:
              if self.is_bc_sell(stock):
                 return self.sell(stock)
              return False
@@ -238,9 +239,10 @@ class SellAnalyze(object):
           if self.__config.get_t1()['trade']['enable']:
              res = str(self.__trade.buy(df_final['code'],buyVolume,float(price)))
              if 'entrust_no' in res or 'success' in res:
-                 stock.set_cache('buy_price',d_price)
+                 stock.set_cache('bc_buy_price',d_price)
           elif self.__config.get_t1()['trade']['enableMock']:
                res = self.__mockTrade.mockTrade(df_final['code'],float(price),buyVolume)
                if res == 0:
-                  stock.set_cache('buy_price',d_price)
+                  stock.set_cache('bc_buy_price',d_price)
+          stock.set_cache('bc_buy_price',d_price)        
           return False
