@@ -3,7 +3,7 @@ __author__ = 'aqua'
 
 import download
 import hcdata
-import hitTopTest2
+# import hitTopTest2
 import AutoSellTest
 import datetime as dt
 from datetime import timedelta
@@ -15,7 +15,7 @@ if __name__ == '__main__':
    # code_pre_close_map = [('000760','3.58')]
    # date = '20180919'
 
-   code_pre_close_map = [('603398', '10.59')]
+   code_pre_close_map = [('002288', '4.46')]
    date = '20181211'
    date_next = '20181212'
    load_dir = '../../data/excels'

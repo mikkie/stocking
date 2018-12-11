@@ -148,8 +148,12 @@ class SellAnalyze(object):
                 state = self.__config.get_t1()['seller']['state']   
                 sellVolume = state[stock.get_code()]['volume'] 
                 if self.__config.get_t1()['trade']['enable']:
-                   if self.__trade.has_bc_buy(stock.get_code(), sellVolume):
-                      return self.sell(stock, sellVolume)
+                   now = dt.datetime.now()
+                   check_bc_buy_time = stock.get_cache('check_bc_buy_time')
+                   if check_bc_buy_time is None or (now - check_bc_buy_time).seconds >= 30:
+                      stock.set_cache('check_bc_buy_time', now) 
+                      if self.__trade.has_bc_buy(stock.get_code(), sellVolume):
+                         return self.sell(stock, sellVolume)
                    return False 
                 return self.sell(stock, sellVolume)
              return False
