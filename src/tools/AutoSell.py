@@ -10,6 +10,7 @@ sys.path.append('..')
 from config.Config import Config
 from t1.datas.DataHolder import DataHolder
 from t1.analyze.SellAnalyze import SellAnalyze
+from t1.trade.trade import Trade
 from t1.trade.MockTrade import MockTrade
 from t1.MyLog import MyLog
 from utils.Utils import Utils
@@ -53,6 +54,8 @@ if __name__ == '__main__':
          strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
    if setting.get_t1()['trade']['enableMock']:      
       mockTrade.relogin()
+   if setting.get_t1()['trade']['enable']:
+      trade = Trade()   
    pool = mp.Pool(1)
    manager = mp.Manager()
    queue = manager.Queue()
@@ -69,6 +72,11 @@ if __name__ == '__main__':
           if (now - interDataHolder['currentTime']).seconds > 60:
              interDataHolder['currentTime'] = now
              mockTrade.relogin()
+       if setting.get_t1()['trade']['enable']:
+          now = dt.datetime.now()
+          if (now - interDataHolder['currentTime']).seconds > 320:
+             interDataHolder['currentTime'] = now
+             trade.refresh()   
        df = ts.get_realtime_quotes(codeList)
        zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
        queue.put({'df' : df,'zs' : zs})
