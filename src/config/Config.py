@@ -151,12 +151,12 @@ class Config(object):
                      'win_bad' : 2.0 
                   },
                   'margin' : {
-                     '002288' : 0.5
+                     '603398' : 0.5
                   },
                   'state' : {
-                     '002288' : {
-                        'price' : 5.06,
-                        'volume' : 20000
+                     '603398' : {
+                        'price' : 10.59,
+                        'volume' : 2000
                      }
                   },
                   'bc_sell_profit' : 1.0,
