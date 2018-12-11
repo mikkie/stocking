@@ -56,7 +56,7 @@ if __name__ == '__main__':
    if setting.get_t1()['trade']['enableMock']:      
       mockTrade.relogin()
    if setting.get_t1()['trade']['enable']:
-      trade = Trade()   
+      trade = Trade(isSell=True)   
    pool = mp.Pool(1)
    manager = mp.Manager()
    queue = manager.Queue()
