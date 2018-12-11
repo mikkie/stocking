@@ -12,6 +12,7 @@ from t1.datas.DataHolder import DataHolder
 from t1.analyze.SellAnalyze import SellAnalyze
 from t1.trade.trade import Trade
 from t1.trade.MockTrade import MockTrade
+from t1.trade.ProxyManager import ProxyManager
 from t1.MyLog import MyLog
 from utils.Utils import Utils
 from sqlalchemy import create_engine
@@ -64,6 +65,7 @@ if __name__ == '__main__':
    interDataHolder = {
       'currentTime' : dt.datetime.now()
    }
+   proxyManager = ProxyManager(2)
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
@@ -77,8 +79,8 @@ if __name__ == '__main__':
           if (now - interDataHolder['currentTime']).seconds > 320:
              interDataHolder['currentTime'] = now
              trade.refresh()   
-       df = ts.get_realtime_quotes(codeList)
-       zs = ts.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'])
+       df = proxyManager.get_realtime_quotes(codeList,batch_size=0,use_proxy_no_batch=True)
+       zs = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
        queue.put({'df' : df,'zs' : zs})
 
    sched.start()
