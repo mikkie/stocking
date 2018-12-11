@@ -147,6 +147,10 @@ class SellAnalyze(object):
              if self.is_bc_sell(stock):
                 state = self.__config.get_t1()['seller']['state']   
                 sellVolume = state[stock.get_code()]['volume'] 
+                if self.__config.get_t1()['trade']['enable']:
+                   if self.__trade.has_bc_buy(stock.get_code(), sellVolume):
+                      return self.sell(stock, sellVolume)
+                   return False 
                 return self.sell(stock, sellVolume)
              return False
           ratio = 1

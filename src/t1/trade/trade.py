@@ -73,7 +73,20 @@ class Trade(object):
               return buyCount
           except Exception as e:
                  MyLog.info('查询当日买入数量失败,%s' % e)
-                 return 0    
+                 return 0  
+
+
+      def has_bc_buy(self, code, volume):
+          try:
+              j = self.__user.today_trades
+              if len(j) > 0:
+                 for stock in j:
+                     if stock['证券代码'].find(code) >= 0 and int(stock['成交数量']) == volume and stock['操作'].find('买入') >= 0:
+                        return True
+              return False
+          except Exception as e:
+                 MyLog.info('查询补仓失败,%s' % e)
+                 return False           
 
 
       def queryBalance(self):
