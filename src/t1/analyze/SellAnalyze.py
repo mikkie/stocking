@@ -156,9 +156,10 @@ class SellAnalyze(object):
                 return self.sell(stock, sellVolume)
              return False
           ratio = 1
+          my_stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['my_loss']
           stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['loss']
           stop_win = self.__config.get_t1()['seller'][stock.get_code()]['win']
-          if self.getWinLossPercent(stock) < stop_loss and self.getCurrentPercent(stock) < stop_loss:
+          if self.getWinLossPercent(stock) < my_stop_loss and self.getCurrentPercent(stock) < stop_loss:
              now_line = stock.get_Lastline()
              if now_line['time'] > '14:30:00':
                 return False
