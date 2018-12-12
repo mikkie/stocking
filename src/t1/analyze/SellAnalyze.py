@@ -56,8 +56,7 @@ class SellAnalyze(object):
           now_line = stock.get_Lastline()
           buy_price = stock.get_cache('buy_price')
           if buy_price is None:
-             state = self.__config.get_t1()['seller']['state']   
-             buy_price = state[stock.get_code()]['price']
+             buy_price = self.__config.get_t1()['seller'][stock.get_code()]['price']
              stock.set_cache('buy_price',buy_price)  
           return (self.convertToFloat(now_line['price']) - buy_price) / buy_price * 100
               
@@ -70,7 +69,7 @@ class SellAnalyze(object):
 
       def initLS(self,stock,dh,ratio):
           ccp = self.getWinLossPercent(stock)
-          ls = ccp - self.__config.get_t1()['seller']['margin'][stock.get_code()] * ratio
+          ls = ccp - self.__config.get_t1()['seller'][stock.get_code()]['margin'] * ratio
           if ls > self.__config.get_t1()['seller']['min_threshold']:
              stock.set_ls(ls)
 
@@ -89,7 +88,7 @@ class SellAnalyze(object):
           now_line = stock.get_Lastline()
           now_price = self.convertToFloat(now_line['price'])
           lowest_price = self.convertToFloat(now_line['low'])
-          if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 > self.__config.get_t1()['bc_point']['p_limit_lowest']:
+          if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 > self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
              return False
           datas = stock.get_data()
           start = -15
@@ -100,7 +99,7 @@ class SellAnalyze(object):
           amount_ratio = 100
           if sell_amount != 0.0:
              amount_ratio = amount / sell_amount 
-          tag = amount > self.__config.get_t1()['bc_point']['min_amount'] and amount_ratio > self.__config.get_t1()['bc_point']['amount_ratio'] 
+          tag = amount > self.__config.get_t1()['seller'][stock.get_code()]['min_amount'] and amount_ratio > self.__config.get_t1()['seller'][stock.get_code()]['amount_ratio'] 
           if tag:
              MyLog.info('bc buy match: time = %s, lowest_price = %s, buy_amount = %s, sell_amount = %s, amount_ratio = %s' % (now_line['date'] + ' ' + now_line['time'], lowest_price, amount, sell_amount, amount_ratio)) 
           return tag
@@ -111,7 +110,7 @@ class SellAnalyze(object):
           buy_price = stock.get_cache('bc_buy_price')
           if buy_price is None:
              return False 
-          if (self.convertToFloat(now_line['price']) - buy_price) / self.convertToFloat(now_line['pre_close']) * 100 >= self.__config.get_t1()['seller']['bc_sell_profit']:
+          if (self.convertToFloat(now_line['price']) - buy_price) / self.convertToFloat(now_line['pre_close']) * 100 >= self.__config.get_t1()['seller'][stock.get_code()]['bc_sell_profit']:
              return True 
           return False
 
@@ -131,9 +130,9 @@ class SellAnalyze(object):
                  high = price
               if low is None or price < low:
                  low = price    
-          if (high - now_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 < self.__config.get_t1()['seller']['ydxd']:
+          if (high - now_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 < self.__config.get_t1()['seller'][stock.get_code()]['ydxd']:
              return False
-          if now_price == low or (now_price - low) / self.convertToFloat(datas[-1]['pre_close']) * 100 > self.__config.get_t1()['bc_point']['p_limit_lowest']:
+          if now_price == low or (now_price - low) / self.convertToFloat(datas[-1]['pre_close']) * 100 > self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
              return False
           return True   
 
@@ -145,8 +144,7 @@ class SellAnalyze(object):
       def calc(self,zs,stock,dh):
           if stock.get_cache('bc_buy_price') is not None:
              if self.is_bc_sell(stock):
-                state = self.__config.get_t1()['seller']['state']   
-                sellVolume = state[stock.get_code()]['volume'] 
+                sellVolume = self.__config.get_t1()['seller'][stock.get_code()]['volume'] 
                 if self.__config.get_t1()['trade']['enable']:
                    now = dt.datetime.now()
                    check_bc_buy_time = stock.get_cache('check_bc_buy_time')
@@ -158,12 +156,8 @@ class SellAnalyze(object):
                 return self.sell(stock, sellVolume)
              return False
           ratio = 1
-          stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_good']
-          stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_good']
-          if self.isZSMatch(zs,stock):
-             ratio = self.__config.get_t1()['seller']['ratio']
-             stop_loss = self.__config.get_t1()['seller']['stop_loss_win']['loss_bad']
-             stop_win = self.__config.get_t1()['seller']['stop_loss_win']['win_bad']
+          stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['loss']
+          stop_win = self.__config.get_t1()['seller'][stock.get_code()]['win']
           if self.getWinLossPercent(stock) < stop_loss and self.getCurrentPercent(stock) < stop_loss:
              now_line = stock.get_Lastline()
              if now_line['time'] > '14:30:00':
@@ -190,7 +184,7 @@ class SellAnalyze(object):
           else:
                stock.reset_sellSignal()
                ccp = self.getWinLossPercent(stock)
-               tls = ccp - self.__config.get_t1()['seller']['margin'][stock.get_code()] * ratio
+               tls = ccp - self.__config.get_t1()['seller'][stock.get_code()]['margin'] * ratio
                if tls > stock.get_ls():
                   stock.set_ls(tls) 
                return False     
@@ -242,8 +236,7 @@ class SellAnalyze(object):
           p = (float(df_final['price']) - float(df_final['pre_close'])) / float(df_final['pre_close'])
           d_price = round(float(df_final['pre_close']) * (1 + p + 0.005), 2)
           price = str('%.2f' % d_price)
-          state = self.__config.get_t1()['seller']['state']   
-          buyVolume = state[stock.get_code()]['volume']
+          buyVolume = self.__config.get_t1()['seller'][stock.get_code()]['volume']
           info = '在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
           MyLog.info(info)
           if self.__config.get_t1()['trade']['enable']:
