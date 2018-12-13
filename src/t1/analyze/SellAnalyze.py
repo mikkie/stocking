@@ -110,7 +110,7 @@ class SellAnalyze(object):
           buy_price = stock.get_cache('bc_buy_price')
           if buy_price is None:
              return False 
-          if (self.convertToFloat(now_line['price']) - buy_price) / self.convertToFloat(now_line['pre_close']) * 100 >= self.__config.get_t1()['seller'][stock.get_code()]['bc_sell_profit']:
+          if (self.convertToFloat(now_line['price']) - buy_price) / buy_price * 100 >= self.__config.get_t1()['seller'][stock.get_code()]['bc_sell_profit']:
              return True 
           return False
 
@@ -222,7 +222,7 @@ class SellAnalyze(object):
           if not self.can_sell(stock):
              return False 
           last_line = stock.get_Lastline()
-          price = float(str('%.2f' % (float(last_line['price']) - self.__config.get_t1()['trade']['minusPrice'])))
+          price = float(str('%.2f' % (float(last_line['price']))))
           info = '[%s] 在 %s 以 %s 卖出 [%s]%s 全部股票' % (Utils.getCurrentTime(),str(last_line['date']) + ' ' + str(last_line['time']), price, last_line['code'], last_line['name'])
           MyLog.info(info)
           if self.__config.get_t1()['trade']['enable']:
@@ -234,8 +234,7 @@ class SellAnalyze(object):
 
       def bc_buy(self, stock):
           df_final = stock.get_Lastline()     
-          p = (float(df_final['price']) - float(df_final['pre_close'])) / float(df_final['pre_close'])
-          d_price = round(float(df_final['pre_close']) * (1 + p + 0.005), 2)
+          d_price = round(float(df_final['price']), 2)
           price = str('%.2f' % d_price)
           buyVolume = self.__config.get_t1()['seller'][stock.get_code()]['volume']
           info = '在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
