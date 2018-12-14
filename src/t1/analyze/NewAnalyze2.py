@@ -322,7 +322,7 @@ class NewAnalyze2(object):
 
       def is_tail_match(self, stock, dh):
           now_line = stock.get_Lastline()
-          if now_line['time'] < '14:30:00':
+          if now_line['time'] < '14:30:00' or now_line['time'] > '14:50:00':
              return False
           cur_p = self.getCurrentPercent(stock)
           if cur_p > self.__config.get_t1()['buy_tail']['p_range'][1] or cur_p < self.__config.get_t1()['buy_tail']['p_range'][0]:
