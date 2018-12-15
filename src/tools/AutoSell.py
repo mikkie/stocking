@@ -69,6 +69,12 @@ if __name__ == '__main__':
 
    @sched.scheduled_job('interval', seconds=setting.get_t1()['get_data_inter'])
    def getData():
+       strTime = time.strftime('%H:%M:%S',time.localtime(time.time()))
+       if strTime > '11:30:30' and strTime < '12:59:30': 
+          return
+       if strTime > '15:30:30':
+          os._exit(0)
+          return
        if setting.get_t1()['trade']['enableMock']:
           now = dt.datetime.now()
           if (now - interDataHolder['currentTime']).seconds > 60:
