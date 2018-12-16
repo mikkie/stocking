@@ -187,6 +187,7 @@ class Config(object):
                   'zs' : -0.5
               },
               'buy_tail' : {
+                  'cg_p' : 0.5,
                   'p_range' : [-6.5,2.0],
                   'p_limit_lowest' : 0.5,
                   'high_low_diff' : 3.0,

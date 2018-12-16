@@ -331,7 +331,7 @@ class NewAnalyze2(object):
           lowest_price = self.convertToFloat(now_line['low'])
           highest_price = self.convertToFloat(now_line['high'])
           open_price = self.convertToFloat(now_line['open'])
-          if open_price == highest_price:
+          if (highest_price - open_price) / self.convertToFloat(now_line['pre_close']) * 100 < self.__config.get_t1()['buy_tail']['cg_p']:
              return False 
           if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 > self.__config.get_t1()['buy_tail']['p_limit_lowest']:
              return False  
