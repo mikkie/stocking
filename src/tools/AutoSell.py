@@ -28,7 +28,7 @@ engine = create_engine(setting.get_DBurl())
 analyze = SellAnalyze()
 
 
-def run(queue):
+def run(queue, balance):
     MyLog.info('child process %s is running' % os.getpid())
     try:
         dh = None
@@ -36,12 +36,14 @@ def run(queue):
         while data is not None and data['df'] is not None and len(data['df']) > 0:
             df = data['df']
             zs = data['zs']
+            if data['balance'] is not None:
+               balance.value = data['balance']
             s = int(round(time.time() * 1000))
             if dh is None:
                codeList = df['code'].tolist()
                dh = DataHolder(codeList) 
             dh.addSellData(df)
-            analyze.calcMain(zs,dh)
+            analyze.calcMain(zs,dh,balance)
             MyLog.debug('process %s, calc data time = %d' % (os.getpid(),(int(round(time.time() * 1000)) - s))) 
             data = queue.get(True)   
     except Exception as e:
@@ -60,10 +62,12 @@ if __name__ == '__main__':
    pool = mp.Pool(1)
    manager = mp.Manager()
    queue = manager.Queue()
-   pool.apply_async(run, (queue,))
+   balance = manager.Value('i',setting.get_t1()['trade']['balance'])
+   pool.apply_async(run, (queue,balance))
    sched = BlockingScheduler()
    interDataHolder = {
-      'currentTime' : dt.datetime.now()
+      'currentTime' : dt.datetime.now(),
+      'balance' : None
    }
    proxyManager = ProxyManager(2)
 
@@ -84,9 +88,10 @@ if __name__ == '__main__':
           now = dt.datetime.now()
           if (now - interDataHolder['currentTime']).seconds > 320:
              interDataHolder['currentTime'] = now
-             trade.refresh()   
+             trade.refresh() 
+             interDataHolder['balance'] = trade.queryBalance()  
        df = proxyManager.get_realtime_quotes(codeList,batch_size=0,use_proxy_no_batch=True)
        zs = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-       queue.put({'df' : df,'zs' : zs})
+       queue.put({'df' : df,'zs' : zs, 'balance' : interDataHolder['balance']})
 
    sched.start()

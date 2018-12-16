@@ -25,14 +25,14 @@ class SellAnalyze(object):
              self.__mockTrade = MockTrade()    
           self.__engine = create_engine(self.__config.get_DBurl())
 
-      def calcMain(self,zs,dh):
+      def calcMain(self,zs,dh,balance):
           data = dh.get_data()
           for code in data:
               if len(dh.get_selled()) > 0:
                  if code in dh.get_selled():
                     continue 
               try:  
-                 if self.calc(zs,data[code],dh):
+                 if self.calc(zs,data[code],dh,balance):
                     dh.add_selled(code,True)
               except Exception as e:
                      last_line = data[code].get_Lastline()
@@ -141,7 +141,7 @@ class SellAnalyze(object):
 
 
 
-      def calc(self,zs,stock,dh):
+      def calc(self,zs,stock,dh,balance):
           if stock.get_cache('bc_buy_price') is not None:
              if self.is_bc_sell(stock):
                 sellVolume = self.__config.get_t1()['seller'][stock.get_code()]['volume'] 
@@ -159,12 +159,13 @@ class SellAnalyze(object):
           my_stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['my_loss']
           stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['loss']
           stop_win = self.__config.get_t1()['seller'][stock.get_code()]['win']
-          if self.getWinLossPercent(stock) < my_stop_loss and self.getCurrentPercent(stock) < stop_loss:
+          enable_bc = self.__config.get_t1()['seller'][stock.get_code()]['enable_bc']
+          if enable_bc and self.getWinLossPercent(stock) < my_stop_loss and self.getCurrentPercent(stock) < stop_loss:
              now_line = stock.get_Lastline()
              if now_line['time'] > '14:30:00':
                 return False
              if self.is_bc_point(stock) or self.is_ydxd(stock):
-                return self.bc_buy(stock)  
+                return self.bc_buy(stock,balance)  
             #  stock.add_sellSignal()
             #  if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
             #     return self.sell(stock)
@@ -232,11 +233,14 @@ class SellAnalyze(object):
           return True
 
 
-      def bc_buy(self, stock):
+      def bc_buy(self, stock, balance):
           df_final = stock.get_Lastline()     
           d_price = round(float(df_final['price']), 2)
           price = str('%.2f' % d_price)
           buyVolume = self.__config.get_t1()['seller'][stock.get_code()]['volume']
+          buyMoney = d_price * buyVolume
+          if balance is not None and buyMoney > balance.value or buyVolume == 0:
+             return False
           info = '在 %s 以 %s 买入 [%s]%s %s 股' % (str(df_final['date']) + ' ' + str(df_final['time']), price, df_final['code'], df_final['name'], str(buyVolume))
           MyLog.info(info)
           if self.__config.get_t1()['trade']['enable']:
