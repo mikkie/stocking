@@ -109,7 +109,7 @@ class Trade(object):
                  return False    
 
 
-# trade = Trade()
+# trade = Trade(isSell=True)
 # #buy1
 # trade.buy('300022',100,4.68)
 # #buy1
@@ -129,7 +129,8 @@ class Trade(object):
 
 # trade.sell('002121',5.80)
 
-# trade.sell('002121',7.14)
+# print(trade.sell('002229',6.89))
+# print(trade.sell('002229',6.89))
 # #sell2
 # trade.sell('002031',3.41) 
 
