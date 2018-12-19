@@ -186,20 +186,6 @@ class Config(object):
                      'amount_ratio' : 2.0,
                      'enable_bc' : True
                   },
-                  '300698' : {
-                     'my_loss' : -3.5,
-                     'loss' : -1.0,
-                     'win' : 0.5,
-                     'margin' : 0.5,
-                     'price' : 16.835,
-                     'volume' : 700,
-                     'bc_sell_profit' : 0.8,
-                     'ydxd' : 1.0,
-                     'p_limit_lowest' : 0.5,
-                     'min_amount' : 1500000,
-                     'amount_ratio' : 2.0,
-                     'enable_bc' : True
-                  },
                   'min_threshold' : -8,
                   'cancelTime' : 30,
                   'maxSellSignal' : 20
