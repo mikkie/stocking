@@ -145,11 +145,11 @@ class Config(object):
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
                   '002089' : {
-                     'my_loss' : -3.150,
+                     'my_loss' : -3.770,
                      'loss' : -1.0,
                      'win' : 1.0,
                      'margin' : 0.5,
-                     'price' : 4.708,
+                     'price' : 4.666,
                      'volume' : 2500,
                      'bc_sell_profit' : 0.8,
                      'ydxd' : 1.0,
