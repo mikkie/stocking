@@ -146,7 +146,7 @@ class Config(object):
               'seller' : {
                   '002089' : {
                      'my_loss' : -2.270,
-                     'loss' : -0.5,
+                     'loss' : -1.0,
                      'win' : 1.0,
                      'margin' : 0.5,
                      'price' : 4.666,
@@ -160,7 +160,7 @@ class Config(object):
                   },
                   '002229' : {
                      'my_loss' : -2.310,
-                     'loss' : -0.5,
+                     'loss' : -1.0,
                      'win' : 1.0,
                      'margin' : 0.5,
                      'price' : 7.094,
@@ -174,7 +174,7 @@ class Config(object):
                   },
                   '300588' : {
                      'my_loss' : -2.670,
-                     'loss' : -0.5,
+                     'loss' : -1.0,
                      'win' : 1.0,
                      'margin' : 0.5,
                      'price' : 11.353,
@@ -184,7 +184,7 @@ class Config(object):
                      'p_limit_lowest' : 0.5,
                      'min_amount' : 1500000,
                      'amount_ratio' : 2.0,
-                     'enable_bc' : True
+                     'enable_bc' : False
                   },
                   'min_threshold' : -8,
                   'cancelTime' : 30,

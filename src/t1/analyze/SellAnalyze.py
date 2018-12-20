@@ -118,21 +118,19 @@ class SellAnalyze(object):
       def is_ydxd(self, stock):
           datas = stock.get_data()
           now_price = self.convertToFloat(datas[-1]['price'])
+          lowest_price = self.convertToFloat(datas[-1]['low'])
           start = -20
           if len(datas) < 20:
              start = len(datas) * -1
           temp = datas[start:]
           high = None
-          low = None
           for row in temp:
               price = self.convertToFloat(row['price'])
               if high is None or price > high:
                  high = price
-              if low is None or price < low:
-                 low = price    
           if (high - now_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 < self.__config.get_t1()['seller'][stock.get_code()]['ydxd']:
              return False
-          if now_price == low or (now_price - low) / self.convertToFloat(datas[-1]['pre_close']) * 100 > self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
+          if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 > self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
              return False
           return True   
 
@@ -160,11 +158,11 @@ class SellAnalyze(object):
           stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['loss']
           stop_win = self.__config.get_t1()['seller'][stock.get_code()]['win']
           enable_bc = self.__config.get_t1()['seller'][stock.get_code()]['enable_bc']
-          if enable_bc and self.getWinLossPercent(stock) < my_stop_loss and self.getCurrentPercent(stock) < stop_loss:
+          if enable_bc and self.getWinLossPercent(stock) < my_stop_loss:
              now_line = stock.get_Lastline()
              if now_line['time'] > '14:30:00':
                 return False
-             if self.is_bc_point(stock) or self.is_ydxd(stock):
+             if (self.getCurrentPercent(stock) < stop_loss and self.is_bc_point(stock)) or self.is_ydxd(stock):
                 return self.bc_buy(stock,balance)  
             #  stock.add_sellSignal()
             #  if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
