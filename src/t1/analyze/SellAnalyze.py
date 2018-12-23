@@ -84,6 +84,17 @@ class SellAnalyze(object):
                  return 0
 
 
+      def is_force_bc(self, stock):
+          bc_force_p = self.__config.get_t1()['seller']['bc_force_p']
+          now_line = stock.get_Lastline()
+          now_price = self.convertToFloat(now_line['price'])
+          if self.getCurrentPercent(stock) < bc_force_p:
+             lowest_price = self.convertToFloat(now_line['low'])
+             if now_price != lowest_price and (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 < self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
+                return True
+          return False
+
+
       def is_bc_point(self, stock):
           now_line = stock.get_Lastline()
           now_price = self.convertToFloat(now_line['price'])
@@ -158,12 +169,11 @@ class SellAnalyze(object):
           stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['loss']
           stop_win = self.__config.get_t1()['seller'][stock.get_code()]['win']
           enable_bc = self.__config.get_t1()['seller'][stock.get_code()]['enable_bc']
-          bc_force_p = self.__config.get_t1()['seller']['bc_force_p']
           if enable_bc and self.getWinLossPercent(stock) < my_stop_loss:
              now_line = stock.get_Lastline()
              if now_line['time'] > '14:30:00':
                 return False
-             if self.getCurrentPercent(stock) < bc_force_p or (self.getCurrentPercent(stock) < stop_loss and self.is_bc_point(stock)) or self.is_ydxd(stock):
+             if self.is_force_bc(stock) or (self.getCurrentPercent(stock) < stop_loss and self.is_bc_point(stock)) or self.is_ydxd(stock):
                 return self.bc_buy(stock,balance)  
             #  stock.add_sellSignal()
             #  if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
