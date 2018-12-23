@@ -146,7 +146,7 @@ class Config(object):
               'seller' : {
                   '002089' : {
                      'my_loss' : -3.0,
-                     'loss' : 0.0,
+                     'loss' : -0.5,
                      'win' : 1.0,
                      'margin' : 0.5,
                      'price' : 4.666,
@@ -174,7 +174,7 @@ class Config(object):
                   },
                   '300588' : {
                      'my_loss' : -3.0,
-                     'loss' : 0.0,
+                     'loss' : -0.5,
                      'win' : 0.5,
                      'margin' : 0.25,
                      'price' : 11.353,
