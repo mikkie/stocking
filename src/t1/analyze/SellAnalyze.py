@@ -194,7 +194,7 @@ class SellAnalyze(object):
                 return False
           if self.getWinLossPercent(stock) < stock.get_ls():
              stock.add_sellSignal()
-             if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal']: 
+             if stock.get_sellSignal() > self.__config.get_t1()['seller']['maxSellSignal'] and self.getCurrentPercent(stock) >= self.__config.get_t1()['seller'][stock.get_code()]['win']: 
                 return self.sell(stock)
              return False
           else:
