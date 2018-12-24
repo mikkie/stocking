@@ -88,9 +88,11 @@ class SellAnalyze(object):
           bc_force_p = self.__config.get_t1()['seller']['bc_force_p']
           now_line = stock.get_Lastline()
           now_price = self.convertToFloat(now_line['price'])
-          if self.getCurrentPercent(stock) < bc_force_p:
+          current_p = self.getCurrentPercent(stock)
+          if current_p < bc_force_p:
              lowest_price = self.convertToFloat(now_line['low'])
              if now_price != lowest_price and (now_price - lowest_price) / self.convertToFloat(now_line['pre_close']) * 100 < self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
+                MyLog.info('force bc match, time = %s, p = %s' % (now_line['date'] + ' ' + now_line['time'], current_p))
                 return True
           return False
 
@@ -127,6 +129,7 @@ class SellAnalyze(object):
 
 
       def is_ydxd(self, stock):
+          now_line = stock.get_Lastline()
           datas = stock.get_data()
           now_price = self.convertToFloat(datas[-1]['price'])
           lowest_price = self.convertToFloat(datas[-1]['low'])
@@ -139,10 +142,12 @@ class SellAnalyze(object):
               price = self.convertToFloat(row['price'])
               if high is None or price > high:
                  high = price
-          if (high - now_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 < self.__config.get_t1()['seller'][stock.get_code()]['ydxd']:
+          ydxd = (high - now_price) / self.convertToFloat(datas[-1]['pre_close']) * 100
+          if ydxd < self.__config.get_t1()['seller'][stock.get_code()]['ydxd']:
              return False
           if now_price == lowest_price or (now_price - lowest_price) / self.convertToFloat(datas[-1]['pre_close']) * 100 > self.__config.get_t1()['seller'][stock.get_code()]['p_limit_lowest']:
              return False
+          MyLog.info('ydxd match: time = %s, p = %s' % (now_line['date'] + ' ' + now_line['time'], ydxd))  
           return True   
 
 
