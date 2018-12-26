@@ -150,7 +150,7 @@ class Config(object):
                      'win' : 1.0,
                      'margin' : 0.25,
                      'price' : 5.760,
-                     'volume' : 2500,
+                     'volume' : 4000,
                      'bc_sell_profit' : 1.0,
                      'ydxd' : 1.2,
                      'p_limit_lowest' : 0.5,
