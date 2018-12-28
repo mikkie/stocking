@@ -242,9 +242,15 @@ class SellAnalyze(object):
           info = '[%s] 在 %s 以 %s 卖出 [%s]%s 全部股票' % (Utils.getCurrentTime(),str(last_line['date']) + ' ' + str(last_line['time']), price, last_line['code'], last_line['name'])
           MyLog.info(info)
           if self.__config.get_t1()['trade']['enable']:
-             return self.__trade.sell(stock.get_code(),price, amount = amount)
+             tag = self.__trade.sell(stock.get_code(),price, amount = amount)
+             if amount is not None:
+                return True
+             return tag  
           elif self.__config.get_t1()['trade']['enableMock']:
-               return self.__mockTrade.sell(stock.get_code(),price) 
+               tag = self.__mockTrade.sell(stock.get_code(),price)
+               if amount is not None:
+                  return True
+               return tag 
           return True
 
 
