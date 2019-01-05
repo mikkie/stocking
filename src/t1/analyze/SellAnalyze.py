@@ -159,15 +159,16 @@ class SellAnalyze(object):
           if stock.get_cache('bc_buy_price') is not None:
              if self.is_bc_sell(stock):
                 sellVolume = self.__config.get_t1()['seller'][stock.get_code()]['volume'] 
-                if self.__config.get_t1()['trade']['enable']:
-                   now = dt.datetime.now()
-                   check_bc_buy_time = stock.get_cache('check_bc_buy_time')
-                   if check_bc_buy_time is None or (now - check_bc_buy_time).seconds >= 30:
-                      stock.set_cache('check_bc_buy_time', now) 
+                now = dt.datetime.now()
+                check_bc_buy_time = stock.get_cache('check_bc_buy_time')
+                if check_bc_buy_time is None or (now - check_bc_buy_time).seconds >= 30:
+                   stock.set_cache('check_bc_buy_time', now) 
+                   if self.__config.get_t1()['trade']['enable']:
                       if self.__trade.has_bc_buy(stock.get_code(), sellVolume):
                          return self.sell(stock, sellVolume)
-                   return False 
-                return self.sell(stock, sellVolume)
+                   if self.__config.get_t1()['trade']['enableMock']:
+                      if self.__mockTrade.has_buy(stock.get_code(), sellVolume):
+                         return self.sell(stock, sellVolume)       
              return False
           ratio = 1
           my_stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['my_loss']
@@ -247,7 +248,7 @@ class SellAnalyze(object):
                 return True
              return tag  
           elif self.__config.get_t1()['trade']['enableMock']:
-               tag = self.__mockTrade.sell(stock.get_code(),price)
+               tag = self.__mockTrade.sell(stock.get_code(),price, amount = amount)
                if amount is not None:
                   return True
                return tag 

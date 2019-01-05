@@ -5,6 +5,9 @@ import requests
 import time
 import json
 import datetime as dt
+# import sys
+# sys.path.append('..')
+# import MyLog
 from ..MyLog import MyLog
 
 class MockTrade(object):
@@ -19,7 +22,7 @@ class MockTrade(object):
               'Host':'mncg.10jqka.com.cn',
               'Referer':'http://mncg.10jqka.com.cn/cgiwt/index/index',
               'X-Requested-With':'XMLHttpRequest',
-              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; isSaveAccount=0; searchGuide=sg; __utma=156575163.844587348.1519633850.1528420928.1529396733.87; __utmz=156575163.1529396733.87.87.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; v=Akr8-CBmJa1OLqkBuvkpMOnRmzvoO86WwL9COdSD9h0oh-TtvMsepZBPklqn; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1529396747,1529630582,1529631919,1529889662; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1Mjk4ODk2OTE6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MWJkMTIzYTFkZWZjMjIyODlkMWVmZTU3M2Q1NzFmNGU2OmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=c3a53fac15ec05fc5dc3c5d9070547ad; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=timestamp; PHPSESSID=fe7218bb14621b3f6b8460eeb93c30a0',
+              'Cookie':'uaid=3e9d33c7f0daebe595757fcd5d3722ba; searchGuide=sg; BAIDU_SSP_lcr=http://www.yamixed.com/fav/article/2/157; __utma=156575163.844587348.1519633850.1540181789.1546674715.135; __utmc=156575163; __utmz=156575163.1546674715.135.135.utmcsr=yamixed.com|utmccn=(referral)|utmcmd=referral|utmcct=/fav/article/2/157; __utmt=1; __utmb=156575163.2.10.1546674715; user=MDphcXVhSVFjOjpOb25lOjUwMDo0MjUzOTk0Njc6NywxMTExMTExMTExMSw0MDs0NCwxMSw0MDs2LDEsNDA7NSwxLDQwOzEsMSw0MDsyLDEsNDA7MywxLDQwOzUsMSw0MDs4LDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxLDQwOjI0Ojo6NDE1Mzk5NDY3OjE1NDY2NzQ4Mjc6OjoxNTA2MDQ4OTYwOjg2NDAwOjA6MWJjMGM1ODVjMGRmYzQ3ODI0OWNhN2I5MGRkNjViODUwOmRlZmF1bHRfMjox; userid=415399467; u_name=aquaIQc; escapename=aquaIQc; ticket=a9d9252b38c409ad443b44c45eb2c736; v=Apos6ND2kqWd4B4Jtg7pEV8n60u_yx66kE-SSaQTRi34FzR9jFtutWDf4l53; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1546674757,1546674855; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1546674855; PHPSESSID=26cb7de8af1f3770bbe6e41ee804cc75; isSaveAccount=0',
               'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36'
           }
 
@@ -52,6 +55,23 @@ class MockTrade(object):
           except Exception as e:
                  MyLog.info('模拟交易失败code = %s,price = %s, amount = %s, e = %s' % (code,price,amount,e))
                  return ''  
+
+
+      def query_balance(self):
+          self.__header['Cookie'] = self.__header['Cookie'].replace('timestamp',str(time.time()))
+          try:   
+             postData = {
+              'mkcode' : 1,
+              'gdzh' : '0098894246',
+              'type' : 'cmd_wt_mairu',
+              'updateClass' : 'qryzijin|qryChicang|'
+             }
+             response = requests.post('http://mncg.10jqka.com.cn/cgiwt/delegate/updateclass',data=postData, headers=self.__header)
+             result = json.loads(response.text)
+             return float(result['result']['qryzijin']['result']['data']['kyje'])
+          except Exception as e:
+                 MyLog.MyLog.info('can not get balance %s' % e)
+                 return None
 
 
       def getHoldStocks(self):
@@ -98,44 +118,71 @@ class MockTrade(object):
 
 
       def queryBuyStocks(self):
-          jsonData = self.queryChenjiao()
-          j = json.loads(jsonData)
-          stockList = j['result']['list']
-          buyCount = 0
-          if len(stockList) > 0:
-             for stock in stockList:           
-                 if stock['d_2109'] == '买入':
-                    buyCount = buyCount + 1
-          return buyCount     
+          try:
+             jsonData = self.queryChenjiao()
+             j = json.loads(jsonData)
+             stockList = j['result']['list']
+             buyCount = 0
+             if len(stockList) > 0:
+                for stock in stockList:           
+                    if stock['d_2109'] == '买入':
+                       buyCount = buyCount + 1
+             return buyCount
+          except Exception as e:
+                 MyLog.info('can not queryBuyStocks %s' % e)
+                 return 0       
+
+
+      def has_buy(self, code, volume):
+          try:
+             jsonData = self.queryChenjiao()
+             j = json.loads(jsonData)
+             stockList = j['result']['list']
+             if len(stockList) > 0:
+                for stock in stockList:           
+                    if stock['d_2109'] == '买入' and stock['d_2102'] == code and int(stock['d_2128']) == volume:
+                       return True 
+             return False
+          except Exception as e:
+                 MyLog.info('can not has_buy %s' % e)
+                 return False  
 
 
       def cancelAllBuy(self):
-          jsonData = self.queryDeligated()
-          j = json.loads(jsonData)
-          if 'result' not in j or 'list' not in j['result']:
-              return
-          stockList = j['result']['list']
-          if len(stockList) > 0:
-             for stock in stockList:
-                 if (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '买入':
-                    self.cancelDeligated(stock['d_2135'],stock['d_2139'])
+          try:
+             jsonData = self.queryDeligated()
+             j = json.loads(jsonData)
+             if 'result' not in j or 'list' not in j['result']:
+                 return
+             stockList = j['result']['list']
+             if len(stockList) > 0:
+                for stock in stockList:
+                    if (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '买入':
+                       self.cancelDeligated(stock['d_2135'],stock['d_2139'])
+          except Exception as e:
+                 MyLog.info('can not cancelAllBuy %s' % e)
+
 
       def cancelBuy(self,code):
-          jsonData = self.queryDeligated()
-          j = json.loads(jsonData)
-          if 'result' not in j or 'list' not in j['result']:
-              return -1
-          stockList = j['result']['list']
-          if len(stockList) > 0:
-             for stock in stockList:
-                 if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '买入':
-                    text = self.cancelDeligated(stock['d_2135'],stock['d_2139'])
-                    j = json.loads(text)
-                    return j['errorcode']
-          return -1      
+          try:
+             jsonData = self.queryDeligated()
+             j = json.loads(jsonData)
+             if 'result' not in j or 'list' not in j['result']:
+                 return -1
+             stockList = j['result']['list']
+             if len(stockList) > 0:
+                for stock in stockList:
+                    if stock['d_2102'] == code and (int(stock['d_2126']) - int(stock['d_2128'])) > 0 and stock['d_2105'] != '全部撤单' and stock['d_2109'] == '买入':
+                       text = self.cancelDeligated(stock['d_2135'],stock['d_2139'])
+                       j = json.loads(text)
+                       return j['errorcode']
+             return -1
+          except Exception as e:
+                 MyLog.info('can not cancelBuy %s' % e)    
+                 return -1   
 
 
-      def sell(self,code,price):
+      def sell(self,code,price, amount=None):
           try:
              isSelled = True
              jsonData = self.queryDeligated()
@@ -155,7 +202,10 @@ class MockTrade(object):
                 for stock in stockList:
                     if stock['d_2102'] == code and int(stock['d_2121']) > 0:
                        isSelled = False 
-                       self.mockTrade(code,price,int(stock['d_2121']),tradeType='cmd_wt_maichu') 
+                       sellAmount = int(stock['d_2121'])
+                       if amount is not None:
+                          sellAmount = amount      
+                       self.mockTrade(code,price,sellAmount,tradeType='cmd_wt_maichu') 
              return isSelled
           except Exception as e:
                  MyLog.info('sell [%s] error' % code)
@@ -165,12 +215,13 @@ class MockTrade(object):
 
 # trade = MockTrade()
 # res = trade.relogin()
-# MyLog.info(trade.sell('002012',7.68))
+# print(trade.has_buy('000856',1000))
+# print(trade.sell('000856',14.00))
+# trade.cancelAllBuy()
+# print(trade.query_balance())
 # MyLog.info(trade.sell('300191',23.20))
 # MyLog.info(trade.sell('300722',46.99))
 # MyLog.info(trade.sell('603080',37.04))
 # res = trade.mockTrade('300231',10.00,100)
-# count = trade.queryBuyStocks()
-# MyLog.info(count)
 
 

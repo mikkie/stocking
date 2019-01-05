@@ -221,11 +221,17 @@ if __name__ == '__main__':
        timestamp = dt.datetime.now()
        if setting.get_t1()['trade']['enableMock']:
           delSeconds = (timestamp - interDataHolder['currentTime']).seconds
+          delBalanceSeconds = (timestamp - interDataHolder['balanceTime']).seconds
           delQueryBuySeconds = (timestamp - interDataHolder['queryBuyTime']).seconds
           if delSeconds > 30:
              interDataHolder['currentTime'] = timestamp
              interDataHolder['zs'] = proxyManager.get_realtime_quotes(['sh','sz','hs300','sz50','zxb','cyb'],batch_size=0,use_proxy_no_batch=True)
-          if delQueryBuySeconds > 120:
+          if delBalanceSeconds > 320:
+             interDataHolder['balanceTime'] = timestamp
+             balance = mockTrade.query_balance()
+             if balance is not None:
+                interDataHolder['balance'] = balance
+          if delQueryBuySeconds > 350:
              interDataHolder['queryBuyTime'] = timestamp 
              mockTrade.relogin() 
              count = mockTrade.queryBuyStocks()
