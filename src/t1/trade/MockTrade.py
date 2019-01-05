@@ -70,7 +70,7 @@ class MockTrade(object):
              result = json.loads(response.text)
              return float(result['result']['qryzijin']['result']['data']['kyje'])
           except Exception as e:
-                 MyLog.MyLog.info('can not get balance %s' % e)
+                 MyLog.info('can not get balance %s' % e)
                  return None
 
 
