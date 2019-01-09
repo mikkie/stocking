@@ -15,14 +15,14 @@ if __name__ == '__main__':
    # code_pre_close_map = [('000760','3.58')]
    # date = '20180919'
 
-   code_pre_close_map = [('002288', '4.52')]
-   date = '20181213'
-   date_next = '20181214'
+   code_pre_close_map = [('300545', '18.93')]
+   date = '20190109'
+   date_next = '20190110'
    load_dir = '../../data/excels'
    compare_dir = '../../data/compare'
 
-#    hcdata.removeall(load_dir)
-#    code_list = download.download(code_pre_close_map, date, load_dir)
+  #  hcdata.removeall(load_dir)
+  #  code_list = download.download(code_pre_close_map, date, load_dir)
    df_list = hcdata.loaddata(load_dir, save=False)
    result = AutoSellTest.start_test_by_df(df_list)
 #    if len(result) > 0:

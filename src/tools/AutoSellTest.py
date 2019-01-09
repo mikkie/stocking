@@ -41,7 +41,7 @@ def run(i):
            df = df.append(src_datas[code].iloc[i])
     if len(df) > 0:
        dh.addSellData(df)
-       analyze.calcMain(None,dh)
+       analyze.calcMain(None,dh,None)
 
 
 @Utils.printperformance
