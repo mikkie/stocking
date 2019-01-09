@@ -14,6 +14,8 @@ from utils.Utils import Utils
 from t1.trade.trade import Trade
 from t1.trade.MockTrade import MockTrade
 import threading
+import decimal
+decimal.getcontext().rounding = decimal.ROUND_05UP
 
 class SellAnalyze(object):
 
@@ -175,8 +177,9 @@ class SellAnalyze(object):
           stop_loss = self.__config.get_t1()['seller'][stock.get_code()]['loss']
           stop_win = self.__config.get_t1()['seller'][stock.get_code()]['win']
           enable_bc = self.__config.get_t1()['seller'][stock.get_code()]['enable_bc']
+          now_line = stock.get_Lastline()
+          high_limit = round(decimal.Decimal(self.convertToFloat(now_line['pre_close']) * 1.1), 2)  
           if enable_bc and self.getWinLossPercent(stock) < my_stop_loss:
-             now_line = stock.get_Lastline()
              if now_line['time'] > '14:30:00':
                 return False
              if self.is_force_bc(stock) or (self.getCurrentPercent(stock) < stop_loss and self.is_bc_point(stock)) or self.is_ydxd(stock):
@@ -188,7 +191,11 @@ class SellAnalyze(object):
           if self.getWinLossPercent(stock) >= stop_win:
              stock.set_cache('start_stop_win',True)
           if stock.get_cache('start_stop_win') is None:
-             return False    
+             return False
+          if self.convertToFloat(now_line['price']) >= float(high_limit):
+             amount = self.__config.get_t1()['seller'][stock.get_code()]['sell_volume'] 
+             self.sell(stock, amount=amount)
+             return True   
           if stock.get_ls() is None:
              self.initLS(stock,dh,ratio)
              if stock.get_ls() is None:
