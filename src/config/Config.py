@@ -144,9 +144,39 @@ class Config(object):
               },
               'strategy' : ['zs','time','minR','xspeed','sellWindow'],
               'seller' : {
-                  '002580' : {
-                     'my_loss' : -4.0,
+                  '000005' : {
+                     'my_loss' : -2.9,
                      'loss' : -1.0,
+                     'win' : 1.0,
+                     'margin' : 0.25,
+                     'price' : 3.091,
+                     'volume' : 4800,
+                     'sell_volume' : None,
+                     'bc_sell_profit' : 1.0,
+                     'ydxd' : 1.5,
+                     'p_limit_lowest' : 0.5,
+                     'min_amount' : 1500000,
+                     'amount_ratio' : 2.0,
+                     'enable_bc' : True
+                  },
+                  '002477' : {
+                     'my_loss' : 0.0,
+                     'loss' : -7.0,
+                     'win' : 5.0,
+                     'margin' : 0.25,
+                     'price' : 1.650,
+                     'volume' : 8900,
+                     'sell_volume' : None,
+                     'bc_sell_profit' : 1.0,
+                     'ydxd' : 1.5,
+                     'p_limit_lowest' : 0.5,
+                     'min_amount' : 1500000,
+                     'amount_ratio' : 2.0,
+                     'enable_bc' : True
+                  },
+                  '002580' : {
+                     'my_loss' : -2.0,
+                     'loss' : -2.0,
                      'win' : 1.0,
                      'margin' : 0.25,
                      'price' : 5.752,
@@ -159,13 +189,13 @@ class Config(object):
                      'amount_ratio' : 2.0,
                      'enable_bc' : True
                   },
-                  '002848' : {
-                     'my_loss' : -2.0,
-                     'loss' : -1.5,
-                     'win' : 1.0,
+                  '002902' : {
+                     'my_loss' : -4.0,
+                     'loss' : -1.0,
+                     'win' : 0.8,
                      'margin' : 0.25,
-                     'price' : 12.503,
-                     'volume' : 900,
+                     'price' : 24.507,
+                     'volume' : 600,
                      'sell_volume' : None,
                      'bc_sell_profit' : 0.8,
                      'ydxd' : 1.0,
@@ -176,7 +206,7 @@ class Config(object):
                   },
                   '600235' : {
                      'my_loss' : -2.0,
-                     'loss' : -1.5,
+                     'loss' : -1.0,
                      'win' : 1.0,
                      'margin' : 0.25,
                      'price' : 6.228,
