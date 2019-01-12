@@ -212,8 +212,8 @@ class Config(object):
                      'price' : 6.228,
                      'volume' : 2300,
                      'sell_volume' : None,
-                     'bc_sell_profit' : 1.0,
-                     'ydxd' : 1.5,
+                     'bc_sell_profit' : 0.8,
+                     'ydxd' : 1.0,
                      'p_limit_lowest' : 0.5,
                      'min_amount' : 1500000,
                      'amount_ratio' : 2.0,
@@ -222,7 +222,7 @@ class Config(object):
                   'min_threshold' : -8,
                   'cancelTime' : 30,
                   'maxSellSignal' : 20,
-                  'bc_force_p' : -5.0
+                  'bc_force_p' : -3.0
               },
               'hitBottom' : {
                   'margin' : 0.2,
