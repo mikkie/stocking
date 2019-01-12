@@ -177,7 +177,7 @@ class Config(object):
                   '002580' : {
                      'my_loss' : -2.0,
                      'loss' : -2.0,
-                     'win' : 1.0,
+                     'win' : 0.8,
                      'margin' : 0.25,
                      'price' : 5.752,
                      'volume' : 2500,
